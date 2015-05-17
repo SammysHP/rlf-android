@@ -1,0 +1,72 @@
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="org.milderjoghurt.rlf.android.VoteFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/VoteFragHeader"
+        android:id="@+id/txtVoteHeader"
+        android:textStyle="bold"
+        android:singleLine="true"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:textSize="44sp" />
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="86dp"
+        android:columnCount="2"
+        android:rowCount="2"
+        android:layout_gravity="center"
+        android:useDefaultMargins="true">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/VoteFragButtonA"
+            android:id="@+id/btnVoteA"
+            android:textSize="32sp"
+            android:onClick="onVoteClick" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/VoteFragButtonB"
+            android:id="@+id/btnVoteB"
+            android:textSize="32sp"
+            android:onClick="onVoteClick" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/VoteFragButtonC"
+            android:id="@+id/btnVoteC"
+            android:singleLine="true"
+            android:textSize="32sp"
+            android:onClick="onVoteClick" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/VoteFragButtonD"
+            android:id="@+id/btnVoteD"
+            android:textSize="32sp"
+            android:onClick="onVoteClick" />
+    </GridLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/VoteFragSendTxt"
+        android:id="@+id/button2"
+        android:layout_gravity="center_horizontal"
+        android:onClick="onVoteSend" />
+
+</LinearLayout>

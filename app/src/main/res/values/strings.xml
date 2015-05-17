@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Realtime Lecture Feedback</string>
+
+    <!-- Abstimmung -->
+    <string name="VoteFragButtonA">A</string>
+    <string name="VoteFragButtonB">B</string>
+    <string name="VoteFragButtonC">C</string>
+    <string name="VoteFragButtonD">D</string>
+    <string name="VoteFragHeader">Abstimmung</string>
+    <string name="VoteFragSendTxt">Senden</string>
 </resources>
