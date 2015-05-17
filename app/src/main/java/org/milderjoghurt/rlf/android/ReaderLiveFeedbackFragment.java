@@ -18,7 +18,7 @@ import java.util.Random;
 /**
  * Feedback indicator.
  * <p/>
- * This will show a square area which indicates the current feedback and request state. Feedback will be displayed in different colors ans smileys, request state by flashing colors.
+ * This will show a square area which indicates the current feedback and request state. Feedback will be displayed in different colors as smileys, request state by flashing colors.
  */
 public class ReaderLiveFeedbackFragment extends Fragment {
 
@@ -60,13 +60,13 @@ public class ReaderLiveFeedbackFragment extends Fragment {
         public void run() {
             setFeedbackState(VALUES.get(RANDOM.nextInt(SIZE)));
 
-            // Raise request with probability of 10%
-            if (RANDOM.nextInt(100) < 10) {
+            // Raise request with probability of 15%
+            if (RANDOM.nextInt(100) < 15) {
                 setRequestState(true);
             }
 
-            // Dismiss request with probability of 70%
-            if (RANDOM.nextInt(100) < 70) {
+            // Dismiss request with probability of 60%
+            if (RANDOM.nextInt(100) < 60) {
                 setRequestState(false);
             }
 
