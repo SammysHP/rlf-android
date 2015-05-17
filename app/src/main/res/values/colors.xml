@@ -1,0 +1,6 @@
+<resources>
+    <color name="reader_livefeedback_positive">@android:color/holo_green_light</color>
+    <color name="reader_livefeedback_neutral">@android:color/holo_orange_light</color>
+    <color name="reader_livefeedback_negative">@android:color/holo_red_light</color>
+    <color name="reader_livefeedback_request">@android:color/holo_blue_bright</color>
+</resources>
