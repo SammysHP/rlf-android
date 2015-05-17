@@ -8,4 +8,9 @@
     <string name="VoteFragButtonD">D</string>
     <string name="VoteFragHeader">Abstimmung</string>
     <string name="VoteFragSendTxt">Senden</string>
+
+    <!-- Session erstellen-->
+    <string name="CreateText">Erstellen</string>
+    <string name="CancelText">Abbrechen</string>
+    <string name="lblSessionNameText">Namern der Session eingeben</string>
 </resources>
