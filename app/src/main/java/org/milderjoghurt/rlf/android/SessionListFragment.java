@@ -9,7 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+
 import org.milderjoghurt.rlf.android.dummy.SessionListAdapter;
+
+import java.util.Random;
 
 public class SessionListFragment extends Fragment {
 
@@ -38,6 +42,16 @@ public class SessionListFragment extends Fragment {
         // specify an adapter
         mAdapter = new SessionListAdapter();
         mRecyclerView.setAdapter(mAdapter);
+
+        // Floating Button Action
+        final FloatingActionButton addSession = (FloatingActionButton) view.findViewById(R.id.session_list_fab);
+        addSession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Random rnd = new Random();
+                addSession.setColorNormal(rnd.nextInt());
+            }
+        });
 
         return view;
     }
