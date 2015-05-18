@@ -9,8 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.milderjoghurt.rlf.android.dummy.DummyAdapter;
-
+import org.milderjoghurt.rlf.android.dummy.SessionListAdapter;
 
 public class SessionListFragment extends Fragment {
 
@@ -37,7 +36,7 @@ public class SessionListFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter
-        mAdapter = new DummyAdapter();
+        mAdapter = new SessionListAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
         return view;
