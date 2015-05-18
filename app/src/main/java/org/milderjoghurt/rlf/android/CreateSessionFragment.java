@@ -3,18 +3,13 @@ package org.milderjoghurt.rlf.android;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CreateSessionFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link CreateSessionFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CreateSessionFragment extends Fragment {
 
     @Override
@@ -22,7 +17,23 @@ public class CreateSessionFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_create_session, container, false);
+        setHasOptionsMenu(true);
         return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_create_session, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_create:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
