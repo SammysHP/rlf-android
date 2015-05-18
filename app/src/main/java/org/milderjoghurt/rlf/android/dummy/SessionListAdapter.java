@@ -21,21 +21,8 @@ import java.text.SimpleDateFormat;
 public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.SessionViewHolder> {
     List<Session> sessions;
 
-    public SessionListAdapter() {
-        initializeData();
-    }
-
-    // Provide Dummy content
-    private void initializeData() {
-        sessions = new ArrayList<>();
-        sessions.add(new Session("ABCDEF", "Software Qualitaet", true));
-        sessions.add(new Session("GHIJKL", "Software Technik", true));
-        sessions.add(new Session("MNOPQR", "Software Projekt 1", false));
-        sessions.add(new Session("MNOPQR", "Software Projekt 2", false));
-        sessions.add(new Session("MNOPQR", "Software Projekt 3", false));
-        sessions.add(new Session("MNOPQR", "Software Projekt 4", false));
-        sessions.add(new Session("MNOPQR", "Software Projekt 5", false));
-        sessions.add(new Session("MNOPQR", "Software Projekt 6", false));
+    public SessionListAdapter(List<Session> sessions) {
+        this.sessions = sessions;
     }
 
     // Provide a reference to the views for each data item
