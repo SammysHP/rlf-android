@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -58,7 +59,10 @@ public class ReaderLiveFeedbackFragment extends Fragment {
 
         @Override
         public void run() {
-            setFeedbackState(VALUES.get(RANDOM.nextInt(SIZE)));
+            // Change feedback state with probability of 80%
+            if (RANDOM.nextInt(100) < 80) {
+                setFeedbackState(VALUES.get(RANDOM.nextInt(SIZE)));
+            }
 
             // Raise request with probability of 15%
             if (RANDOM.nextInt(100) < 15) {
@@ -68,6 +72,11 @@ public class ReaderLiveFeedbackFragment extends Fragment {
             // Dismiss request with probability of 60%
             if (RANDOM.nextInt(100) < 60) {
                 setRequestState(false);
+            }
+
+            // Update user count with probability of 50%
+            if (RANDOM.nextInt(100) < 50) {
+                setUserCount(RANDOM.nextInt(15));
             }
 
             demonstrationHandler.postDelayed(demonstrationRunnable, 5000); // every 5 seconds
@@ -142,5 +151,19 @@ public class ReaderLiveFeedbackFragment extends Fragment {
         }
 
         icon.setImageResource(activeFeedbackState.icon);
+    }
+
+    /**
+     * Update the number of active users.
+     *
+     * @param count Number of active users used for the calculation
+     */
+    private void setUserCount(final int count) {
+        if (getView() == null) {
+            return;
+        }
+
+        TextView v = (TextView) getView().findViewById(R.id.reader_feedback_usercount);
+        v.setText(Integer.toString(count));
     }
 }
