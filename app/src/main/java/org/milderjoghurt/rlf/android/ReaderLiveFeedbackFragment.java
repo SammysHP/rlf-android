@@ -76,7 +76,7 @@ public class ReaderLiveFeedbackFragment extends Fragment {
 
             // Update user count with probability of 50%
             if (RANDOM.nextInt(100) < 50) {
-                setUserCount(RANDOM.nextInt(15));
+                setUserCount(RANDOM.nextInt(15+5));
             }
 
             demonstrationHandler.postDelayed(demonstrationRunnable, 5000); // every 5 seconds
