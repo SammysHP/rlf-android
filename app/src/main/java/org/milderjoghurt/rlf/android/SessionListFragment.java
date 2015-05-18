@@ -8,12 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.content.Intent;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import org.milderjoghurt.rlf.android.dummy.SessionListAdapter;
-
-import java.util.Random;
 
 public class SessionListFragment extends Fragment {
 
@@ -48,8 +47,8 @@ public class SessionListFragment extends Fragment {
         addSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Random rnd = new Random();
-                addSession.setColorNormal(rnd.nextInt());
+                Intent intent = new Intent(view.getContext(), CreateSessionActivity.class);
+                view.getContext().startActivity(intent);
             }
         });
 

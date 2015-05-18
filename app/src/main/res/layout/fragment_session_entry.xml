@@ -30,8 +30,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/session_open"
+            android:layout_toLeftOf="@+id/session_date"
+            android:singleLine="true"
             android:text="Foo Bar"
-            android:textSize="20sp" />
+            android:textSize="18sp"
+            android:autoText="false" />
 
         <TextView
             android:id="@+id/session_date"
