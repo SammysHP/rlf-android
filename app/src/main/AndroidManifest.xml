@@ -20,7 +20,15 @@
         <activity
             android:name=".SessionListActivity"
             android:exported="true"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
+           </activity>
+        <activity
+            android:name=".CreateSessionActivity"
+            android:label="@string/title_activity_create_session"
+            android:parentActivityName=".SessionListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SessionListActivity" />         
         </activity>
     </application>
 

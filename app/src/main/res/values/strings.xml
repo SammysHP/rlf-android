@@ -10,7 +10,6 @@
     <string name="VoteFragSendTxt">Senden</string>
 
     <!-- Session erstellen-->
-    <string name="CreateText">Erstellen</string>
-    <string name="CancelText">Abbrechen</string>
-    <string name="lblSessionNameText">Namern der Session eingeben</string>
+    <string name="title_activity_create_session"></string>
+    <string name="action_settings">Settings</string>
 </resources>
