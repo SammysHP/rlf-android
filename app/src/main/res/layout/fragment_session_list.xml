@@ -5,11 +5,13 @@
     android:layout_height="match_parent"
     tools:context="org.milderjoghurt.rlf.android.SessionListFragment">
 
-    <android.support.v7.widget.RecyclerView
+    <com.malinskiy.superrecyclerview.SuperRecyclerView
         android:id="@+id/session_list"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        app:layout_empty="@layout/fragment_session_listempty"
+        app:scrollbarStyle="insideInset"/>
 
     <com.getbase.floatingactionbutton.AddFloatingActionButton
         android:id="@+id/session_list_fab"

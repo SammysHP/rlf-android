@@ -1,33 +1,36 @@
 package org.milderjoghurt.rlf.android;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.content.Intent;
 import android.widget.Toast;
+import android.os.Handler;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.malinskiy.superrecyclerview.OnMoreListener;
+import com.malinskiy.superrecyclerview.SuperRecyclerView;
 
 import org.milderjoghurt.rlf.android.dummy.Session;
 import org.milderjoghurt.rlf.android.dummy.SessionListAdapter;
-import org.milderjoghurt.rlf.android.ui.SwipeDismissRecyclerViewTouchListener;
+
+import com.malinskiy.superrecyclerview.swipe.SparseItemRemoveAnimator;
+import com.malinskiy.superrecyclerview.swipe.SwipeDismissRecyclerViewTouchListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SessionListFragment extends Fragment {
+public class SessionListFragment extends Fragment implements OnMoreListener, SwipeRefreshLayout.OnRefreshListener, SwipeDismissRecyclerViewTouchListener.DismissCallbacks {
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private SuperRecyclerView mRecyclerView;
+    private SessionListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private SparseItemRemoveAnimator mSparseAnimator;
     List<Session> sessions;
 
     @Override
@@ -65,12 +68,7 @@ public class SessionListFragment extends Fragment {
     }
 
     private void initRecyclerView(View view) {
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.session_list);
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView = (SuperRecyclerView) view.findViewById(R.id.session_list);
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -81,67 +79,42 @@ public class SessionListFragment extends Fragment {
         mAdapter = new SessionListAdapter(sessions);
         mRecyclerView.setAdapter(mAdapter);
 
-        SwipeDismissRecyclerViewTouchListener touchListener =
-                new SwipeDismissRecyclerViewTouchListener(
-                        mRecyclerView,
-                        new SwipeDismissRecyclerViewTouchListener.DismissCallbacks() {
-                            @Override
-                            public boolean canDismiss(int position) {
-                                return true;
-                            }
-
-                            @Override
-                            public void onDismiss(RecyclerView recyclerView, int[] reverseSortedPositions) {
-                                for (int position : reverseSortedPositions) {
-                                    sessions.remove(position);
-                                }
-                                // do not call notifyItemRemoved for every item, it will cause gaps on deleting items
-                                mAdapter.notifyDataSetChanged();
-                            }
-                        });
-        mRecyclerView.setOnTouchListener(touchListener);
-        // Setting this scroll listener is required to ensure that during ListView scrolling,
-        // we don't look for swipes.
-        mRecyclerView.setOnScrollListener(touchListener.makeScrollListener());
-        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(view.getContext(),
-                new OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        Toast.makeText(view.getContext(), "Clicked " + sessions.get(position), Toast.LENGTH_SHORT).show();
-                    }
-                }));
+        mRecyclerView.setRefreshListener(this);
+        mRecyclerView.setRefreshingColorResources(android.R.color.holo_orange_light, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_red_light);
+        //mRecyclerView.setupMoreListener(this, 1);
     }
 
-    public interface OnItemClickListener {
-        public void onItemClick(View view, int position);
+
+    @Override
+    public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
+        Toast.makeText(this.getActivity(), "More", Toast.LENGTH_LONG).show();
+
+        //mAdapter.add("More asked, more served");
     }
 
-    public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
-        private OnItemClickListener mListener;
+    @Override
+    public boolean canDismiss(int position) {
+        return true;
+    }
 
-        GestureDetector mGestureDetector;
-
-        public RecyclerItemClickListener(Context context, OnItemClickListener listener) {
-            mListener = listener;
-            mGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    return true;
-                }
-            });
+    @Override
+    public void onDismiss(RecyclerView recyclerView, int[] reverseSortedPositions) {
+        for (int position : reverseSortedPositions) {
+            mSparseAnimator.setSkipNext(true);
+            sessions.remove(position);
         }
+    }
 
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView view, MotionEvent e) {
-            View childView = view.findChildViewUnder(e.getX(), e.getY());
-            if (childView != null && mListener != null && mGestureDetector.onTouchEvent(e)) {
-                mListener.onItemClick(childView, view.getChildPosition(childView));
+    @Override
+    public void onRefresh() {
+        Toast.makeText(this.getActivity(), "Refresh", Toast.LENGTH_LONG).show();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                mAdapter.insert(new Session("AAAAAA", "new", false), 0);
             }
-            return false;
-        }
+        }, 2000);
 
-        @Override
-        public void onTouchEvent(RecyclerView view, MotionEvent motionEvent) {
-        }
     }
 }
