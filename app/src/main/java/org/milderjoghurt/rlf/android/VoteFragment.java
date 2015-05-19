@@ -1,7 +1,5 @@
 package org.milderjoghurt.rlf.android;
 
-import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log; // for demonstration/testing
@@ -28,44 +26,49 @@ public class VoteFragment extends Fragment {
     // last vote or -1 if not available
     private int lastVoteSymbol = -1;
 
-    // auto-generated
-    private OnFragmentInteractionListener mListener;
-
-    public VoteFragment() {
-        // Required empty public constructor
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_vote, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    // FIXME auto-generated
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
 
         // fill vote map
-        voteMapping[0] = (Button) getView().findViewById(R.id.btnVoteA);
-        voteMapping[1] = (Button) getView().findViewById(R.id.btnVoteB);
-        voteMapping[2] = (Button) getView().findViewById(R.id.btnVoteC);
-        voteMapping[3] = (Button) getView().findViewById(R.id.btnVoteD);
+        try {
+            Button btnA = (Button) getView().findViewById(R.id.btnVoteA);
+            Button btnB = (Button) getView().findViewById(R.id.btnVoteB);
+            Button btnC = (Button) getView().findViewById(R.id.btnVoteC);
+            Button btnD = (Button) getView().findViewById(R.id.btnVoteD);
+            Button btnSend = (Button) getView().findViewById(R.id.btnVoteSend);
+
+            View.OnClickListener voteClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    VoteFragment.this.onVoteClick(view);
+                }
+            };
+
+            // set listeners manually
+            btnA.setOnClickListener(voteClickListener);
+            btnB.setOnClickListener(voteClickListener);
+            btnC.setOnClickListener(voteClickListener);
+            btnD.setOnClickListener(voteClickListener);
+            btnSend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    VoteFragment.this.onVoteSend(view);
+                }
+            });
+
+            voteMapping[0] = btnA;
+            voteMapping[1] = btnB;
+            voteMapping[2] = btnC;
+            voteMapping[3] = btnD;
+        } catch (Exception e) {
+            Log.d(LOG_TAG, "gui setup failed");
+        }
+
+
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_vote, container, false);
     }
 
     /**
@@ -100,28 +103,4 @@ public class VoteFragment extends Fragment {
     public int getLastVoteSymbol() {
         return lastVoteSymbol;
     }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     * FIXME auto-generated
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        // --> auto-generated
-        public void onFragmentInteraction(Uri uri);
-    }
-
 }
