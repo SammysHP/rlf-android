@@ -13,12 +13,12 @@ import android.widget.RadioButton;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link StartPage.OnFragmentInteractionListener} interface
+ * {@link StartPageFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link StartPage#newInstance} factory method to
+ * Use the {@link StartPageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class StartPage extends Fragment {
+public class StartPageFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,11 +36,11 @@ public class StartPage extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment StartPage.
+     * @return A new instance of fragment StartPageFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static StartPage newInstance(String param1, String param2) {
-        StartPage fragment = new StartPage();
+    public static StartPageFragment newInstance(String param1, String param2) {
+        StartPageFragment fragment = new StartPageFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -48,7 +48,7 @@ public class StartPage extends Fragment {
         return fragment;
     }
 
-    public StartPage() {
+    public StartPageFragment() {
         // Required empty public constructor
     }
 
