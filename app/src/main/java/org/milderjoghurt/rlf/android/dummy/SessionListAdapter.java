@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.milderjoghurt.rlf.android.R;
 
@@ -16,7 +17,6 @@ import java.util.Calendar;
 import java.text.SimpleDateFormat;
 
 import com.malinskiy.superrecyclerview.swipe.BaseSwipeAdapter;
-import com.malinskiy.superrecyclerview.swipe.SwipeLayout;
 
 /**
  * Dummy Content Adapter for Session List
@@ -35,6 +35,7 @@ public class SessionListAdapter extends BaseSwipeAdapter<SessionListAdapter.View
         TextView sessionId;
         ImageView sessionOpen;
         TextView sessionDate;
+        Button deleteButton;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -43,6 +44,7 @@ public class SessionListAdapter extends BaseSwipeAdapter<SessionListAdapter.View
             sessionId = (TextView) itemView.findViewById(R.id.session_id);
             sessionOpen = (ImageView) itemView.findViewById(R.id.session_open);
             sessionDate = (TextView) itemView.findViewById(R.id.session_date);
+            deleteButton = (Button) itemView.findViewById(R.id.session_list_item_delete);
         }
     }
 
@@ -50,8 +52,17 @@ public class SessionListAdapter extends BaseSwipeAdapter<SessionListAdapter.View
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_session_entry, viewGroup, false);
-        ViewHolder svh = new ViewHolder(v);
-        return svh;
+        final ViewHolder holder = new ViewHolder(v);
+
+        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                remove(holder.getPosition());
+                Toast.makeText(v.getContext(), "Deleted " + holder.getPosition(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return holder;
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -99,5 +110,13 @@ public class SessionListAdapter extends BaseSwipeAdapter<SessionListAdapter.View
         sessions.add(position, session);
 
         notifyItemInserted(position);
+    }
+
+    public void remove(int position) {
+        sessions.remove(position);
+
+        closeItem(position);
+
+        notifyItemRemoved(position);
     }
 }

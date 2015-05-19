@@ -1,5 +1,6 @@
 package org.milderjoghurt.rlf.android;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -18,14 +19,16 @@ import com.malinskiy.superrecyclerview.SuperRecyclerView;
 
 import org.milderjoghurt.rlf.android.dummy.Session;
 import org.milderjoghurt.rlf.android.dummy.SessionListAdapter;
+import org.milderjoghurt.rlf.android.ui.RecyclerUtils;
 
 import com.malinskiy.superrecyclerview.swipe.SparseItemRemoveAnimator;
 import com.malinskiy.superrecyclerview.swipe.SwipeDismissRecyclerViewTouchListener;
+import com.malinskiy.superrecyclerview.swipe.SwipeItemManagerInterface;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SessionListFragment extends Fragment implements OnMoreListener, SwipeRefreshLayout.OnRefreshListener, SwipeDismissRecyclerViewTouchListener.DismissCallbacks {
+public class SessionListFragment extends Fragment implements OnMoreListener, SwipeRefreshLayout.OnRefreshListener {
 
     private SuperRecyclerView mRecyclerView;
     private SessionListAdapter mAdapter;
@@ -79,8 +82,17 @@ public class SessionListFragment extends Fragment implements OnMoreListener, Swi
         mAdapter = new SessionListAdapter(sessions);
         mRecyclerView.setAdapter(mAdapter);
 
-        mRecyclerView.setRefreshListener(this);
-        mRecyclerView.setRefreshingColorResources(android.R.color.holo_orange_light, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_red_light);
+        mAdapter.setMode(SwipeItemManagerInterface.Mode.Single);
+        mRecyclerView.addOnItemTouchListener(new RecyclerUtils.RecyclerItemClickListener(getActivity(), new RecyclerUtils.RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(getActivity(), "Clicked " + position, Toast.LENGTH_SHORT).show();
+            }
+        }));
+
+        // add refresh listener
+        //mRecyclerView.setRefreshListener(this);
+        //mRecyclerView.setRefreshingColorResources(android.R.color.holo_orange_light, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_red_light);
         //mRecyclerView.setupMoreListener(this, 1);
     }
 
@@ -88,21 +100,7 @@ public class SessionListFragment extends Fragment implements OnMoreListener, Swi
     @Override
     public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
         Toast.makeText(this.getActivity(), "More", Toast.LENGTH_LONG).show();
-
         //mAdapter.add("More asked, more served");
-    }
-
-    @Override
-    public boolean canDismiss(int position) {
-        return true;
-    }
-
-    @Override
-    public void onDismiss(RecyclerView recyclerView, int[] reverseSortedPositions) {
-        for (int position : reverseSortedPositions) {
-            mSparseAnimator.setSkipNext(true);
-            sessions.remove(position);
-        }
     }
 
     @Override
@@ -115,6 +113,11 @@ public class SessionListFragment extends Fragment implements OnMoreListener, Swi
                 mAdapter.insert(new Session("AAAAAA", "new", false), 0);
             }
         }, 2000);
+    }
 
+    /** Called when the user clicks the Send button */
+    public void sendMessage(View view) {
+        Toast.makeText(this.getActivity(), "click!", Toast.LENGTH_LONG).show();
+        // Do something in response to button
     }
 }
