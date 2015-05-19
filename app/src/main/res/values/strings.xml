@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Realtime Lecture Feedback</string>
+    <string name="delete">Löschen</string>
 
     <!-- Abstimmung -->
     <string name="VoteFragButtonA">A</string>
@@ -15,6 +16,7 @@
 
     <!-- Session liste-->
     <string name="SessionList">Eigene Sitzungen</string>
+    <string name="SessionDeleteQuestion">Sitzung löschen?</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
