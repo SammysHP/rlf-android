@@ -1,0 +1,97 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginBottom="60dp"
+    tools:context=".StudentLiveFragment"
+    android:id="@+id/fragment_student_live"
+    >
+    <!-- TODO: Update blank fragment layout -->
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:layout_weight="2">
+        
+        
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_turtle" />
+
+        <SeekBar
+            android:id="@+id/feedback_seekbar_speed1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_rabbit" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="2">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_understand" />
+
+        <SeekBar
+            android:id="@+id/feedback_seekbar_understandability1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_confused" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+
+
+        >
+
+        <ToggleButton
+            android:layout_width="170dp"
+            android:layout_height="75dp"
+            android:text="New ToggleButton"
+            android:id="@+id/toggleButton"
+            android:layout_margin="10dp" />
+
+        <ToggleButton
+            android:layout_width="170dp"
+            android:layout_height="75dp"
+            android:text="New ToggleButton"
+            android:id="@+id/toggleButton2"
+            android:textColorHighlight="#ff5dff4c"
+            android:textColorHint="#ff6171ff"
+            android:layout_margin="10dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

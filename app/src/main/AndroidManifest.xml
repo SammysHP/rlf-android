@@ -20,15 +20,19 @@
         <activity
             android:name=".SessionListActivity"
             android:exported="true"
-            android:label="@string/SessionList">
-           </activity>
+            android:label="@string/SessionList" >
+        </activity>
         <activity
             android:name=".CreateSessionActivity"
             android:label="@string/title_activity_create_session"
-            android:parentActivityName=".SessionListActivity">
+            android:parentActivityName=".SessionListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".SessionListActivity" />
+        </activity>
+        <activity
+            android:name=".StudentLiveActivity"
+            android:label="@string/title_activity_student_live" >
         </activity>
     </application>
 
