@@ -32,16 +32,14 @@
             android:layout_height="wrap_content"
             android:text="@string/VoteFragButtonA"
             android:id="@+id/btnVoteA"
-            android:textSize="32sp"
-            android:onClick="onVoteClick" />
+            android:textSize="32sp" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/VoteFragButtonB"
             android:id="@+id/btnVoteB"
-            android:textSize="32sp"
-            android:onClick="onVoteClick" />
+            android:textSize="32sp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -49,24 +47,21 @@
             android:text="@string/VoteFragButtonC"
             android:id="@+id/btnVoteC"
             android:singleLine="true"
-            android:textSize="32sp"
-            android:onClick="onVoteClick" />
+            android:textSize="32sp" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/VoteFragButtonD"
             android:id="@+id/btnVoteD"
-            android:textSize="32sp"
-            android:onClick="onVoteClick" />
+            android:textSize="32sp" />
     </GridLayout>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/VoteFragSendTxt"
-        android:id="@+id/button2"
-        android:layout_gravity="center_horizontal"
-        android:onClick="onVoteSend" />
+        android:id="@+id/btnVoteSend"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>
