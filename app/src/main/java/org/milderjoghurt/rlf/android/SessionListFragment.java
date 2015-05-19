@@ -1,29 +1,26 @@
 package org.milderjoghurt.rlf.android;
 
-import android.content.Context;
-import android.support.v4.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.content.Intent;
 import android.widget.Toast;
-import android.os.Handler;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.malinskiy.superrecyclerview.OnMoreListener;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
+import com.malinskiy.superrecyclerview.swipe.SparseItemRemoveAnimator;
+import com.malinskiy.superrecyclerview.swipe.SwipeItemManagerInterface;
 
 import org.milderjoghurt.rlf.android.dummy.Session;
 import org.milderjoghurt.rlf.android.dummy.SessionListAdapter;
 import org.milderjoghurt.rlf.android.ui.RecyclerUtils;
-
-import com.malinskiy.superrecyclerview.swipe.SparseItemRemoveAnimator;
-import com.malinskiy.superrecyclerview.swipe.SwipeDismissRecyclerViewTouchListener;
-import com.malinskiy.superrecyclerview.swipe.SwipeItemManagerInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,11 +110,5 @@ public class SessionListFragment extends Fragment implements OnMoreListener, Swi
                 mAdapter.insert(new Session("AAAAAA", "new", false), 0);
             }
         }, 2000);
-    }
-
-    /** Called when the user clicks the Send button */
-    public void sendMessage(View view) {
-        Toast.makeText(this.getActivity(), "click!", Toast.LENGTH_LONG).show();
-        // Do something in response to button
     }
 }

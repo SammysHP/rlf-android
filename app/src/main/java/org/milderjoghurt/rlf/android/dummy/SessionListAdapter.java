@@ -10,13 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.malinskiy.superrecyclerview.swipe.BaseSwipeAdapter;
+
 import org.milderjoghurt.rlf.android.R;
 
-import java.util.List;
-import java.util.Calendar;
 import java.text.SimpleDateFormat;
-
-import com.malinskiy.superrecyclerview.swipe.BaseSwipeAdapter;
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * Dummy Content Adapter for Session List
