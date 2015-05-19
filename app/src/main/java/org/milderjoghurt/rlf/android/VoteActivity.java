@@ -1,12 +1,12 @@
 package org.milderjoghurt.rlf.android;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 
 /**
- *
+ * Activity for votings
  */
-public class VoteActivity extends FragmentActivity {
+public class VoteActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
