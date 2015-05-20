@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/reader_feedback_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:context=".ReaderPollFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <include
+            android:id="@+id/pollbarA"
+            layout="@layout/verticalbar" />
+
+        <include
+            android:id="@+id/pollbarB"
+            layout="@layout/verticalbar" />
+
+        <include
+            android:id="@+id/pollbarC"
+            layout="@layout/verticalbar" />
+
+        <include
+            android:id="@+id/pollbarD"
+            layout="@layout/verticalbar" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Zurücksetzen" />
+</LinearLayout>
