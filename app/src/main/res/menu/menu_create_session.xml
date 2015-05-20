@@ -3,9 +3,9 @@
 
     <item
         android:id="@+id/action_create"
-        android:orderInCategory="100"
-        android:showAsAction="always|withText"
-        android:title="Erstellen" />
+        android:icon="@drawable/ic_add_white_24dp"
+        android:title="Erstellen"
+        app:showAsAction="always|withText" />
 
     <item
         android:id="@+id/action_settings"

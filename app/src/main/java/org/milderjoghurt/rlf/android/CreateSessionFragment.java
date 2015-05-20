@@ -2,13 +2,16 @@ package org.milderjoghurt.rlf.android;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
+import org.milderjoghurt.rlf.android.dummy.Session;
 
 public class CreateSessionFragment extends Fragment {
 
@@ -31,6 +34,10 @@ public class CreateSessionFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.action_create:
+                EditText et = (EditText) getView().findViewById(R.id.etSessionName);
+                Session session = new Session("BASDAA", et.getText().toString(), false);
+
+                NavUtils.navigateUpFromSameTask(getActivity());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
