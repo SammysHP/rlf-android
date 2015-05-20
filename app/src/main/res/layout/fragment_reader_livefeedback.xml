@@ -39,4 +39,14 @@
             android:textColor="#ffffffff"
             android:layout_gravity="center_vertical" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/reader_feedback_dismiss"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_dismiss_raised_hand"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:clickable="true"
+        android:visibility="gone" />
 </org.milderjoghurt.rlf.android.ui.SquareRelativeLayout>

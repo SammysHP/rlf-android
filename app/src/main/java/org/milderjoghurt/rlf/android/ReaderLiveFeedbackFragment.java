@@ -69,8 +69,8 @@ public class ReaderLiveFeedbackFragment extends Fragment {
                 setRequestState(true);
             }
 
-            // Dismiss request with probability of 60%
-            if (RANDOM.nextInt(100) < 60) {
+            // Dismiss request with probability of 50%
+            if (RANDOM.nextInt(100) < 50) {
                 setRequestState(false);
             }
 
@@ -89,7 +89,18 @@ public class ReaderLiveFeedbackFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_reader_livefeedback, container, false);
+        View view = inflater.inflate(R.layout.fragment_reader_livefeedback, container, false);
+
+        View dismissButton = view.findViewById(R.id.reader_feedback_dismiss);
+        dismissButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestActive = false;
+                updateView();
+            }
+        });
+
+        return view;
     }
 
     @Override
@@ -137,15 +148,18 @@ public class ReaderLiveFeedbackFragment extends Fragment {
 
         View background = getView(); // R.id.reader_feedback_background
         ImageView icon = (ImageView) getView().findViewById(R.id.reader_feedback_icon);
+        View dismissButton = getView().findViewById(R.id.reader_feedback_dismiss);
 
         if (requestActive) {
             AnimationDrawable animator = new AnimationDrawable();
-            animator.addFrame(new ColorDrawable(getResources().getColor(activeFeedbackState.color)), FLASH_DURATION);
             animator.addFrame(new ColorDrawable(getResources().getColor(R.color.reader_livefeedback_request)), FLASH_DURATION);
+            animator.addFrame(new ColorDrawable(getResources().getColor(activeFeedbackState.color)), FLASH_DURATION);
             animator.setOneShot(false);
             background.setBackground(animator);
             animator.start();
+            dismissButton.setVisibility(View.VISIBLE);
         } else {
+            dismissButton.setVisibility(View.GONE);
             background.setBackground(null);
             background.setBackgroundResource(activeFeedbackState.color);
         }
