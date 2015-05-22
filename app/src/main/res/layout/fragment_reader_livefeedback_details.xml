@@ -23,7 +23,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:enabled="false"
+            android:max="256"
+            android:maxHeight="15dp"
+            android:progress="128"
+            android:progressDrawable="@drawable/seekbar_npn"
+            android:splitTrack="false"
+            android:thumb="@drawable/seekbar_arrows" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -47,8 +54,15 @@
             android:id="@+id/feedback_seekbar_understandability"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1" />
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:max="256"
+            android:maxHeight="15dp"
+            android:progress="0"
+            android:progressDrawable="@drawable/seekbar_pn"
+            android:splitTrack="false"
+            android:thumb="@drawable/seekbar_arrows" />
 
         <ImageView
             android:layout_width="wrap_content"
