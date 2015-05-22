@@ -2,12 +2,18 @@ package org.milderjoghurt.rlf.android;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class ReaderPollFragment extends Fragment {
     private Bar pollbarA;
@@ -41,6 +47,45 @@ public class ReaderPollFragment extends Fragment {
         }
     }
 
+    /*
+     * TODO: For demonstration
+     */
+    Handler demonstrationHandler = new Handler();
+
+    /*
+     * TODO: For demonstration
+     */
+    private Runnable demonstrationRunnable = new Runnable() {
+        private final Random RANDOM = new Random();
+
+        public int multiMax(int... n) {
+            int i = 0;
+            int max = n[i];
+
+            while (++i < n.length)
+                if (n[i] > max)
+                    max = n[i];
+
+            return max;
+        }
+
+        @Override
+        public void run() {
+            int a = RANDOM.nextInt(15);
+            int b = RANDOM.nextInt(15);
+            int c = RANDOM.nextInt(15);
+            int d = RANDOM.nextInt(15);
+            int max = multiMax(a, b, c, d);
+
+            pollbarA.setCount(a, max);
+            pollbarB.setCount(b, max);
+            pollbarC.setCount(c, max);
+            pollbarD.setCount(d, max);
+
+            demonstrationHandler.postDelayed(demonstrationRunnable, 10000); // every 10 seconds
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -51,6 +96,29 @@ public class ReaderPollFragment extends Fragment {
         pollbarC = new Bar((LinearLayout) view.findViewById(R.id.pollbarC), "C");
         pollbarD = new Bar((LinearLayout) view.findViewById(R.id.pollbarD), "D");
 
+        View dismissButton = view.findViewById(R.id.poll_reset);
+        dismissButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pollbarA.setCount(0,0);
+                pollbarB.setCount(0,0);
+                pollbarC.setCount(0,0);
+                pollbarD.setCount(0,0);
+            }
+        });
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        demonstrationHandler.post(demonstrationRunnable); // TODO: For demonstration
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        demonstrationHandler.removeCallbacks(demonstrationRunnable); // TODO: For demonstration
     }
 }
