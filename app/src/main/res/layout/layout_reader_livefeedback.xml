@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:elevation="5dp"
+        android:orientation="vertical">
+
+        <fragment
+            android:id="@+id/fragment_reader_livefeedback"
+            android:name="org.milderjoghurt.rlf.android.ReaderLiveFeedbackFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_reader_livefeedback" />
+
+    </LinearLayout>
+
+    <fragment
+        android:id="@+id/fragment_reader_livefeedback_details"
+        android:name="org.milderjoghurt.rlf.android.ReaderLiveFeedbackDetailsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_reader_livefeedback_details" />
+
+</LinearLayout>
