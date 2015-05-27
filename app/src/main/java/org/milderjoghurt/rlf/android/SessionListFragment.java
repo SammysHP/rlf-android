@@ -27,11 +27,11 @@ import java.util.List;
 
 public class SessionListFragment extends Fragment implements OnMoreListener, SwipeRefreshLayout.OnRefreshListener {
 
+    List<Session> sessions;
     private SuperRecyclerView mRecyclerView;
     private SessionListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SparseItemRemoveAnimator mSparseAnimator;
-    List<Session> sessions;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,6 +84,10 @@ public class SessionListFragment extends Fragment implements OnMoreListener, Swi
             @Override
             public void onItemClick(View view, int position) {
                 Toast.makeText(getActivity(), "Clicked " + position, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getView().getContext(), ReaderActivity.class);
+
+                intent.putExtra("Titel", sessions.get(position).toString());
+                getView().getContext().startActivity(intent);
             }
         }));
 

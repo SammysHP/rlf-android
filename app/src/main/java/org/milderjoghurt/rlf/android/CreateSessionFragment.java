@@ -10,8 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-
-import org.milderjoghurt.rlf.android.dummy.Session;
+import android.widget.Toast;
 
 public class CreateSessionFragment extends Fragment {
 
@@ -35,9 +34,10 @@ public class CreateSessionFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.action_create:
                 EditText et = (EditText) getView().findViewById(R.id.etSessionName);
-                Session session = new Session("BASDAA", et.getText().toString(), false);
+                //Session session = new Session("BASDAA", et.getText().toString(), false);
 
                 NavUtils.navigateUpFromSameTask(getActivity());
+                Toast.makeText(getActivity(), et.getText().toString() + " Erstellt", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

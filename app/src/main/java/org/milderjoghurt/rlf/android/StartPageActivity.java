@@ -2,7 +2,6 @@ package org.milderjoghurt.rlf.android;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.WindowManager;
 
 public class StartPageActivity extends AppCompatActivity {
 
@@ -10,9 +9,6 @@ public class StartPageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startpage);
-
-        // Enable "keep screen on" programmatically (independently of portrait/landscape layout)
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
 }
