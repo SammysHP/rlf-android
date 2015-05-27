@@ -6,10 +6,6 @@
     android:layout_height="fill_parent"
     tools:context="org.milderjoghurt.rlf.android.VoteFragment">
 
-    <Space
-        android:layout_width="fill_parent"
-        android:layout_height="40dp" />
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,30 +16,44 @@
         android:singleLine="true"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:textSize="44sp" />
+        android:textSize="50sp" />
 
     <GridLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="86dp"
         android:columnCount="2"
         android:rowCount="2"
         android:layout_gravity="center"
-        android:useDefaultMargins="true">
+        android:useDefaultMargins="true"
+        android:layout_marginTop="40sp"
+        android:layout_marginBottom="40sp"
+        android:rowOrderPreserved="false">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/VoteFragButtonA"
             android:id="@+id/btnVoteA"
-            android:textSize="32sp" />
+            android:textSize="40sp"
+            android:singleLine="true"
+            android:paddingLeft="60dp"
+            android:paddingTop="30dp"
+            android:paddingRight="60dp"
+            android:paddingBottom="30dp"
+            android:background="@color/vote_button_unselected" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/VoteFragButtonB"
             android:id="@+id/btnVoteB"
-            android:textSize="32sp" />
+            android:textSize="40sp"
+            android:singleLine="true"
+            android:paddingLeft="60dp"
+            android:paddingRight="60dp"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp"
+            android:background="@color/vote_button_unselected" />
 
         <Button
             android:layout_width="wrap_content"
@@ -51,33 +61,30 @@
             android:text="@string/VoteFragButtonC"
             android:id="@+id/btnVoteC"
             android:singleLine="true"
-            android:textSize="32sp" />
+            android:textSize="40sp"
+            android:paddingLeft="60dp"
+            android:paddingTop="30dp"
+            android:paddingRight="60dp"
+            android:paddingBottom="30dp"
+            android:background="@color/vote_button_unselected" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/VoteFragButtonD"
             android:id="@+id/btnVoteD"
-            android:textSize="32sp" />
+            android:textSize="40sp"
+            android:singleLine="true"
+            android:paddingLeft="60dp"
+            android:paddingTop="30dp"
+            android:paddingRight="60dp"
+            android:paddingBottom="30dp"
+            android:background="@color/vote_button_unselected" />
     </GridLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="40dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="fill_parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Auswahl: --"
-            android:id="@+id/txtVoteChoice"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentTop="false"
-            android:layout_centerInParent="true" />
 
         <Button
             android:layout_width="match_parent"
@@ -87,7 +94,13 @@
             android:layout_gravity="bottom"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="false"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:textStyle="bold"
+            android:textSize="28sp"
+            android:background="@color/vote_button_unselected"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:enabled="false" />
     </RelativeLayout>
 
 </LinearLayout>

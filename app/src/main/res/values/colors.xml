@@ -3,4 +3,7 @@
     <color name="reader_livefeedback_neutral">@android:color/holo_orange_light</color>
     <color name="reader_livefeedback_negative">@android:color/holo_red_light</color>
     <color name="reader_livefeedback_request">@android:color/holo_blue_bright</color>
+
+    <color name="vote_button_unselected">@android:color/darker_gray</color>
+    <color name="vote_button_selected">@android:color/holo_blue_light</color>
 </resources>
