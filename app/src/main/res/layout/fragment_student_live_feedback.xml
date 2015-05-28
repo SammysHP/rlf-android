@@ -1,0 +1,73 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_student_live_feedback"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context="org.milderjoghurt.rlf.android.StudentLiveFeedbackFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_turtle" />
+
+        <SeekBar
+            android:id="@+id/feedback_seekbar_speed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:max="256"
+            android:maxHeight="15dp"
+            android:progress="128"
+            android:progressDrawable="@drawable/seekbar_npn"
+            android:splitTrack="false"
+            android:thumb="@drawable/seekbar_arrows" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_rabbit" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_understand" />
+
+        <SeekBar
+            android:id="@+id/feedback_seekbar_understandability"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:max="256"
+            android:maxHeight="15dp"
+            android:progress="0"
+            android:progressDrawable="@drawable/seekbar_pn"
+            android:splitTrack="false"
+            android:thumb="@drawable/seekbar_arrows" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_confused" />
+    </LinearLayout>
+</LinearLayout>
