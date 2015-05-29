@@ -83,17 +83,17 @@ public class StartPageFragment extends Fragment {
         }
     }
 
-    public void createVeranstaltung(View view) {
+    public void createSession(View view) {
         Intent intent = new Intent(this, DisplayMessageActivity.class);
 
 
         startActivity(intent);
     }
 
-    public void enterVeranstaltung(View view) {
+    public void enterSession(View view) {
         Intent intent = new Intent(this, DisplayMessageActivity.class);
 
-        EditText editText = (EditText) getView().findViewById(R.id.SitzungID);
+        EditText editText = (EditText) getView().findViewById(R.id.SessionID);
         String message = editText.getText().toString();
 
         intent.putExtra(EXTRA_MESSAGE, message);

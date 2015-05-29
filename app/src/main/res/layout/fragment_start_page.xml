@@ -11,23 +11,23 @@
     <Button
         android:layout_width="157dp"
         android:layout_height="99dp"
-        android:text="Eigene Veranstaltungen"
-        android:onClick="createVeranstaltung"
+        android:text="New Session"
+        android:onClick="createSession"
         android:id="@+id/button"
         android:layout_gravity="center_vertical" />
 
 
-    <EditText android:id="@+id/SitzungID"
+    <EditText android:id="@+id/SessionID"
         android:layout_width="wrap_content"
         android:layout_height="73dp"
-        android:hint="SitzungID"
+        android:hint="SessionID"
         android:layout_gravity="bottom" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="89dp"
-        android:text="Veranstaltung beitreten"
-        android:onClick="enterVeranstaltung"
+        android:text="Create Session"
+        android:onClick="enterSession"
         android:layout_gravity="center_vertical" />
 
 </RelativeLayout>
