@@ -11,7 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+
+import android.app.Fragment;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import org.milderjoghurt.rlf.android.dummy.Session;
 
@@ -22,6 +30,7 @@ public class StartPageFragment extends Fragment {
 
     List<Session> sessions;
     private ArrayAdapter<Session> mAdapter;
+    String EXTRA_MESSAGE = "bla";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,5 +81,22 @@ public class StartPageFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void createVeranstaltung(View view) {
+        Intent intent = new Intent(this, DisplayMessageActivity.class);
+
+
+        startActivity(intent);
+    }
+
+    public void enterVeranstaltung(View view) {
+        Intent intent = new Intent(this, DisplayMessageActivity.class);
+
+        EditText editText = (EditText) getView().findViewById(R.id.SitzungID);
+        String message = editText.getText().toString();
+
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
     }
 }

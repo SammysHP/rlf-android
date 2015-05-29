@@ -8,4 +8,26 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:layout_width="157dp"
+        android:layout_height="99dp"
+        android:text="Eigene Veranstaltungen"
+        android:onClick="createVeranstaltung"
+        android:id="@+id/button"
+        android:layout_gravity="center_vertical" />
+
+
+    <EditText android:id="@+id/SitzungID"
+        android:layout_width="wrap_content"
+        android:layout_height="73dp"
+        android:hint="SitzungID"
+        android:layout_gravity="bottom" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="89dp"
+        android:text="Veranstaltung beitreten"
+        android:onClick="enterVeranstaltung"
+        android:layout_gravity="center_vertical" />
+
 </RelativeLayout>
