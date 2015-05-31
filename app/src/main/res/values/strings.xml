@@ -16,6 +16,10 @@
 
 
     <string name="SessionStart">Sitzung starten</string>
+    <string name="SessionIdText">Sitzungs ID</string>
+    <string name="SessionEnter">Sitzung beitreten</string>
+    <string name="OwnedSession">Eigene Sitzungen</string>
+
     <!-- Session liste-->
     <string name="SessionList">Eigene Sitzungen</string>
     <string name="SessionDeleteQuestion">Sitzung löschen?</string>
@@ -27,4 +31,5 @@
     <string name="break1">Pause</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="btnCreateText">Erstellen</string>
 </resources>
