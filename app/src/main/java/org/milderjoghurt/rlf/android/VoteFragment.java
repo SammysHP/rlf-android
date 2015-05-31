@@ -20,13 +20,12 @@ public class VoteFragment extends Fragment {
 
     // local res / logging
     private static final String LOG_TAG = "Voting";
-    private static final String SELECTED_CHOICE_PREFIX = "Auswahl:";
     private static final String MSG_VOTE_SENDED = "Auswahl gesendet";
     private static final String MSG_VOTE_BLOCKED = "Du hast eben erst abgestimmt!";
 
     // vote symbols
-    public static final int[] VOTES = { 0, 1, 2, 3 };
     public static final String[] VOTES_LBL = { "A", "B", "C", "D" };
+    public static final String VOTE_NONE = "NONE";
 
     // UI
     private Button[] voteMapping = { null, null, null, null }; // determine which button maps to which vote symbol
@@ -34,10 +33,9 @@ public class VoteFragment extends Fragment {
     private AnimationDrawable sendBtnUIFeedback = null;
 
     // model
+    private boolean[] selectionStates = {false, false, false, false };
     private static final long LEAST_WAIT_TIME = 30000; // ms
-    private int lastVoteSymbol = -1; // last vote or -1 if not available
-    private String lastVoteSymbolStr = VOTES_LBL[0]; // vote str
-    private long lastVoteTime = 0; // timestamp - prevent clientside spamming
+    private long lastVoteTime = 0; // timestamp --> prevent clientside spamming
 
 
     @Override
@@ -60,23 +58,23 @@ public class VoteFragment extends Fragment {
             if(voteMapping[i] == btnSource) {
 
                 // set model state
-                setVoteSymbol(i);
-
-                // visual feedback on ui
-                src.setBackgroundColor(getResources().getColor(R.color.vote_button_selected));
+                selectionStates[i] = !selectionStates[i];
 
                 // there was (at least) one selection, so "sending" is enabled
                 sendButton.setEnabled(true);
-
-            } else {
-
-                // no match --> set to unselected color
-                voteMapping[i].setBackgroundColor(getResources().getColor(R.color.vote_button_unselected));
             }
+
+            // visual feedback on ui
+            final int btnColor = selectionStates[i] ? getResources().getColor(R.color.vote_button_selected) : getResources().getColor(R.color.vote_button_unselected);
+            voteMapping[i].setBackgroundColor(btnColor);
         }
 
+        // TODO:
+        // the model state might also be sended here, but this might contradict
+        // the "send info vs. revert choice" idea issued in gitlab
+
         // debug
-        //Log.d(LOG_TAG, "vote " + getLastVoteSymbol() + " selected");
+        //Log.d(LOG_TAG, "voted " + getLastVoteSymbolStr());
     }
 
     /**
@@ -109,24 +107,46 @@ public class VoteFragment extends Fragment {
             // give more ui feedback:
             Toast.makeText(getActivity().getApplicationContext(), MSG_VOTE_SENDED, Toast.LENGTH_SHORT).show();
 
-            for(int i=0;i<voteMapping.length;++i) {
+
+            for(int i=0;i<selectionStates.length;++i) {
+                selectionStates[i] = false; // reset
                 voteMapping[i].setBackgroundColor(getResources().getColor(R.color.vote_button_unselected));
             }
-            sendButton.setEnabled(false);
+            //sendButton.setEnabled(false); // FIXME should be disabled when nothin selected?
         }
+
+        // debug
+        Log.d(LOG_TAG, "voted " + getLastVoteSymbolStr());
     }
 
-    private void setVoteSymbol(int index) {
-        lastVoteSymbol = VOTES[index];
-        lastVoteSymbolStr = VOTES_LBL[index];
+    private boolean isSelected(int index) {
+        return (index >= 0 && index < selectionStates.length) ? selectionStates[index] : false;
     }
 
-    public int getLastVoteSymbol() {
-        return lastVoteSymbol;
+    private boolean isAtLeastOneSelected() {
+        boolean result = false;
+        for(boolean b : selectionStates)
+            result |= b;
+        return result;
     }
 
+    /**
+     * Returns the current model state. Can be "VOTE_NONE" if no selection was done
+     * @return Selection choices as string or VOTE_NONE
+     */
     public String getLastVoteSymbolStr() {
-        return lastVoteSymbolStr;
+
+        // TODO: details about how to communicate with server necessary
+
+        if(!isAtLeastOneSelected())
+            return VOTE_NONE;
+
+        String result = "";
+        for(int i=0;i<selectionStates.length;++i)
+            if(isSelected(i))
+                result += VOTES_LBL[i];
+
+        return result;
     }
 
     @Override
@@ -141,7 +161,7 @@ public class VoteFragment extends Fragment {
             Button btnC = (Button) getView().findViewById(R.id.btnVoteC);
             Button btnD = (Button) getView().findViewById(R.id.btnVoteD);
             sendButton = (Button) getView().findViewById(R.id.btnVoteSend);
-            sendButton.setEnabled(false); // there needs to be a selection for enabling
+            //sendButton.setEnabled(false);  // FIXME should be disabled when nothin selected? --> usability
 
             View.OnClickListener voteClickListener = new View.OnClickListener() {
                 @Override
@@ -175,7 +195,7 @@ public class VoteFragment extends Fragment {
 
 
         } catch (Exception e) {
-            Log.d(LOG_TAG, "gui setup failed");
+            Log.d(LOG_TAG, "gui setup failed in vote fragment");
         }
     }
 }
