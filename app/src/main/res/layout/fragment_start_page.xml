@@ -1,0 +1,36 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.milderjoghurt.rlf.android.StartPageFragment">
+
+    <EditText
+        android:id="@+id/SessionID"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="bottom"
+        android:hint="@string/SessionIdText"
+        android:singleLine="true"
+        android:textAlignment="center"
+        android:textSize="52sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnEnterSession"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/SessionID"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_vertical"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp"
+        android:text="@string/SessionEnter"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>
