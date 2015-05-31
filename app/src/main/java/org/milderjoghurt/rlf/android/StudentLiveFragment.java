@@ -21,7 +21,7 @@ public class StudentLiveFragment extends Fragment {
 
         super.onActivityCreated(savedInstance);
 
-        Button break1_btn = (Button) getView().findViewById(R.id.break1);
+     //   Button break1_btn = (Button) getView().findViewById(R.id.break1);
         Button signal_btn = (Button) getView().findViewById(R.id.signal);
 
 

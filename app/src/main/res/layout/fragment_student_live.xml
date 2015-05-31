@@ -10,19 +10,10 @@
     android:weightSum="1">
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:text="@string/break1"
-        android:id="@+id/break1"
-        android:layout_margin="10dp"
-        android:layout_weight="0.50" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
         android:text="@string/signal"
         android:id="@+id/signal"
-        android:layout_margin="10dp"
-        android:layout_weight="0.50" />
+        android:layout_margin="10dp" />
 
 </LinearLayout>
