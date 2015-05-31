@@ -1,17 +1,48 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
 
-    <fragment
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical">
+
+<!--    <fragment
         android:id="@+id/fragment"
         android:name="org.milderjoghurt.rlf.android.StartPageFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
-        tools:layout="@layout/fragment_startpage_entry" />
+        tools:layout="@layout/fragment_startpage_entry" />-->
+
+
+<ListView
+    android:id="@+id/listViewOpenSessions"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true" />
+
+<Button
+    android:layout_width="157dp"
+    android:layout_height="99dp"
+    android:text="New Session"
+    android:onClick="createSession"
+    android:id="@+id/button"
+    android:layout_gravity="center_vertical" />
+
+
+<EditText android:id="@+id/SessionID"
+    android:layout_width="wrap_content"
+    android:layout_height="73dp"
+    android:hint="SessionID"
+    android:layout_gravity="bottom" />
+
+<Button
+    android:layout_width="match_parent"
+    android:layout_height="89dp"
+    android:text="Create Session"
+    android:onClick="enterSession"
+    android:layout_gravity="center_vertical" />
 
 
 </LinearLayout>

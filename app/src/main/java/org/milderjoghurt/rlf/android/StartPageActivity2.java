@@ -61,7 +61,7 @@ public class StartPageActivity2 extends ActionBarActivity {
     }
 
 
-    @Override
+    //@Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_start_page, menu);
     }
@@ -80,14 +80,14 @@ public class StartPageActivity2 extends ActionBarActivity {
     }
 
     public void createSession(View view) {
-        Intent intent = new Intent(this, DisplayMessageActivity.class);
+        Intent intent = new Intent(this, CreateSessionActivity.class);
 
 
         startActivity(intent);
     }
 
     public void enterSession(View view) {
-        Intent intent = new Intent(this, DisplayMessageActivity.class);
+        Intent intent = new Intent(this, StudentLiveActivity.class);
 
         EditText editText = (EditText) this.getWindow().getDecorView().findViewById(R.id.SessionID);
         String message = editText.getText().toString();
