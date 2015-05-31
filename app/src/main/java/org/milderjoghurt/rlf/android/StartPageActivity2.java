@@ -3,6 +3,7 @@ package org.milderjoghurt.rlf.android;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class StartPageActivity2 extends ActionBarActivity {
+public class StartPageActivity2 extends AppCompatActivity {
 
     public final static String EXTRA_MESSAGE = "de.unihannover.se.helloandroid.MESSAGE";
     List<Session> sessions;
@@ -44,7 +45,7 @@ public class StartPageActivity2 extends ActionBarActivity {
         sessions.add(new Session("MNOPQR", "Software Projekt 5", false));
         sessions.add(new Session("MNOPQR", "Software Projekt 6", false));
 
-        mAdapter = new ArrayAdapter<>(this.getWindow().getDecorView().getContext(), R.layout.activity_startpage, R.id.session_name, sessions);
+        mAdapter = new ArrayAdapter<>(this.getWindow().getDecorView().getContext(),  R.layout.fragment_startpage_entry, R.id.session_name, sessions);
 
         ListView mSessionView = (ListView) this.getWindow().getDecorView().findViewById(R.id.listViewOpenSessions);
         mSessionView.setAdapter(mAdapter);
