@@ -1,106 +1,124 @@
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
     tools:context="org.milderjoghurt.rlf.android.VoteFragment">
 
     <TextView
+        android:id="@+id/txtVoteHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/VoteFragHeader"
-        android:id="@+id/txtVoteHeader"
-        android:textStyle="bold"
-        android:singleLine="true"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:textSize="50sp" />
+        android:singleLine="true"
+        android:text="@string/VoteFragHeader"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="50sp"
+        android:textStyle="bold" />
 
-    <GridLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:columnCount="2"
-        android:rowCount="2"
-        android:layout_gravity="center"
-        android:useDefaultMargins="true"
-        android:layout_marginTop="40sp"
-        android:layout_marginBottom="40sp"
-        android:rowOrderPreserved="false">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/VoteFragButtonA"
-            android:id="@+id/btnVoteA"
-            android:textSize="40sp"
-            android:singleLine="true"
-            android:paddingLeft="60dp"
-            android:paddingTop="30dp"
-            android:paddingRight="60dp"
-            android:paddingBottom="30dp"
-            android:background="@color/vote_button_unselected" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/VoteFragButtonB"
-            android:id="@+id/btnVoteB"
-            android:textSize="40sp"
-            android:singleLine="true"
-            android:paddingLeft="60dp"
-            android:paddingRight="60dp"
-            android:paddingTop="30dp"
-            android:paddingBottom="30dp"
-            android:background="@color/vote_button_unselected" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/VoteFragButtonC"
-            android:id="@+id/btnVoteC"
-            android:singleLine="true"
-            android:textSize="40sp"
-            android:paddingLeft="60dp"
-            android:paddingTop="30dp"
-            android:paddingRight="60dp"
-            android:paddingBottom="30dp"
-            android:background="@color/vote_button_unselected" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/VoteFragButtonD"
-            android:id="@+id/btnVoteD"
-            android:textSize="40sp"
-            android:singleLine="true"
-            android:paddingLeft="60dp"
-            android:paddingTop="30dp"
-            android:paddingRight="60dp"
-            android:paddingBottom="30dp"
-            android:background="@color/vote_button_unselected" />
-    </GridLayout>
-
-    <RelativeLayout
+    <Space
         android:layout_width="match_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="0dp"
+        android:layout_weight="0.2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5" />
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/VoteFragSendTxt"
-            android:id="@+id/btnVoteSend"
-            android:layout_gravity="bottom"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentStart="true"
-            android:textStyle="bold"
-            android:textSize="28sp"
+            android:id="@+id/btnVoteA"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
             android:background="@color/vote_button_unselected"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:enabled="false" />
-    </RelativeLayout>
+            android:singleLine="true"
+            android:text="@string/VoteFragButtonA"
+            android:textSize="40sp" />
+
+        <Button
+            android:id="@+id/btnVoteB"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@color/vote_button_unselected"
+            android:singleLine="true"
+            android:text="@string/VoteFragButtonB"
+            android:textSize="40sp" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5" />
+
+        <Button
+            android:id="@+id/btnVoteC"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@color/vote_button_unselected"
+            android:singleLine="true"
+            android:text="@string/VoteFragButtonC"
+            android:textSize="40sp" />
+
+        <Button
+            android:id="@+id/btnVoteD"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@color/vote_button_unselected"
+            android:singleLine="true"
+            android:text="@string/VoteFragButtonD"
+            android:textSize="40sp" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5" />
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2" />
+
+    <Button
+        android:id="@+id/btnVoteSend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/vote_button_unselected"
+        android:enabled="false"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp"
+        android:text="@string/VoteFragSendTxt"
+        android:textSize="28sp"
+        android:textStyle="bold" />
 
 </LinearLayout>
