@@ -21,7 +21,6 @@ import org.milderjoghurt.rlf.android.dummy.Session;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class StartPageActivity extends AppCompatActivity {
 
     public final static String EXTRA_MESSAGE = "";
@@ -58,11 +57,8 @@ public class StartPageActivity extends AppCompatActivity {
                 view.getContext().startActivity(intent);
             }
         });
-
     }
 
-
-    //@Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_start_page, menu);
     }
