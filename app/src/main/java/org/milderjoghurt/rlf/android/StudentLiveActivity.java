@@ -26,9 +26,6 @@ public class StudentLiveActivity extends AppCompatActivity {
         Intent intent = getIntent();
         setTitle(intent.getStringExtra("Titel"));
 
-        // Enable "keep screen on" programmatically (independently of portrait/landscape layout)
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPagerAdapter = new ViewPagerAdapter();
         viewPager.setAdapter(viewPagerAdapter);
