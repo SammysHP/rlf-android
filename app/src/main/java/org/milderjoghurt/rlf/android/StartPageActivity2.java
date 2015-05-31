@@ -82,17 +82,13 @@ public class StartPageActivity2 extends AppCompatActivity {
 
     public void createSession(View view) {
         Intent intent = new Intent(this, CreateSessionActivity.class);
-
-
         startActivity(intent);
     }
 
     public void enterSession(View view) {
         Intent intent = new Intent(this, StudentLiveActivity.class);
-
         EditText editText = (EditText) this.getWindow().getDecorView().findViewById(R.id.SessionID);
         String message = editText.getText().toString();
-
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
