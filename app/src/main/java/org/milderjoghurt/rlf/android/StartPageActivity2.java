@@ -11,13 +11,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import org.milderjoghurt.rlf.android.R;
+import org.milderjoghurt.rlf.android.SessionListActivity;
+import org.milderjoghurt.rlf.android.StudentLiveActivity;
 import org.milderjoghurt.rlf.android.dummy.Session;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class StartPageActivity extends ActionBarActivity {
+public class StartPageActivity2 extends ActionBarActivity {
 
     public final static String EXTRA_MESSAGE = "de.unihannover.se.helloandroid.MESSAGE";
     List<Session> sessions;
