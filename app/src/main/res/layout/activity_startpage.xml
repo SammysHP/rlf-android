@@ -25,7 +25,7 @@ android:orientation="vertical">
 <Button
     android:layout_width="157dp"
     android:layout_height="99dp"
-    android:text="New Session"
+    android:text="Create Session"
     android:onClick="createSession"
     android:id="@+id/button"
     android:layout_gravity="center_vertical" />
@@ -40,7 +40,7 @@ android:orientation="vertical">
 <Button
     android:layout_width="match_parent"
     android:layout_height="89dp"
-    android:text="Create Session"
+    android:text="Join Session"
     android:onClick="enterSession"
     android:layout_gravity="center_vertical" />
 
