@@ -3,6 +3,7 @@ package org.milderjoghurt.rlf.android.dummy;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -53,6 +54,16 @@ public class SessionListAdapter extends BaseSwipeAdapter<SessionListAdapter.View
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_session_entry, viewGroup, false);
         final ViewHolder holder = new ViewHolder(v);
+
+        holder.cv.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent e) {
+                if (e.getAction() == MotionEvent.ACTION_UP) {
+                    Toast.makeText(v.getContext(), "Clicked " + holder.getPosition(), Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            }
+        });
 
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override

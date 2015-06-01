@@ -20,7 +20,6 @@ import com.malinskiy.superrecyclerview.swipe.SwipeItemManagerInterface;
 
 import org.milderjoghurt.rlf.android.dummy.Session;
 import org.milderjoghurt.rlf.android.dummy.SessionListAdapter;
-import org.milderjoghurt.rlf.android.ui.RecyclerUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,23 +79,12 @@ public class SessionListFragment extends Fragment implements OnMoreListener, Swi
         mRecyclerView.setAdapter(mAdapter);
 
         mAdapter.setMode(SwipeItemManagerInterface.Mode.Single);
-        mRecyclerView.addOnItemTouchListener(new RecyclerUtils.RecyclerItemClickListener(getActivity(), new RecyclerUtils.RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Toast.makeText(getActivity(), "Clicked " + position, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getView().getContext(), ReaderActivity.class);
-
-                intent.putExtra("Titel", sessions.get(position).toString());
-                getView().getContext().startActivity(intent);
-            }
-        }));
 
         // add refresh listener
         //mRecyclerView.setRefreshListener(this);
         //mRecyclerView.setRefreshingColorResources(android.R.color.holo_orange_light, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_red_light);
         //mRecyclerView.setupMoreListener(this, 1);
     }
-
 
     @Override
     public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
