@@ -64,5 +64,17 @@ public class ReaderActivity extends AppCompatActivity {
         public void destroyItem(final ViewGroup container, final int position, final Object object) {
             container.removeView((View) object);
         }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "Feedback";
+                case 1:
+                    return "Umfrage";
+                default:
+                    return "";
+            }
+        }
     }
 }
