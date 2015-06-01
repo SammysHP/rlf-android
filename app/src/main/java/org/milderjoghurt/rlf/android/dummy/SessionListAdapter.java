@@ -1,8 +1,10 @@
 package org.milderjoghurt.rlf.android.dummy;
 
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 import com.malinskiy.superrecyclerview.swipe.BaseSwipeAdapter;
 
 import org.milderjoghurt.rlf.android.R;
+import org.milderjoghurt.rlf.android.ReaderActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -53,6 +56,18 @@ public class SessionListAdapter extends BaseSwipeAdapter<SessionListAdapter.View
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_session_entry, viewGroup, false);
         final ViewHolder holder = new ViewHolder(v);
+
+        holder.cv.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent e) {
+                if (e.getAction() == MotionEvent.ACTION_UP) {
+                    Intent intent = new Intent(v.getContext(), ReaderActivity.class);
+                    intent.putExtra("Titel", sessions.get(holder.getPosition()).toString());
+                    v.getContext().startActivity(intent);
+                }
+                return true;
+            }
+        });
 
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override

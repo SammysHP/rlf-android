@@ -2,12 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_create"
-        android:icon="@drawable/ic_add_white_24dp"
-        android:title="Erstellen"
-        app:showAsAction="always|withText" />
-
-    <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
         app:showAsAction="never" />

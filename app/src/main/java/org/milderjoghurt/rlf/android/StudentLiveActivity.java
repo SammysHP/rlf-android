@@ -26,9 +26,6 @@ public class StudentLiveActivity extends AppCompatActivity {
         Intent intent = getIntent();
         setTitle(intent.getStringExtra("Titel"));
 
-        // Enable "keep screen on" programmatically (independently of portrait/landscape layout)
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPagerAdapter = new ViewPagerAdapter();
         viewPager.setAdapter(viewPagerAdapter);
@@ -68,8 +65,19 @@ public class StudentLiveActivity extends AppCompatActivity {
         public void destroyItem(final ViewGroup container, final int position, final Object object) {
             container.removeView((View) object);
         }
-    }
 
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return getResources().getString(R.string.title_feedback);
+                case 1:
+                    return getResources().getString(R.string.title_poll);
+                default:
+                    return "";
+            }
+        }
+    }
 }
 
 

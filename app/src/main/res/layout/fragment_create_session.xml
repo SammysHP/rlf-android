@@ -18,4 +18,13 @@
         android:textAlignment="center"
         android:textSize="22sp" />
 
+    <Button
+        android:id="@+id/btnCreateSession"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etSessionName"
+        android:layout_centerHorizontal="true"
+        android:text="@string/btnCreateText"
+        android:textSize="22sp" />
+
 </RelativeLayout>
