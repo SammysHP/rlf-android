@@ -69,9 +69,9 @@ public class ReaderActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Feedback";
+                    return getResources().getString(R.string.title_feedback);
                 case 1:
-                    return "Umfrage";
+                    return getResources().getString(R.string.title_poll);
                 default:
                     return "";
             }
