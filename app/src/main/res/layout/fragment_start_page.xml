@@ -33,18 +33,31 @@
             android:maxLength="6"
             android:singleLine="true"
             android:textSize="52sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:hint="123456"/>
     </FrameLayout>
 
     <Button
         android:id="@+id/btnEnterSession"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/SessionIDContainer"
         android:layout_centerHorizontal="true"
         android:paddingBottom="20dp"
         android:paddingTop="20dp"
         android:text="@string/SessionEnter"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnListSessions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnEnterSession"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp"
+        android:text="@string/OwnedSession"
         android:textSize="28sp"
         android:textStyle="bold" />
 

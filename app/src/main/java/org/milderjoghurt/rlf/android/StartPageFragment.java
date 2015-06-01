@@ -33,6 +33,14 @@ public class StartPageFragment extends Fragment {
             }
         });
 
+        Button btnListSessions = (Button) view.findViewById(R.id.btnListSessions);
+        btnListSessions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listSessions();
+            }
+        });
+
         EditText idInput = (EditText) view.findViewById(R.id.SessionID);
         idInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -52,24 +60,6 @@ public class StartPageFragment extends Fragment {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_start_page, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.session_start:
-                Intent intent = new Intent(getView().getContext(), SessionListActivity.class);
-                getView().getContext().startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     private void enterSession() {
         Intent intent = new Intent(getView().getContext(), StudentLiveActivity.class);
 
@@ -80,5 +70,10 @@ public class StartPageFragment extends Fragment {
             intent.putExtra("Titel", editText.getText().toString());
             startActivity(intent);
         }
+    }
+
+    private void listSessions() {
+        Intent intent = new Intent(getView().getContext(), SessionListActivity.class);
+        getView().getContext().startActivity(intent);
     }
 }
