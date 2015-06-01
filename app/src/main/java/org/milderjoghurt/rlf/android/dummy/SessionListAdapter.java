@@ -1,5 +1,6 @@
 package org.milderjoghurt.rlf.android.dummy;
 
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import com.malinskiy.superrecyclerview.swipe.BaseSwipeAdapter;
 
 import org.milderjoghurt.rlf.android.R;
+import org.milderjoghurt.rlf.android.ReaderActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -59,7 +61,9 @@ public class SessionListAdapter extends BaseSwipeAdapter<SessionListAdapter.View
             @Override
             public boolean onTouch(View v, MotionEvent e) {
                 if (e.getAction() == MotionEvent.ACTION_UP) {
-                    Toast.makeText(v.getContext(), "Clicked " + holder.getPosition(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(v.getContext(), ReaderActivity.class);
+                    intent.putExtra("Titel", sessions.get(holder.getPosition()).toString());
+                    v.getContext().startActivity(intent);
                 }
                 return true;
             }
