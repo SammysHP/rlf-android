@@ -65,8 +65,19 @@ public class StudentLiveActivity extends AppCompatActivity {
         public void destroyItem(final ViewGroup container, final int position, final Object object) {
             container.removeView((View) object);
         }
-    }
 
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return getResources().getString(R.string.title_feedback);
+                case 1:
+                    return getResources().getString(R.string.title_poll);
+                default:
+                    return "";
+            }
+        }
+    }
 }
 
 
