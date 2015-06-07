@@ -7,6 +7,5 @@
     <color name="viewpagerindicator_bg">#333333</color>
     <color name="viewpagerindicator_fg">#ffffff</color>
 
-    <color name="vote_button_unselected">@android:color/darker_gray</color>
     <color name="vote_button_selected">@android:color/holo_blue_light</color>
 </resources>
