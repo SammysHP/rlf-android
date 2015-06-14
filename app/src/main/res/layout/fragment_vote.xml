@@ -5,18 +5,6 @@
     android:orientation="vertical"
     tools:context="org.milderjoghurt.rlf.android.VoteFragment">
 
-    <TextView
-        android:id="@+id/txtVoteHeader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"
-        android:singleLine="true"
-        android:text="@string/VoteFragHeader"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="50sp"
-        android:textStyle="bold" />
-
     <Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -40,8 +28,7 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:background="@color/vote_button_unselected"
-            android:singleLine="true"
+            android:singleLine="false"
             android:text="@string/VoteFragButtonA"
             android:textSize="40sp" />
 
@@ -52,8 +39,7 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:background="@color/vote_button_unselected"
-            android:singleLine="true"
+            android:singleLine="false"
             android:text="@string/VoteFragButtonB"
             android:textSize="40sp" />
 
@@ -81,8 +67,7 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:background="@color/vote_button_unselected"
-            android:singleLine="true"
+            android:singleLine="false"
             android:text="@string/VoteFragButtonC"
             android:textSize="40sp" />
 
@@ -93,8 +78,7 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:background="@color/vote_button_unselected"
-            android:singleLine="true"
+            android:singleLine="false"
             android:text="@string/VoteFragButtonD"
             android:textSize="40sp" />
 
@@ -113,7 +97,6 @@
         android:id="@+id/btnVoteSend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/vote_button_unselected"
         android:enabled="false"
         android:paddingBottom="20dp"
         android:paddingTop="20dp"

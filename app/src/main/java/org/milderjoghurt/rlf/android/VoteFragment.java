@@ -31,12 +31,16 @@ public class VoteFragment extends Fragment {
     private Button[] voteMapping = { null, null, null, null }; // determine which button maps to which vote symbol
     private Button sendButton = null;
     private AnimationDrawable sendBtnUIFeedback = null;
+    private static final int unselectedColor = R.color.button_material_light;
 
     // model
     private boolean[] selectionStates = {false, false, false, false };
-    private static final long LEAST_WAIT_TIME = 30000; // ms
+    private static final long LEAST_WAIT_TIME = 300; // ms
     private long lastVoteTime = 0; // timestamp --> prevent clientside spamming
 
+    public VoteFragment() {
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,15 +63,11 @@ public class VoteFragment extends Fragment {
 
                 // set model state
                 selectionStates[i] = !selectionStates[i];
-
-                // there was (at least) one selection, so "sending" is enabled
-                sendButton.setEnabled(true);
             }
-
-            // visual feedback on ui
-            final int btnColor = selectionStates[i] ? getResources().getColor(R.color.vote_button_selected) : getResources().getColor(R.color.vote_button_unselected);
-            voteMapping[i].setBackgroundColor(btnColor);
         }
+
+        // ui feedback
+        updateUI();
 
         // TODO:
         // the model state might also be sended here, but this might contradict
@@ -104,19 +104,19 @@ public class VoteFragment extends Fragment {
             // update timestamp
             lastVoteTime = curTime;
 
+            // debug
+            Log.d(LOG_TAG, "voted " + getLastVoteSymbolStr());
+
             // give more ui feedback:
             Toast.makeText(getActivity().getApplicationContext(), MSG_VOTE_SENDED, Toast.LENGTH_SHORT).show();
 
-
+            // reset model
             for(int i=0;i<selectionStates.length;++i) {
-                selectionStates[i] = false; // reset
-                voteMapping[i].setBackgroundColor(getResources().getColor(R.color.vote_button_unselected));
+                selectionStates[i] = false;
             }
-            //sendButton.setEnabled(false); // FIXME should be disabled when nothin selected?
-        }
 
-        // debug
-        Log.d(LOG_TAG, "voted " + getLastVoteSymbolStr());
+            updateUI();
+        }
     }
 
     private boolean isSelected(int index) {
@@ -128,6 +128,19 @@ public class VoteFragment extends Fragment {
         for(boolean b : selectionStates)
             result |= b;
         return result;
+    }
+
+    /**
+     * Updates UI state, especially element colors
+     */
+    private void updateUI() {
+        for(int i = 0; i < voteMapping.length; ++i) {
+            final int btnColor = selectionStates[i] ? getResources().getColor(R.color.vote_button_selected) : getResources().getColor(unselectedColor);
+            voteMapping[i].setBackgroundColor(btnColor);
+        }
+
+        // there was (at least) one selection, so "sending" is enabled
+        sendButton.setEnabled(isAtLeastOneSelected());
     }
 
     /**
@@ -161,7 +174,6 @@ public class VoteFragment extends Fragment {
             Button btnC = (Button) getView().findViewById(R.id.btnVoteC);
             Button btnD = (Button) getView().findViewById(R.id.btnVoteD);
             sendButton = (Button) getView().findViewById(R.id.btnVoteSend);
-            //sendButton.setEnabled(false);  // FIXME should be disabled when nothin selected? --> usability
 
             View.OnClickListener voteClickListener = new View.OnClickListener() {
                 @Override
@@ -190,9 +202,10 @@ public class VoteFragment extends Fragment {
 
             sendBtnUIFeedback = new AnimationDrawable();
             sendBtnUIFeedback.addFrame(new ColorDrawable(getResources().getColor(R.color.vote_button_selected)), 110);
-            sendBtnUIFeedback.addFrame(new ColorDrawable(getResources().getColor(R.color.vote_button_unselected)), 10);
+            sendBtnUIFeedback.addFrame(new ColorDrawable(getResources().getColor(unselectedColor)), 10); // back to unselected
             sendBtnUIFeedback.setOneShot(true);
 
+            updateUI();
 
         } catch (Exception e) {
             Log.d(LOG_TAG, "gui setup failed in vote fragment");
