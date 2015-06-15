@@ -69,7 +69,7 @@ public class StartPageFragment extends Fragment {
         final EditText editText = (EditText) getView().findViewById(R.id.SessionID);
 
         if (editText.getText().toString().length() != 6) {
-            Toast.makeText(getActivity(), "Falsche ID", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "zu kurze ID", Toast.LENGTH_SHORT).show();
             editText.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
             new Handler().postDelayed(new Runnable() {
                 @Override
