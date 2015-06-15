@@ -2,7 +2,10 @@ package org.milderjoghurt.rlf.android;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -63,15 +66,22 @@ public class StartPageFragment extends Fragment {
     private void enterSession() {
         Intent intent = new Intent(getView().getContext(), StudentLiveActivity.class);
 
-        EditText editText = (EditText) getView().findViewById(R.id.SessionID);
+        final EditText editText = (EditText) getView().findViewById(R.id.SessionID);
+
         if (editText.getText().toString().length() != 6) {
             Toast.makeText(getActivity(), "Falsche ID", Toast.LENGTH_SHORT).show();
+            editText.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    editText.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+                }
+            }, 500);
         } else {
             intent.putExtra("Titel", editText.getText().toString());
             startActivity(intent);
         }
     }
-
     private void listSessions() {
         Intent intent = new Intent(getView().getContext(), SessionListActivity.class);
         getView().getContext().startActivity(intent);
