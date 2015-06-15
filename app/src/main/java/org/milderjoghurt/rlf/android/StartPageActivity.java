@@ -12,16 +12,4 @@ public class StartPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startpage);
     }
-
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-
-        if (((EditText) findViewById(R.id.SessionID)).getText().toString().length() != 6) {
-            ((EditText) findViewById(R.id.SessionID)).setTextColor(Color.GRAY);
-            ((EditText) findViewById(R.id.SessionID)).setEnabled(true);
-        } else {
-            ((EditText) findViewById(R.id.SessionID)).setTextColor(Color.BLACK);
-            ((EditText) findViewById(R.id.SessionID)).setEnabled(false);
-        }
-        return true;
-    }
 }
