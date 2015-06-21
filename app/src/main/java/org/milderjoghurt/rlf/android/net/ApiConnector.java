@@ -145,20 +145,72 @@ public class ApiConnector {
         put(Constants.SESSION + sessionId, params, handler);
     }
 
-    public static void deleteSession(final String sessionId, final String owner, final AsyncHttpResponseHandler handler) {
-        delete(Constants.SESSION + sessionId + '/' + owner, handler);
+    public static void deleteSession(final String sessionId, final String owner, final ApiResponseHandler<Session> handler) {
+        delete(Constants.SESSION + sessionId + '/' + owner, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                handler.onFailure(e);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                handler.onSuccess(null);
+            }
+        });
     }
 
-    public static void getVotes(final String sessionId, final AsyncHttpResponseHandler handler) {
-        get(Constants.SESSION + sessionId + Constants.VOTES, null, handler);
+    public static void getVotes(final String sessionId, final ApiResponseHandler<List<Vote>> handler) {
+        get(Constants.SESSION + sessionId + Constants.VOTES, null, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                handler.onFailure(e);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    final List<Vote> voteList = Arrays.asList(mapper.readValue(responseString, Vote[].class));
+                    handler.onSuccess(voteList);
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
+            }
+        });
     }
 
-    public static void getAnswers(final String sessionId, final AsyncHttpResponseHandler handler) {
-        get(Constants.SESSION + sessionId + Constants.ANSWERS, null, handler);
+    public static void getAnswers(final String sessionId, final ApiResponseHandler<List<QuestionAnswer>> handler) {
+        get(Constants.SESSION + sessionId + Constants.ANSWERS, null, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                handler.onFailure(e);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    final List<QuestionAnswer> answerList = Arrays.asList(mapper.readValue(responseString, QuestionAnswer[].class));
+                    handler.onSuccess(answerList);
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
+            }
+        });
     }
 
-    public static void resetAnswers(final String sessionId, final String owner, final AsyncHttpResponseHandler handler) {
-        get(Constants.SESSION + sessionId + Constants.RESET_ANSWERS + owner, null, handler);
+    public static void resetAnswers(final String sessionId, final String owner, final ApiResponseHandler<Session> handler) {
+        get(Constants.SESSION + sessionId + Constants.RESET_ANSWERS + owner, null, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                handler.onFailure(e);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                handler.onSuccess(null);
+            }
+        });
     }
 
     public static void createAnswer(final String sessionId, final AsyncHttpResponseHandler handler) {
