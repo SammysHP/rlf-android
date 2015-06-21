@@ -28,4 +28,6 @@ dependencies {
     compile 'com.malinskiy:superrecyclerview:1.1.0'
     compile 'com.malinskiy:materialicons:1.0.1'
     compile 'com.loopj.android:android-async-http:1.4.5'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.5.3'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.5.3'
 }

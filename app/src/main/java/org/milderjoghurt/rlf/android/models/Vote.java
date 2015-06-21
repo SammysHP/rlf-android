@@ -1,5 +1,7 @@
 package org.milderjoghurt.rlf.android.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -18,16 +20,9 @@ public class Vote {
 	public Type type;
 
 	public enum Type {
-		@EnumValue("S")
 		SPEED,
-
-		@EnumValue("U")
 		UNDERSTANDABILITY,
-
-		@EnumValue("R")
 		REQUEST,
-
-		@EnumValue("N")
 		NOREQUEST,
 	}
 
