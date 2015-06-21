@@ -10,6 +10,8 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import org.apache.http.Header;
 import org.milderjoghurt.rlf.android.models.*;
+import org.milderjoghurt.rlf.android.net.exceptions.NoSuchSessionException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -108,6 +110,11 @@ public class ApiConnector {
         get(Constants.SESSION + sessionId, null, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                if (statusCode == 404) {
+                    handler.onFailure(new NoSuchSessionException(sessionId));
+                    return;
+                }
+
                 handler.onFailure(e);
             }
 
