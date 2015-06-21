@@ -9,11 +9,16 @@ import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import org.apache.http.Header;
-import org.milderjoghurt.rlf.android.dummy.Session;
+import org.milderjoghurt.rlf.android.models.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class ApiConnector {
     private static final class Constants {
-        static final String BASE_URL = "http://krul.finf.uni-hannover.de/todo/"; // TODO
+        static final String BASE_URL = "http://krul.finf.uni-hannover.de:9000/";
         static final String SESSIONS = "sessions";
         static final String SESSION = "sessions/";
         static final String SESSIONS_FROM = "sessions/from/";
@@ -59,12 +64,44 @@ public class ApiConnector {
         return Constants.BASE_URL + relativeUrl;
     }
 
-    public static void getSessions(final AsyncHttpResponseHandler handler) {
-        get(Constants.SESSIONS, null, handler);
+    public static void getSessions(final ApiResponseHandler<List<Session>> handler) {
+        get(Constants.SESSIONS, null, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                handler.onFailure(e);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    final List<Session> sessionList= Arrays.asList(mapper.readValue(responseString, Session[].class));
+                    handler.onSuccess(sessionList);
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
+            }
+        });
     }
 
-    public static void getSessionsByOwner(final String owner, final AsyncHttpResponseHandler handler) {
-        get(Constants.SESSIONS_FROM + owner, null, handler);
+    public static void getSessionsByOwner(final String owner, final ApiResponseHandler<Session> handler) {
+        get(Constants.SESSIONS_FROM + owner, null, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                handler.onFailure(e);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    final Session session = mapper.readValue(responseString, Session.class);
+                    handler.onSuccess(session);
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
+            }
+        });
     }
 
     public static void getSession(final String sessionId, final ApiResponseHandler<Session> handler) {
@@ -76,8 +113,13 @@ public class ApiConnector {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                final Session session = new Session("foo", "bar", true); // TODO
-                handler.onSuccess(session);
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    final Session session = mapper.readValue(responseString, Session.class);
+                    handler.onSuccess(session);
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
         });
     }
