@@ -9,12 +9,14 @@ import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import org.apache.http.Header;
+import org.apache.http.entity.StringEntity;
 import org.milderjoghurt.rlf.android.models.*;
 import org.milderjoghurt.rlf.android.net.exceptions.NoSuchSessionException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -54,8 +56,26 @@ public class ApiConnector {
         client.post(getAbsoluteUrl(url), params, responseHandler);
     }
 
+    private static void post(final String url, final String json, final AsyncHttpResponseHandler responseHandler) {
+        try {
+            final StringEntity entity = new StringEntity(json);
+            client.post(null, getAbsoluteUrl(url), entity, "application/json", responseHandler);
+        } catch (UnsupportedEncodingException e) {
+            // ignore this shit
+        }
+    }
+
     private static void put(final String url, final RequestParams params, final AsyncHttpResponseHandler responseHandler) {
         client.put(getAbsoluteUrl(url), params, responseHandler);
+    }
+
+    private static void put(final String url, final String json, final AsyncHttpResponseHandler responseHandler) {
+        try {
+            final StringEntity entity = new StringEntity(json);
+            client.put(null, getAbsoluteUrl(url), entity, "application/json", responseHandler);
+        } catch (UnsupportedEncodingException e) {
+            // ignore this shit
+        }
     }
 
     private static void delete(final String url, final AsyncHttpResponseHandler responseHandler) {
