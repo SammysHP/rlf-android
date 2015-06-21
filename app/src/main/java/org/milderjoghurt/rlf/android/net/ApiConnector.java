@@ -32,7 +32,7 @@ public class ApiConnector {
         // Do not instantiate
     }
 
-    private static String getOwnerId(final Context context) {
+    public static String getOwnerId(final Context context) {
         final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return tm.getDeviceId();
     }
