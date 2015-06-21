@@ -241,20 +241,12 @@ public class ApiConnector {
     }
 
     public static void createAnswer(final String sessionId, final AsyncHttpResponseHandler handler) {
-        // TODO: transform (new parameter!) answer to POST params
-        final RequestParams params = new RequestParams();
-        params.put("key", "value");
-        params.put("more", "data");
-
-        post(Constants.ANSWER + sessionId, null, handler);
+        // TODO
+        post(Constants.ANSWER + sessionId, "[]", handler);
     }
 
     public static void createVote(final String sessionId, final AsyncHttpResponseHandler handler) {
-        // TODO: transform (new parameter!) answer to POST params
-        final RequestParams params = new RequestParams();
-        params.put("key", "value");
-        params.put("more", "data");
-
-        post(Constants.VOTE + sessionId, null, handler);
+        // TODO
+        post(Constants.VOTE + sessionId, "[]", handler);
     }
 }
