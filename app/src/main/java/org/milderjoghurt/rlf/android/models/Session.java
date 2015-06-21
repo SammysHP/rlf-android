@@ -19,6 +19,9 @@ public class Session {
 
     public Date resetDate = new Date();
 
+    public Session() {
+    }
+
     public Session(String owner, String name) {
         this.owner = owner;
         this.name = name;

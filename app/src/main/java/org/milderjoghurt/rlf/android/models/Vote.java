@@ -26,6 +26,9 @@ public class Vote {
 		NOREQUEST,
 	}
 
+	public Vote() {
+	}
+
 	public Vote(Session session, String owner, Type type, Integer vote) {
 		this.session = session;
 		this.owner = owner;

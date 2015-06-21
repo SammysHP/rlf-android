@@ -24,6 +24,9 @@ public class QuestionAnswer {
         D,
     }
 
+    public QuestionAnswer() {
+    }
+
     public QuestionAnswer(Session session, String owner, Answer answer) {
         this.session = session;
         this.owner = owner;
