@@ -6,10 +6,15 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+
+import org.milderjoghurt.rlf.android.models.Session;
+import org.milderjoghurt.rlf.android.net.ApiConnector;
+import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 
 
 public class StudentLiveActivity extends AppCompatActivity {
@@ -29,6 +34,18 @@ public class StudentLiveActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPagerAdapter = new ViewPagerAdapter();
         viewPager.setAdapter(viewPagerAdapter);
+
+        ApiConnector.getSession(intent.getStringExtra("Titel"), new ApiResponseHandler<Session>() {
+            @Override
+            public void onFailure(Throwable e) {
+                Log.e("rlf-android", e.toString());
+            }
+
+            @Override
+            public void onSuccess(Session session) {
+                Log.e("rlf-android", session.name);
+            }
+        });
     }
 
     private class ViewPagerAdapter extends PagerAdapter {
