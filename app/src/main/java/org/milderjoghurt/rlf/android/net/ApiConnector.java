@@ -3,7 +3,9 @@ package org.milderjoghurt.rlf.android.net;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 
+import org.apache.http.Header;
 import org.milderjoghurt.rlf.android.dummy.Session;
 
 public class ApiConnector {
@@ -21,6 +23,10 @@ public class ApiConnector {
         private Constants() {
             // Do not instantiate
         }
+    }
+
+    private ApiConnector() {
+        // Do not instantiate
     }
 
     private static AsyncHttpClient client = new AsyncHttpClient();
@@ -45,19 +51,30 @@ public class ApiConnector {
         return Constants.BASE_URL + relativeUrl;
     }
 
-    public void getSessions(final AsyncHttpResponseHandler handler) {
+    public static void getSessions(final AsyncHttpResponseHandler handler) {
         get(Constants.SESSIONS, null, handler);
     }
 
-    public void getSessionsByOwner(final String owner, final AsyncHttpResponseHandler handler) {
+    public static void getSessionsByOwner(final String owner, final AsyncHttpResponseHandler handler) {
         get(Constants.SESSIONS_FROM + owner, null, handler);
     }
 
-    public void getSession(final String sessionId, final AsyncHttpResponseHandler handler) {
-        get(Constants.SESSION + sessionId, null, handler);
+    public static void getSession(final String sessionId, final ApiResponseHandler<Session> handler) {
+        get(Constants.SESSION + sessionId, null, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                handler.onFailure(e);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                final Session session = new Session("foo", "bar", true); // TODO
+                handler.onSuccess(session);
+            }
+        });
     }
 
-    public void createSession(final Session session, final AsyncHttpResponseHandler handler) {
+    public static void createSession(final Session session, final AsyncHttpResponseHandler handler) {
         // TODO: transform session into POST params
         final RequestParams params = new RequestParams();
         params.put("key", "value");
@@ -66,7 +83,7 @@ public class ApiConnector {
         post(Constants.SESSIONS, params, handler);
     }
 
-    public void updateSession(final Session session, final AsyncHttpResponseHandler handler) {
+    public static void updateSession(final Session session, final AsyncHttpResponseHandler handler) {
         // TODO: get ID from session object
         final String sessionId = "todo";
 
@@ -78,23 +95,23 @@ public class ApiConnector {
         put(Constants.SESSION + sessionId, params, handler);
     }
 
-    public void deleteSession(final String sessionId, final String owner, final AsyncHttpResponseHandler handler) {
+    public static void deleteSession(final String sessionId, final String owner, final AsyncHttpResponseHandler handler) {
         delete(Constants.SESSION + sessionId + '/' + owner, handler);
     }
 
-    public void getVotes(final String sessionId, final AsyncHttpResponseHandler handler) {
+    public static void getVotes(final String sessionId, final AsyncHttpResponseHandler handler) {
         get(Constants.SESSION + sessionId + Constants.VOTES, null, handler);
     }
 
-    public void getAnswers(final String sessionId, final AsyncHttpResponseHandler handler) {
+    public static void getAnswers(final String sessionId, final AsyncHttpResponseHandler handler) {
         get(Constants.SESSION + sessionId + Constants.ANSWERS, null, handler);
     }
 
-    public void resetAnswers(final String sessionId, final String owner, final AsyncHttpResponseHandler handler) {
+    public static void resetAnswers(final String sessionId, final String owner, final AsyncHttpResponseHandler handler) {
         get(Constants.SESSION + sessionId + Constants.RESET_ANSWERS + owner, null, handler);
     }
 
-    public void createAnswer(final String sessionId, final AsyncHttpResponseHandler handler) {
+    public static void createAnswer(final String sessionId, final AsyncHttpResponseHandler handler) {
         // TODO: transform (new parameter!) answer to POST params
         final RequestParams params = new RequestParams();
         params.put("key", "value");
@@ -103,7 +120,7 @@ public class ApiConnector {
         post(Constants.ANSWER + sessionId, null, handler);
     }
 
-    public void createVote(final String sessionId, final AsyncHttpResponseHandler handler) {
+    public static void createVote(final String sessionId, final AsyncHttpResponseHandler handler) {
         // TODO: transform (new parameter!) answer to POST params
         final RequestParams params = new RequestParams();
         params.put("key", "value");

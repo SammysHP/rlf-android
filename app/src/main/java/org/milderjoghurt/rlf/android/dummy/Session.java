@@ -1,9 +1,11 @@
 package org.milderjoghurt.rlf.android.dummy;
 
+import org.milderjoghurt.rlf.android.models.Model;
+
 import java.util.Date;
 import java.util.Random;
 
-public class Session {
+public class Session implements Model{
     String id;
     String name;
     Boolean open;
