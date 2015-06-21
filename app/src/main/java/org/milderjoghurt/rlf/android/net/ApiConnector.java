@@ -3,7 +3,9 @@ package org.milderjoghurt.rlf.android.net;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 
+import org.apache.http.Header;
 import org.milderjoghurt.rlf.android.dummy.Session;
 
 public class ApiConnector {
@@ -53,8 +55,19 @@ public class ApiConnector {
         get(Constants.SESSIONS_FROM + owner, null, handler);
     }
 
-    public void getSession(final String sessionId, final AsyncHttpResponseHandler handler) {
-        get(Constants.SESSION + sessionId, null, handler);
+    public void getSession(final String sessionId, final ApiResponseHandler<Session> handler) {
+        get(Constants.SESSION + sessionId, null, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                handler.onFailure(e);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                final Session session = new Session("foo", "bar", true); // TODO
+                handler.onSuccess(session);
+            }
+        });
     }
 
     public void createSession(final Session session, final AsyncHttpResponseHandler handler) {
