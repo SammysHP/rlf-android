@@ -86,6 +86,7 @@ public class ApiConnector {
         return Constants.BASE_URL + relativeUrl;
     }
 
+    @Deprecated
     public static void getSessions(final ApiResponseHandler<List<Session>> handler) {
         get(Constants.SESSIONS, null, new TextHttpResponseHandler() {
             @Override
