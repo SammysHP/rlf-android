@@ -3,6 +3,8 @@ package org.milderjoghurt.rlf.android.net;
 import android.content.Context;
 import android.telephony.TelephonyManager;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -10,10 +12,10 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import org.apache.http.Header;
 import org.apache.http.entity.StringEntity;
-import org.milderjoghurt.rlf.android.models.*;
+import org.milderjoghurt.rlf.android.models.QuestionAnswer;
+import org.milderjoghurt.rlf.android.models.Session;
+import org.milderjoghurt.rlf.android.models.Vote;
 import org.milderjoghurt.rlf.android.net.exceptions.NoSuchSessionException;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -95,7 +97,7 @@ public class ApiConnector {
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 ObjectMapper mapper = new ObjectMapper();
                 try {
-                    final List<Session> sessionList= Arrays.asList(mapper.readValue(responseString, Session[].class));
+                    final List<Session> sessionList = Arrays.asList(mapper.readValue(responseString, Session[].class));
                     handler.onSuccess(sessionList);
                 } catch (IOException e) {
                     handler.onFailure(e);
@@ -149,25 +151,59 @@ public class ApiConnector {
         });
     }
 
-    public static void createSession(final Session session, final AsyncHttpResponseHandler handler) {
-        // TODO: transform session into POST params
-        final RequestParams params = new RequestParams();
-        params.put("key", "value");
-        params.put("more", "data");
+    public static void createSession(final Session session, final ApiResponseHandler<Session> handler) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            final String json = mapper.writeValueAsString(session);
 
-        post(Constants.SESSIONS, params, handler);
+            post(Constants.SESSIONS, json, new TextHttpResponseHandler() {
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                    handler.onFailure(e);
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    ObjectMapper mapper = new ObjectMapper();
+                    try {
+                        final Session session = mapper.readValue(responseString, Session.class);
+                        handler.onSuccess(session);
+                    } catch (IOException e) {
+                        handler.onFailure(e);
+                    }
+                }
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void updateSession(final Session session, final AsyncHttpResponseHandler handler) {
-        // TODO: get ID from session object
-        final String sessionId = "todo";
+    public static void updateSession(final Session session, final ApiResponseHandler<Session> handler) {
+        String sessionId = session.id;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            final String json = mapper.writeValueAsString(session);
 
-        // TODO: transform session into POST params
-        final RequestParams params = new RequestParams();
-        params.put("key", "value");
-        params.put("more", "data");
+            put(Constants.SESSIONID + sessionId, json, new TextHttpResponseHandler() {
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                    handler.onFailure(e);
+                }
 
-        put(Constants.SESSIONID + sessionId, params, handler);
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    ObjectMapper mapper = new ObjectMapper();
+                    try {
+                        final Session session = mapper.readValue(responseString, Session.class);
+                        handler.onSuccess(session);
+                    } catch (IOException e) {
+                        handler.onFailure(e);
+                    }
+                }
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void deleteSession(final String sessionId, final String owner, final ApiResponseHandler<Session> handler) {
@@ -238,13 +274,59 @@ public class ApiConnector {
         });
     }
 
-    public static void createAnswer(final String sessionId, final AsyncHttpResponseHandler handler) {
-        // TODO
-        post(Constants.SESSIONID + sessionId + Constants.ANSWERS, "[]", handler);
+    public static void createAnswer(final Session session, final QuestionAnswer answer, final ApiResponseHandler<QuestionAnswer> handler) {
+        String sessionId = session.id;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            final String json = mapper.writeValueAsString(answer);
+
+            post(Constants.SESSIONID + sessionId + Constants.ANSWERS, json, new TextHttpResponseHandler() {
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                    handler.onFailure(e);
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    ObjectMapper mapper = new ObjectMapper();
+                    try {
+                        final QuestionAnswer answer = mapper.readValue(responseString, QuestionAnswer.class);
+                        handler.onSuccess(answer);
+                    } catch (IOException e) {
+                        handler.onFailure(e);
+                    }
+                }
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void createVote(final String sessionId, final AsyncHttpResponseHandler handler) {
-        // TODO
-        post(Constants.SESSIONID + sessionId + Constants.VOTES, "[]", handler);
+    public static void createVote(final Session session, final Vote vote, final ApiResponseHandler<Vote> handler) {
+        String sessionId = session.id;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            final String json = mapper.writeValueAsString(vote);
+
+            post(Constants.SESSIONID + sessionId + Constants.VOTES, json, new TextHttpResponseHandler() {
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                    handler.onFailure(e);
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    ObjectMapper mapper = new ObjectMapper();
+                    try {
+                        final Vote vote = mapper.readValue(responseString, Vote.class);
+                        handler.onSuccess(vote);
+                    } catch (IOException e) {
+                        handler.onFailure(e);
+                    }
+                }
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 }
