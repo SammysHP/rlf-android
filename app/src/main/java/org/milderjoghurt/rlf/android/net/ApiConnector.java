@@ -15,7 +15,10 @@ import org.apache.http.entity.StringEntity;
 import org.milderjoghurt.rlf.android.models.QuestionAnswer;
 import org.milderjoghurt.rlf.android.models.Session;
 import org.milderjoghurt.rlf.android.models.Vote;
+import org.milderjoghurt.rlf.android.net.exceptions.BadRequestException;
 import org.milderjoghurt.rlf.android.net.exceptions.NoSuchSessionException;
+import org.milderjoghurt.rlf.android.net.exceptions.PermissionDeniedException;
+import org.milderjoghurt.rlf.android.net.exceptions.SessionNotOpenException;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -160,6 +163,11 @@ public class ApiConnector {
             post(Constants.SESSIONS, json, new TextHttpResponseHandler() {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                    if (statusCode == 400) {
+                        handler.onFailure(new BadRequestException(responseString));
+                        return;
+                    }
+
                     handler.onFailure(e);
                 }
 
@@ -188,6 +196,11 @@ public class ApiConnector {
             put(Constants.SESSIONID + sessionId, json, new TextHttpResponseHandler() {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                    if (statusCode == 401) {
+                        handler.onFailure(new PermissionDeniedException(responseString));
+                        return;
+                    }
+
                     handler.onFailure(e);
                 }
 
@@ -211,6 +224,11 @@ public class ApiConnector {
         delete(Constants.SESSIONID + sessionId + '/' + owner, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                if (statusCode == 401) {
+                    handler.onFailure(new PermissionDeniedException(responseString));
+                    return;
+                }
+
                 handler.onFailure(e);
             }
 
@@ -225,6 +243,11 @@ public class ApiConnector {
         get(Constants.SESSIONID + sessionId + Constants.VOTES, null, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                if (statusCode == 404) {
+                    handler.onFailure(new NoSuchSessionException(sessionId));
+                    return;
+                }
+
                 handler.onFailure(e);
             }
 
@@ -245,6 +268,11 @@ public class ApiConnector {
         get(Constants.SESSIONID + sessionId + Constants.ANSWERS, null, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                if (statusCode == 404) {
+                    handler.onFailure(new NoSuchSessionException(sessionId));
+                    return;
+                }
+
                 handler.onFailure(e);
             }
 
@@ -265,6 +293,16 @@ public class ApiConnector {
         get(Constants.SESSIONID + sessionId + Constants.RESET_ANSWERS + owner, null, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                if (statusCode == 404) {
+                    handler.onFailure(new NoSuchSessionException(sessionId));
+                    return;
+                }
+
+                if (statusCode == 401) {
+                    handler.onFailure(new PermissionDeniedException(responseString));
+                    return;
+                }
+
                 handler.onFailure(e);
             }
 
@@ -284,6 +322,21 @@ public class ApiConnector {
             post(Constants.SESSIONID + sessionId + Constants.ANSWERS, json, new TextHttpResponseHandler() {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                    if (statusCode == 404) {
+                        handler.onFailure(new NoSuchSessionException(sessionId));
+                        return;
+                    }
+
+                    if (statusCode == 403) {
+                        handler.onFailure(new SessionNotOpenException(sessionId));
+                        return;
+                    }
+
+                    if (statusCode == 400) {
+                        handler.onFailure(new BadRequestException(responseString));
+                        return;
+                    }
+
                     handler.onFailure(e);
                 }
 
@@ -312,6 +365,21 @@ public class ApiConnector {
             post(Constants.SESSIONID + sessionId + Constants.VOTES, json, new TextHttpResponseHandler() {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                    if (statusCode == 404) {
+                        handler.onFailure(new NoSuchSessionException(sessionId));
+                        return;
+                    }
+
+                    if (statusCode == 403) {
+                        handler.onFailure(new SessionNotOpenException(sessionId));
+                        return;
+                    }
+
+                    if (statusCode == 400) {
+                        handler.onFailure(new BadRequestException(responseString));
+                        return;
+                    }
+
                     handler.onFailure(e);
                 }
 
