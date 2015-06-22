@@ -22,15 +22,13 @@ import java.util.List;
 
 public class ApiConnector {
     private static final class Constants {
-        static final String BASE_URL = "http://krul.finf.uni-hannover.de:9000/";
-        static final String SESSIONS = "sessions";
-        static final String SESSION = "sessions/";
-        static final String SESSIONS_FROM = "sessions/from/";
+        static final String BASE_URL = "http://krul.finf.uni-hannover.de:9000";
+        static final String SESSIONS = "/sessions";
+        static final String SESSIONID = "/sessions/";
+        static final String SESSIONS_FROM = "/sessions/from/";
         static final String VOTES = "/votes";
         static final String ANSWERS = "/answers";
         static final String RESET_ANSWERS = "/resetanswers/";
-        static final String VOTE = "votes";
-        static final String ANSWER = "answers";
 
         private Constants() {
             // Do not instantiate
@@ -127,7 +125,7 @@ public class ApiConnector {
     }
 
     public static void getSession(final String sessionId, final ApiResponseHandler<Session> handler) {
-        get(Constants.SESSION + sessionId, null, new TextHttpResponseHandler() {
+        get(Constants.SESSIONID + sessionId, null, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
                 if (statusCode == 404) {
@@ -169,11 +167,11 @@ public class ApiConnector {
         params.put("key", "value");
         params.put("more", "data");
 
-        put(Constants.SESSION + sessionId, params, handler);
+        put(Constants.SESSIONID + sessionId, params, handler);
     }
 
     public static void deleteSession(final String sessionId, final String owner, final ApiResponseHandler<Session> handler) {
-        delete(Constants.SESSION + sessionId + '/' + owner, new TextHttpResponseHandler() {
+        delete(Constants.SESSIONID + sessionId + '/' + owner, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
                 handler.onFailure(e);
@@ -187,7 +185,7 @@ public class ApiConnector {
     }
 
     public static void getVotes(final String sessionId, final ApiResponseHandler<List<Vote>> handler) {
-        get(Constants.SESSION + sessionId + Constants.VOTES, null, new TextHttpResponseHandler() {
+        get(Constants.SESSIONID + sessionId + Constants.VOTES, null, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
                 handler.onFailure(e);
@@ -207,7 +205,7 @@ public class ApiConnector {
     }
 
     public static void getAnswers(final String sessionId, final ApiResponseHandler<List<QuestionAnswer>> handler) {
-        get(Constants.SESSION + sessionId + Constants.ANSWERS, null, new TextHttpResponseHandler() {
+        get(Constants.SESSIONID + sessionId + Constants.ANSWERS, null, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
                 handler.onFailure(e);
@@ -227,7 +225,7 @@ public class ApiConnector {
     }
 
     public static void resetAnswers(final String sessionId, final String owner, final ApiResponseHandler<Session> handler) {
-        get(Constants.SESSION + sessionId + Constants.RESET_ANSWERS + owner, null, new TextHttpResponseHandler() {
+        get(Constants.SESSIONID + sessionId + Constants.RESET_ANSWERS + owner, null, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
                 handler.onFailure(e);
@@ -242,11 +240,11 @@ public class ApiConnector {
 
     public static void createAnswer(final String sessionId, final AsyncHttpResponseHandler handler) {
         // TODO
-        post(Constants.ANSWER + sessionId, "[]", handler);
+        post(Constants.SESSIONID + sessionId + Constants.ANSWERS, "[]", handler);
     }
 
     public static void createVote(final String sessionId, final AsyncHttpResponseHandler handler) {
         // TODO
-        post(Constants.VOTE + sessionId, "[]", handler);
+        post(Constants.SESSIONID + sessionId + Constants.VOTES, "[]", handler);
     }
 }
