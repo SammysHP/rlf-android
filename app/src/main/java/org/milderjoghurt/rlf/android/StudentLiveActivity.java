@@ -2,6 +2,7 @@ package org.milderjoghurt.rlf.android;
 
 //import android.content.Intent;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import org.milderjoghurt.rlf.android.models.Session;
 import org.milderjoghurt.rlf.android.net.ApiConnector;
@@ -18,9 +20,12 @@ import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 
 
 public class StudentLiveActivity extends AppCompatActivity {
+    public static final String EXTRA_ID = "SESSION_ID";
 
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
+
+    private String sessionId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,22 +33,44 @@ public class StudentLiveActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_student_live);
 
-        Intent intent = getIntent();
-        setTitle(intent.getStringExtra("Titel"));
+        final Intent intent = getIntent();
+        final Uri uri = intent.getData();
+        final String idExtra = intent.getStringExtra(EXTRA_ID);
+
+        if (uri != null) {
+            // called from implicit intent, parse URI
+            sessionId = uri.getLastPathSegment();
+        } else if (idExtra != null) {
+            // called from explicit intent with extra
+            sessionId = idExtra;
+        }
+
+        if (sessionId == null) {
+            // no session id found
+            // report error (TODO)
+            // and exit.
+            Toast.makeText(StudentLiveActivity.this, "Fehler", Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPagerAdapter = new ViewPagerAdapter();
         viewPager.setAdapter(viewPagerAdapter);
 
-        ApiConnector.getSession(intent.getStringExtra("Titel"), new ApiResponseHandler<Session>() {
+        ApiConnector.getSession(sessionId, new ApiResponseHandler<Session>() {
             @Override
             public void onFailure(Throwable e) {
                 Log.e("rlf-android", e.toString());
+                // session id invalid or network issue
+                // report error (TODO)
+                // and exit.
+                Toast.makeText(StudentLiveActivity.this, "Fehler", Toast.LENGTH_SHORT).show();
+                finish();
             }
 
             @Override
             public void onSuccess(Session session) {
-                Log.e("rlf-android", session.name);
+                setTitle(session.name);
             }
         });
     }
