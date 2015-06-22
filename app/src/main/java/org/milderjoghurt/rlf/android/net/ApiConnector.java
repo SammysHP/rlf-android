@@ -155,7 +155,8 @@ public class ApiConnector {
         });
     }
 
-    public static void createSession(final Session session, final ApiResponseHandler<Session> handler) {
+    public static void createSession(final Session session, final String owner, final ApiResponseHandler<Session> handler) {
+        session.owner = owner;
         try {
             ObjectMapper mapper = new ObjectMapper();
             final String json = mapper.writeValueAsString(session);
@@ -187,13 +188,13 @@ public class ApiConnector {
         }
     }
 
-    public static void updateSession(final Session session, final ApiResponseHandler<Session> handler) {
-        String sessionId = session.id;
+    public static void updateSession(final Session session, final String owner, final ApiResponseHandler<Session> handler) {
+        session.owner = owner;
         try {
             ObjectMapper mapper = new ObjectMapper();
             final String json = mapper.writeValueAsString(session);
 
-            put(Constants.SESSIONID + sessionId, json, new TextHttpResponseHandler() {
+            put(Constants.SESSIONID + session.id, json, new TextHttpResponseHandler() {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
                     if (statusCode == 401) {
@@ -313,13 +314,13 @@ public class ApiConnector {
         });
     }
 
-    public static void createAnswer(final Session session, final QuestionAnswer answer, final ApiResponseHandler<QuestionAnswer> handler) {
-        String sessionId = session.id;
+    public static void createAnswer(final Session session, final QuestionAnswer answer, final String owner, final ApiResponseHandler<QuestionAnswer> handler) {
+        answer.owner = owner;
         try {
             ObjectMapper mapper = new ObjectMapper();
             final String json = mapper.writeValueAsString(answer);
 
-            post(Constants.SESSIONID + sessionId + Constants.ANSWERS, json, new TextHttpResponseHandler() {
+            post(Constants.SESSIONID + session.id + Constants.ANSWERS, json, new TextHttpResponseHandler() {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
                     if (statusCode == 404) {
@@ -356,13 +357,13 @@ public class ApiConnector {
         }
     }
 
-    public static void createVote(final Session session, final Vote vote, final ApiResponseHandler<Vote> handler) {
-        String sessionId = session.id;
+    public static void createVote(final Session session, final Vote vote, final String owner, final ApiResponseHandler<Vote> handler) {
+        vote.owner = owner;
         try {
             ObjectMapper mapper = new ObjectMapper();
             final String json = mapper.writeValueAsString(vote);
 
-            post(Constants.SESSIONID + sessionId + Constants.VOTES, json, new TextHttpResponseHandler() {
+            post(Constants.SESSIONID + session.id + Constants.VOTES, json, new TextHttpResponseHandler() {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
                     if (statusCode == 404) {
