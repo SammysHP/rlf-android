@@ -324,12 +324,12 @@ public class ApiConnector {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
                     if (statusCode == 404) {
-                        handler.onFailure(new NoSuchSessionException(sessionId));
+                        handler.onFailure(new NoSuchSessionException(session.id));
                         return;
                     }
 
                     if (statusCode == 403) {
-                        handler.onFailure(new SessionNotOpenException(sessionId));
+                        handler.onFailure(new SessionNotOpenException(session.id));
                         return;
                     }
 
@@ -367,12 +367,12 @@ public class ApiConnector {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
                     if (statusCode == 404) {
-                        handler.onFailure(new NoSuchSessionException(sessionId));
+                        handler.onFailure(new NoSuchSessionException(session.id));
                         return;
                     }
 
                     if (statusCode == 403) {
-                        handler.onFailure(new SessionNotOpenException(sessionId));
+                        handler.onFailure(new SessionNotOpenException(session.id));
                         return;
                     }
 
