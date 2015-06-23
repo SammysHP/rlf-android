@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.malinskiy.superrecyclerview.swipe.BaseSwipeAdapter;
 
@@ -34,31 +33,11 @@ public class SessionListAdapter extends BaseSwipeAdapter<SessionListAdapter.View
         this.sessions = sessions;
     }
 
-    // Provide a reference to the views for each data item
-    public static class ViewHolder extends BaseSwipeAdapter.BaseSwipeableViewHolder {
-        CardView cv;
-        TextView sessionName;
-        TextView sessionId;
-        ImageView sessionOpen;
-        TextView sessionDate;
-        Button deleteButton;
-
-        ViewHolder(View itemView) {
-            super(itemView);
-            cv = (CardView) itemView.findViewById(R.id.session_list_item);
-            sessionName = (TextView) itemView.findViewById(R.id.session_name);
-            sessionId = (TextView) itemView.findViewById(R.id.session_id);
-            sessionOpen = (ImageView) itemView.findViewById(R.id.session_open);
-            sessionDate = (TextView) itemView.findViewById(R.id.session_date);
-            deleteButton = (Button) itemView.findViewById(R.id.session_list_item_delete);
-        }
-    }
-
     // Create new views (invoked by the layout manager)
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_session_entry, viewGroup, false);
-        final ViewHolder holder = new ViewHolder(v);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_session_entry, viewGroup, false);
+        final ViewHolder holder = new ViewHolder(view);
 
         holder.cv.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -81,19 +60,19 @@ public class SessionListAdapter extends BaseSwipeAdapter<SessionListAdapter.View
 
                 final Session toDeleteSessionObj = sessions.get(holder.getPosition());
 
-                if(toDeleteSessionObj == null)
+                if (toDeleteSessionObj == null)
                     return; // nothing to do ..
                 final String toDeleteSession = toDeleteSessionObj.id;
                 ApiConnector.deleteSession(toDeleteSession, toDeleteSessionObj.owner, new ApiResponseHandler<Session>() {
                     @Override
                     public void onSuccess(Session model) {
                         remove(holder.getPosition());
-                        Toast.makeText(v.getContext(), holder.getPosition() + " gelöscht", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(v.getContext(), holder.getPosition() + " gelscht", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onFailure(Throwable e) {
-                        Toast.makeText(v.getContext(), "Fehler beim Löschen!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(v.getContext(), "Fehler beim Lschen!", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -155,5 +134,25 @@ public class SessionListAdapter extends BaseSwipeAdapter<SessionListAdapter.View
         closeItem(position);
 
         notifyItemRemoved(position);
+    }
+
+    // Provide a reference to the views for each data item
+    public static class ViewHolder extends BaseSwipeAdapter.BaseSwipeableViewHolder {
+        CardView cv;
+        TextView sessionName;
+        TextView sessionId;
+        ImageView sessionOpen;
+        TextView sessionDate;
+        Button deleteButton;
+
+        ViewHolder(View itemView) {
+            super(itemView);
+            cv = (CardView) itemView.findViewById(R.id.session_list_item);
+            sessionName = (TextView) itemView.findViewById(R.id.session_name);
+            sessionId = (TextView) itemView.findViewById(R.id.session_id);
+            sessionOpen = (ImageView) itemView.findViewById(R.id.session_open);
+            sessionDate = (TextView) itemView.findViewById(R.id.session_date);
+            deleteButton = (Button) itemView.findViewById(R.id.session_list_item_delete);
+        }
     }
 }

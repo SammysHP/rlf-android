@@ -2,21 +2,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:columnCount="3"
-    android:rowCount="28"
+    android:orientation="vertical"
+    android:weightSum="1"
     tools:context="org.milderjoghurt.rlf.android.CreateSessionFragment">
+
 
     <EditText
         android:id="@+id/etSessionName"
-        android:layout_width="wrap_content"
+        android:layout_width="317dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignWithParentIfMissing="false"
-        android:layout_marginTop="76dp"
-        android:layout_toLeftOf="@+id/session_create_fb"
-        android:layout_toStartOf="@+id/session_create_fb"
         android:hint="Veranstaltungsname"
         android:inputType="text"
         android:textAlignment="center"
@@ -26,10 +23,17 @@
         android:id="@+id/session_create_fb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/etSessionName"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="false"
         android:layout_alignParentRight="true"
-        android:layout_alignWithParentIfMissing="false" />
+        android:adjustViewBounds="false" />
+
+    <CalendarView
+        android:id="@+id/calendar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/etSessionName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
