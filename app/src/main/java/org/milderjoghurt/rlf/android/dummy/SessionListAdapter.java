@@ -17,6 +17,8 @@ import com.malinskiy.superrecyclerview.swipe.BaseSwipeAdapter;
 import org.milderjoghurt.rlf.android.R;
 import org.milderjoghurt.rlf.android.ReaderActivity;
 import org.milderjoghurt.rlf.android.models.Session;
+import org.milderjoghurt.rlf.android.net.ApiConnector;
+import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -73,8 +75,27 @@ public class SessionListAdapter extends BaseSwipeAdapter<SessionListAdapter.View
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                remove(holder.getPosition());
-                Toast.makeText(v.getContext(), "Deleted " + holder.getPosition(), Toast.LENGTH_SHORT).show();
+
+
+                // tell deletetion to network API
+
+                final Session toDeleteSessionObj = sessions.get(holder.getPosition());
+
+                if(toDeleteSessionObj == null)
+                    return; // nothing to do ..
+                final String toDeleteSession = toDeleteSessionObj.id;
+                ApiConnector.deleteSession(toDeleteSession, toDeleteSessionObj.owner, new ApiResponseHandler<Session>() {
+                    @Override
+                    public void onSuccess(Session model) {
+                        remove(holder.getPosition());
+                        Toast.makeText(v.getContext(), holder.getPosition() + " gelöscht", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Throwable e) {
+                        Toast.makeText(v.getContext(), "Fehler beim Löschen!", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
