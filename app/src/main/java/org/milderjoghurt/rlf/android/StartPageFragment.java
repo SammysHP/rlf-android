@@ -24,6 +24,7 @@ public class StartPageFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_start_page, container, false);
         setHasOptionsMenu(true);
 
+        ((Button) view.findViewById(R.id.btnEnterSession)).setEnabled(false);
         EditText editText = (EditText) view.findViewById(R.id.SessionID);
 
         editText.addTextChangedListener(new TextWatcher() {
