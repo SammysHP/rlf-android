@@ -88,7 +88,7 @@ public class StartPageFragment extends Fragment {
                 }
             }, 500);
         } else {
-            intent.putExtra("Titel", editText.getText().toString());
+            intent.putExtra(StudentLiveActivity.EXTRA_ID, editText.getText().toString());
             startActivity(intent);
         }
     }
