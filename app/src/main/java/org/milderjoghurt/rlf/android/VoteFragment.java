@@ -12,6 +12,11 @@ import android.widget.Button;
 import android.widget.Toast;
 
 
+import org.milderjoghurt.rlf.android.models.QuestionAnswer;
+import org.milderjoghurt.rlf.android.models.Session;
+import org.milderjoghurt.rlf.android.net.ApiConnector;
+import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
+
 
 /**
  * Fragment for voting functionality
@@ -37,9 +42,25 @@ public class VoteFragment extends Fragment {
     private boolean[] selectionStates = {false, false, false, false };
     private static final long LEAST_WAIT_TIME = 300; // ms
     private long lastVoteTime = 0; // timestamp --> prevent clientside spamming
+    private Session currentSession = null;
 
     public VoteFragment() {
 
+    }
+
+    public void setSessionID(String pSessionID) {
+
+        ApiConnector.getSession(pSessionID, new ApiResponseHandler<Session>() {
+            @Override
+            public void onSuccess(Session session) {
+                VoteFragment.this.currentSession = session;
+            }
+
+            @Override
+            public void onFailure(Throwable e) {
+                VoteFragment.this.currentSession = null; // TODO network error ..
+            }
+        });
     }
 
     @Override
@@ -94,29 +115,74 @@ public class VoteFragment extends Fragment {
             Toast.makeText(getActivity().getApplicationContext(), MSG_VOTE_BLOCKED, Toast.LENGTH_SHORT).show();
             return;
         }
+//
+//        // query vote for sending to server
+//        boolean querySuccess = true; // TODO logic? interface?
+//
+//        // handle success:
+//        if(querySuccess) {
+//
+//            // update timestamp
+//            lastVoteTime = curTime;
+//
+//            // debug
+//            Log.d(LOG_TAG, "voted " + getLastVoteSymbolStr());
+//
+//            // give more ui feedback:
+//            Toast.makeText(getActivity().getApplicationContext(), MSG_VOTE_SENDED, Toast.LENGTH_SHORT).show();
+//
+//            // reset model
+//            for(int i=0;i<selectionStates.length;++i) {
+//                selectionStates[i] = false;
+//            }
+//
+//            updateUI();
+//        }
 
-        // query vote for sending to server
-        boolean querySuccess = true; // TODO logic? interface?
 
-        // handle success:
-        if(querySuccess) {
+        sendButton.setEnabled(false); // disable as long as server is working on answer
 
-            // update timestamp
-            lastVoteTime = curTime;
 
-            // debug
-            Log.d(LOG_TAG, "voted " + getLastVoteSymbolStr());
+        if(currentSession == null)
+        {
+            Log.e("rlf-android", "session for anwering invalid");
+            return;
+        }
 
-            // give more ui feedback:
-            Toast.makeText(getActivity().getApplicationContext(), MSG_VOTE_SENDED, Toast.LENGTH_SHORT).show();
-
-            // reset model
-            for(int i=0;i<selectionStates.length;++i) {
-                selectionStates[i] = false;
+        //
+        ApiConnector.createAnswer(currentSession, new QuestionAnswer(), ApiConnector.getOwnerId(getActivity().getApplicationContext()), new ApiResponseHandler<QuestionAnswer>() {
+            @Override
+            public void onFailure(Throwable e) {
+                // sending answer to server was not successful, give feedback
+                Toast.makeText(getActivity().getApplicationContext(), "Fehler, Auswahl wurde nicht akzeptiert!", Toast.LENGTH_SHORT).show();
+                Log.e("rlf-android", e.toString());
             }
 
-            updateUI();
-        }
+            @Override
+            public void onSuccess(QuestionAnswer answer) {
+                // debug
+                Log.d("rlf-android", "auswahl " + answer.toString() + " gesendet");
+
+                // previous code:
+
+                // update timestamp
+                lastVoteTime = curTime;
+
+                // debug
+                Log.d(LOG_TAG, "voted " + getLastVoteSymbolStr());
+
+                // give more ui feedback:
+                Toast.makeText(getActivity().getApplicationContext(), MSG_VOTE_SENDED, Toast.LENGTH_SHORT).show();
+
+                // reset model
+                for(int i=0;i<selectionStates.length;++i) {
+                    selectionStates[i] = false;
+                }
+
+                updateUI();
+            }
+        });
+
     }
 
     private boolean isSelected(int index) {
