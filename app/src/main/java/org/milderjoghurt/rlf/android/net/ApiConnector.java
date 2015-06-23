@@ -110,7 +110,7 @@ public class ApiConnector {
         });
     }
 
-    public static void getSessionsByOwner(final String owner, final ApiResponseHandler<Session> handler) {
+    public static void getSessionsByOwner(final String owner, final ApiResponseHandler<List<Session>> handler) {
         get(Constants.SESSIONS_FROM + owner, null, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
@@ -121,8 +121,8 @@ public class ApiConnector {
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 ObjectMapper mapper = new ObjectMapper();
                 try {
-                    final Session session = mapper.readValue(responseString, Session.class);
-                    handler.onSuccess(session);
+                    final List<Session> sessionList = Arrays.asList(mapper.readValue(responseString, Session[].class));
+                    handler.onSuccess(sessionList);
                 } catch (IOException e) {
                     handler.onFailure(e);
                 }
