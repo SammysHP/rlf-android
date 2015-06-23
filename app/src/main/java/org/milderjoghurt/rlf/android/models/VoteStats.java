@@ -6,8 +6,6 @@ import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class VoteStats {
-    public Long id;
-
     public Date date = new Date();
 
     public Integer value;
@@ -19,6 +17,7 @@ public class VoteStats {
         SPEED,
         UNDERSTANDABILITY,
         REQUEST,
+        CURRENTUSERS,
     }
 
     public VoteStats() {
