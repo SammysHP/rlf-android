@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import org.milderjoghurt.rlf.android.models.Session;
+import org.milderjoghurt.rlf.android.models.Vote;
 import org.milderjoghurt.rlf.android.net.ApiConnector;
 import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 
@@ -98,7 +99,9 @@ public class StudentLiveActivity extends AppCompatActivity {
                     view = new FrameLayout(container.getContext());
                     //noinspection ResourceType
                     view.setId(12345);
-                    getFragmentManager().beginTransaction().add(view.getId(), new VoteFragment(), null).commit();
+                    VoteFragment voteFrag = new VoteFragment();
+                    voteFrag.setSessionID(sessionId); // session has to be set in any way
+                    getFragmentManager().beginTransaction().add(view.getId(), voteFrag, null).commit();
             }
 
             container.addView(view);
