@@ -50,7 +50,7 @@ public class ApiConnector {
     public static String getOwnerId(final Context context) {
         final SharedPreferences sharedPrefs = context.getSharedPreferences("default", Context.MODE_PRIVATE);
 
-        if (!sharedPrefs.contains("owner_id")) {
+        if (sharedPrefs.contains("owner_id")) {
             return sharedPrefs.getString("owner_id", "");
         }
         
