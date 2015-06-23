@@ -1,6 +1,9 @@
 package org.milderjoghurt.rlf.android.net;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -45,8 +48,27 @@ public class ApiConnector {
     }
 
     public static String getOwnerId(final Context context) {
+        final SharedPreferences sharedPrefs = context.getSharedPreferences("default", Context.MODE_PRIVATE);
+
+        if (sharedPrefs.contains("owner_id")) {
+            return sharedPrefs.getString("owner_id", "");
+        }
+        
         final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        return tm.getDeviceId();
+        final String deviceId = tm.getDeviceId();
+
+        final String androidId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        final WifiManager m_wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        final String wlanMac = m_wm.getConnectionInfo().getMacAddress();
+
+        final String ownerId = deviceId + '-' + androidId + '-' + wlanMac;
+
+        final SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putString("owner_id", ownerId);
+        editor.commit();
+
+        return ownerId;
     }
 
     private static AsyncHttpClient client = new AsyncHttpClient();
