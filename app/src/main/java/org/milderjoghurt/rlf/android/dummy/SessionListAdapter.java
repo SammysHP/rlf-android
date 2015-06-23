@@ -16,6 +16,7 @@ import com.malinskiy.superrecyclerview.swipe.BaseSwipeAdapter;
 
 import org.milderjoghurt.rlf.android.R;
 import org.milderjoghurt.rlf.android.ReaderActivity;
+import org.milderjoghurt.rlf.android.models.Session;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
