@@ -45,6 +45,7 @@
         android:layout_centerHorizontal="true"
         android:paddingBottom="20dp"
         android:paddingTop="20dp"
+        android:enabled="false"
         android:text="@string/SessionEnter"
         android:textSize="28sp"
         android:textStyle="bold" />

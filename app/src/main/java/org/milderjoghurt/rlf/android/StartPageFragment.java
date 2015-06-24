@@ -24,7 +24,6 @@ public class StartPageFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_start_page, container, false);
         setHasOptionsMenu(true);
 
-        ((Button) view.findViewById(R.id.btnEnterSession)).setEnabled(false);
         EditText editText = (EditText) view.findViewById(R.id.SessionID);
 
         editText.addTextChangedListener(new TextWatcher() {
@@ -72,8 +71,6 @@ public class StartPageFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getView().findViewById(R.id.SessionID).requestFocus();
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
     private void enterSession() {
         Intent intent = new Intent(getView().getContext(), StudentLiveActivity.class);
