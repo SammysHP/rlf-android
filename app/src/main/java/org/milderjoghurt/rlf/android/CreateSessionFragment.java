@@ -24,7 +24,7 @@ import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 import java.util.Date;
 
 public class CreateSessionFragment extends Fragment {
-    Date d;
+    Date d = new Date();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,6 +42,7 @@ public class CreateSessionFragment extends Fragment {
 
         MaterialCalendarView calendar = (MaterialCalendarView) view.findViewById(R.id.calendar);
         calendar.setFirstDayOfWeek(2);
+        calendar.setSelectedDate(d);
 
         calendar.setOnDateChangedListener(new OnDateChangedListener() {
             @Override

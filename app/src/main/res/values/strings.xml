@@ -13,6 +13,7 @@
 
     <!-- Session erstellen-->
     <string name="title_create_session">Neue Sitzung</string>
+    <string name="session_name">Name der Sitzung</string>
 
 
     <string name="SessionStart">Sitzung starten</string>
