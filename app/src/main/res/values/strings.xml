@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Realtime Lecture Feedback</string>
     <string name="delete">Löschen</string>
+    <string name="action_settings">Einstellungen</string>
 
     <!-- Abstimmung -->
     <string name="VoteFragButtonA">A</string>
@@ -11,24 +12,21 @@
     <string name="VoteFragSendTxt">Senden</string>
 
     <!-- Session erstellen-->
-    <string name="title_activity_create_session">Neue Sitzung</string>
-    <string name="action_settings">Einstellungen</string>
+    <string name="title_create_session">Neue Sitzung</string>
 
 
     <string name="SessionStart">Sitzung starten</string>
     <string name="SessionIdText">Sitzungs ID</string>
     <string name="SessionEnter">Sitzung beitreten</string>
-    <string name="OwnedSession">Eigene Sitzungen</string>
 
     <!-- Session liste-->
-    <string name="SessionList">Eigene Sitzungen</string>
+    <string name="title_sessionList">Eigene Sitzungen</string>
     <string name="SessionDeleteQuestion">Sitzung löschen?</string>
 
     <string name="title_activity_student_live">StudentLiveActivity</string>
     <string name="signal">Melden</string>
     <string name="break1">Pause</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="btnCreateText">Erstellen</string>
 
     <string name="title_feedback">Feedback</string>

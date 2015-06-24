@@ -18,11 +18,12 @@
         </activity>
         <activity
             android:name=".SessionListActivity"
-            android:label="@string/SessionList"
+            android:label="@string/title_sessionList"
             android:parentActivityName=".StartPageActivity" >
         </activity>
         <activity
             android:name=".CreateSessionActivity"
+            android:label="@string/title_create_session"
             android:parentActivityName=".SessionListActivity" >
         </activity>
         <activity

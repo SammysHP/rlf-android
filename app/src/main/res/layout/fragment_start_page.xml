@@ -57,7 +57,7 @@
         android:layout_centerHorizontal="true"
         android:paddingBottom="20dp"
         android:paddingTop="20dp"
-        android:text="@string/OwnedSession"
+        android:text="@string/title_sessionList"
         android:textSize="28sp"
         android:textStyle="bold" />
 
