@@ -15,7 +15,7 @@ public class Vote {
 
 	public Date date = new Date();
 
-	public Integer vote;
+	public Integer value;
 
 	public Type type;
 
@@ -23,17 +23,16 @@ public class Vote {
 		SPEED,
 		UNDERSTANDABILITY,
 		REQUEST,
-		NOREQUEST,
 	}
 
 	public Vote() {
 	}
 
-	public Vote(Session session, String owner, Type type, Integer vote) {
+	public Vote(Session session, String owner, Type type, Integer value) {
 		this.session = session;
 		this.owner = owner;
 		this.type = type;
-		this.vote = vote;
+		this.value = value;
 	}
 
 }
