@@ -9,11 +9,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateChangedListener;
 
 import org.milderjoghurt.rlf.android.models.Session;
 import org.milderjoghurt.rlf.android.net.ApiConnector;
@@ -22,7 +24,7 @@ import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 import java.util.Date;
 
 public class CreateSessionFragment extends Fragment {
-    public int mday, mmonth, myear;
+    Date d;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,19 +40,13 @@ public class CreateSessionFragment extends Fragment {
             }
         });
 
-        CalendarView calendar = (CalendarView) view.findViewById(R.id.calendar);
-        calendar.setShowWeekNumber(false);
+        MaterialCalendarView calendar = (MaterialCalendarView) view.findViewById(R.id.calendar);
         calendar.setFirstDayOfWeek(2);
-        calendar.setSelectedWeekBackgroundColor(getResources().getColor(R.color.material_blue_grey_800));
-        calendar.setUnfocusedMonthDateColor(getResources().getColor(R.color.hint_foreground_material_light));
-        calendar.setWeekSeparatorLineColor(getResources().getColor(R.color.hint_foreground_material_light));
-        calendar.setSelectedDateVerticalBar(R.color.hint_foreground_material_light);
-        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+
+        calendar.setOnDateChangedListener(new OnDateChangedListener() {
             @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int day) {
-                mday = day;
-                mmonth = month;
-                myear = year;
+            public void onDateChanged(MaterialCalendarView materialCalendarView, CalendarDay calendarDay) {
+                d = calendarDay.getDate();
             }
         });
 
@@ -59,7 +55,6 @@ public class CreateSessionFragment extends Fragment {
 
     public void FloatingButtonClick(View v) {
         EditText et = (EditText) getView().findViewById(R.id.etSessionName);
-        Date d = new Date(myear, mmonth, mday);
 
         Session session = new Session(ApiConnector.getOwnerId(getActivity().getApplicationContext()), et.getText().toString(), false, d);
         ApiConnector.createSession(session, ApiConnector.getOwnerId(getActivity().getApplicationContext()), new ApiResponseHandler<Session>() {

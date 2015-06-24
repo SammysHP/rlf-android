@@ -23,17 +23,16 @@
         android:id="@+id/session_create_fb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignBottom="@+id/etSessionName"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:adjustViewBounds="false" />
 
-    <CalendarView
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
         android:id="@+id/calendar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="fill_parent"
         android:layout_above="@+id/etSessionName"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
