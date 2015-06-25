@@ -1,6 +1,9 @@
 package org.milderjoghurt.rlf.android.net;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,6 +18,7 @@ import org.apache.http.entity.StringEntity;
 import org.milderjoghurt.rlf.android.models.QuestionAnswer;
 import org.milderjoghurt.rlf.android.models.Session;
 import org.milderjoghurt.rlf.android.models.Vote;
+import org.milderjoghurt.rlf.android.models.VoteStats;
 import org.milderjoghurt.rlf.android.net.exceptions.BadRequestException;
 import org.milderjoghurt.rlf.android.net.exceptions.NoSuchSessionException;
 import org.milderjoghurt.rlf.android.net.exceptions.PermissionDeniedException;
@@ -32,6 +36,7 @@ public class ApiConnector {
         static final String SESSIONID = "/sessions/";
         static final String SESSIONS_FROM = "/sessions/from/";
         static final String VOTES = "/votes";
+        static final String VOTESTATS = "/votestats";
         static final String ANSWERS = "/answers";
         static final String RESET_ANSWERS = "/resetanswers/";
 
@@ -45,8 +50,27 @@ public class ApiConnector {
     }
 
     public static String getOwnerId(final Context context) {
+        final SharedPreferences sharedPrefs = context.getSharedPreferences("default", Context.MODE_PRIVATE);
+
+        if (sharedPrefs.contains("owner_id")) {
+            return sharedPrefs.getString("owner_id", "");
+        }
+
         final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        return tm.getDeviceId();
+        final String deviceId = tm.getDeviceId();
+
+        final String androidId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        final WifiManager m_wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        final String wlanMac = m_wm.getConnectionInfo().getMacAddress();
+
+        final String ownerId = deviceId + '-' + androidId + '-' + wlanMac;
+
+        final SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putString("owner_id", ownerId);
+        editor.commit();
+
+        return ownerId;
     }
 
     private static AsyncHttpClient client = new AsyncHttpClient();
@@ -258,6 +282,31 @@ public class ApiConnector {
                 try {
                     final List<Vote> voteList = Arrays.asList(mapper.readValue(responseString, Vote[].class));
                     handler.onSuccess(voteList);
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
+            }
+        });
+    }
+
+    public static void getVoteStats(final String sessionId, final ApiResponseHandler<List<VoteStats>> handler) {
+        get(Constants.SESSIONID + sessionId + Constants.VOTESTATS, null, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
+                if (statusCode == 404) {
+                    handler.onFailure(new NoSuchSessionException(sessionId));
+                    return;
+                }
+
+                handler.onFailure(e);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    final List<VoteStats> vsList = Arrays.asList(mapper.readValue(responseString, VoteStats[].class));
+                    handler.onSuccess(vsList);
                 } catch (IOException e) {
                     handler.onFailure(e);
                 }

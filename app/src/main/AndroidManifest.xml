@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -17,11 +18,12 @@
         </activity>
         <activity
             android:name=".SessionListActivity"
-            android:label="@string/SessionList"
+            android:label="@string/title_sessionList"
             android:parentActivityName=".StartPageActivity" >
         </activity>
         <activity
             android:name=".CreateSessionActivity"
+            android:label="@string/title_create_session"
             android:parentActivityName=".SessionListActivity" >
         </activity>
         <activity

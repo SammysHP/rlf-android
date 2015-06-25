@@ -18,8 +18,10 @@ import com.malinskiy.superrecyclerview.SuperRecyclerView;
 import com.malinskiy.superrecyclerview.swipe.SparseItemRemoveAnimator;
 import com.malinskiy.superrecyclerview.swipe.SwipeItemManagerInterface;
 
-import org.milderjoghurt.rlf.android.dummy.Session;
 import org.milderjoghurt.rlf.android.dummy.SessionListAdapter;
+import org.milderjoghurt.rlf.android.models.Session;
+import org.milderjoghurt.rlf.android.net.ApiConnector;
+import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,14 +58,24 @@ public class SessionListFragment extends Fragment implements OnMoreListener, Swi
     // Provide Dummy content
     private void initializeData() {
         sessions = new ArrayList<>();
-        sessions.add(new Session("ABCDEF", "Software Qualitaet", true));
-        sessions.add(new Session("GHIJKL", "Software Technik", true));
-        sessions.add(new Session("MNOPQR", "Software Projekt 1", false));
-        sessions.add(new Session("MNOPQR", "Software Projekt 2", false));
-        sessions.add(new Session("MNOPQR", "Software Projekt 3", false));
-        sessions.add(new Session("MNOPQR", "Software Projekt 4", false));
-        sessions.add(new Session("MNOPQR", "Software Projekt 5", false));
-        sessions.add(new Session("MNOPQR", "Software Projekt 6", false));
+
+        // get all available data from server
+        final String ownerID = ApiConnector.getOwnerId(getActivity().getApplicationContext());
+        ApiConnector.getSessionsByOwner(ownerID, new ApiResponseHandler<List<Session>>() {
+            @Override
+            public void onSuccess(List<Session> model) {
+                sessions.clear();
+                sessions.addAll(model);
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Throwable e) {
+                sessions.clear();
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+
     }
 
     private void initRecyclerView(View view) {
@@ -94,13 +106,7 @@ public class SessionListFragment extends Fragment implements OnMoreListener, Swi
 
     @Override
     public void onRefresh() {
-        Toast.makeText(this.getActivity(), "Refresh", Toast.LENGTH_LONG).show();
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                mAdapter.insert(new Session("AAAAAA", "new", false), 0);
-            }
-        }, 2000);
+        initializeData();
     }
 }

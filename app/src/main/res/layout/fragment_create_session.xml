@@ -2,29 +2,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:columnCount="3"
-    android:rowCount="28"
+    android:orientation="vertical"
+    android:weightSum="1"
     tools:context="org.milderjoghurt.rlf.android.CreateSessionFragment">
+
 
     <EditText
         android:id="@+id/etSessionName"
-        android:layout_width="match_parent"
+        android:layout_width="317dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:hint="Veranstaltungsname"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="@string/session_name"
         android:inputType="text"
         android:textAlignment="center"
         android:textSize="22sp" />
 
-    <Button
-        android:id="@+id/btnCreateSession"
-        android:layout_width="match_parent"
+    <com.getbase.floatingactionbutton.AddFloatingActionButton
+        android:id="@+id/session_create_fb"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etSessionName"
-        android:layout_centerHorizontal="true"
-        android:text="@string/btnCreateText"
-        android:textSize="22sp" />
+        android:layout_alignBottom="@+id/etSessionName"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:adjustViewBounds="false" />
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/calendar"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/etSessionName"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
