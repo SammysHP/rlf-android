@@ -9,4 +9,12 @@
         android:layout_centerInParent="true"
         android:text="Keine eigenen Sitzungen vorhanden."
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aktualisieren"
+        android:id="@+id/btnRefreshSessionList"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
