@@ -66,8 +66,7 @@ public class SessionListAdapter extends BaseSwipeAdapter<SessionListAdapter.View
 
                 final View sourceView = v; // necessary to get context within asynch handler
 
-                final String toDeleteSession = toDeleteSessionObj.id;
-                ApiConnector.deleteSession(toDeleteSession, ApiConnector.getOwnerId(v.getContext()), new ApiResponseHandler<Session>() {
+                ApiConnector.deleteSession(toDeleteSessionObj, ApiConnector.getOwnerId(v.getContext()), new ApiResponseHandler<Session>() {
                     @Override
                     public void onSuccess(Session model) {
                         remove(holder.getPosition());
@@ -76,7 +75,7 @@ public class SessionListAdapter extends BaseSwipeAdapter<SessionListAdapter.View
 
                     @Override
                     public void onFailure(Throwable e) {
-                        Toast.makeText(sourceView.getContext(), "Fehler beim Entfernen!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(sourceView.getContext(), "Fehler: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
             }
