@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,22 +54,6 @@ public class SessionListFragment extends Fragment implements OnMoreListener, Swi
             }
         });
 
-
-        View refresher = view.findViewById(R.id.btnRefreshSessionList);
-        if(refresher != null && refresher instanceof Button) {
-            Button refresherButton = (Button) refresher;
-            refresherButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    SessionListFragment.this.onRefresh();
-                    if(sessions != null && sessions.size() > 0) {
-                        // TODO the fragment has to be changed in order to display list items (if found any) ?!
-                    }
-                }
-            });
-        }
-
         return view;
     }
 
@@ -83,6 +68,7 @@ public class SessionListFragment extends Fragment implements OnMoreListener, Swi
             public void onSuccess(List<Session> model) {
                 sessions.clear();
                 sessions.addAll(model);
+                Log.d("receive", "received " + sessions.size() + " items");
                 mAdapter.notifyDataSetChanged();
             }
 
@@ -110,8 +96,8 @@ public class SessionListFragment extends Fragment implements OnMoreListener, Swi
         mAdapter.setMode(SwipeItemManagerInterface.Mode.Single);
 
         // add refresh listener
-        //mRecyclerView.setRefreshListener(this);
-        //mRecyclerView.setRefreshingColorResources(android.R.color.holo_orange_light, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_red_light);
+        mRecyclerView.setRefreshListener(this);
+        mRecyclerView.setRefreshingColorResources(android.R.color.holo_orange_light, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_red_light);
         //mRecyclerView.setupMoreListener(this, 1);
     }
 
@@ -123,7 +109,6 @@ public class SessionListFragment extends Fragment implements OnMoreListener, Swi
 
     @Override
     public void onRefresh() {
-
         initializeData();
     }
 }
