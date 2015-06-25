@@ -245,8 +245,8 @@ public class ApiConnector {
         }
     }
 
-    public static void deleteSession(final String sessionId, final String owner, final ApiResponseHandler<Session> handler) {
-        delete(Constants.SESSIONID + sessionId + '/' + owner, new TextHttpResponseHandler() {
+    public static void deleteSession(final Session session, final String owner, final ApiResponseHandler<Session> handler) {
+        delete(Constants.SESSIONID + session.id + '/' + owner, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
                 if (statusCode == 401) {
@@ -259,7 +259,7 @@ public class ApiConnector {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                handler.onSuccess(null);
+                handler.onSuccess(session);
             }
         });
     }
