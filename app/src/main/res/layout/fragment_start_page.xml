@@ -48,7 +48,7 @@
         android:enabled="false"
         android:text="@string/SessionEnter"
         android:textSize="28sp"
-        android:textStyle="bold" />
+        android:theme="@style/ColoredButton" />
 
     <Button
         android:id="@+id/btnListSessions"
@@ -60,6 +60,6 @@
         android:paddingTop="20dp"
         android:text="@string/title_sessionList"
         android:textSize="28sp"
-        android:textStyle="bold" />
+        android:theme="@style/ColoredButton" />
 
 </RelativeLayout>

@@ -1,5 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,21 +7,24 @@
 
     <com.malinskiy.superrecyclerview.SuperRecyclerView
         android:id="@+id/session_list"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_empty="@layout/fragment_session_listempty"
-        app:scrollbarStyle="insideInset"/>
+        app:scrollbarStyle="insideInset" />
 
-    <com.getbase.floatingactionbutton.AddFloatingActionButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/session_list_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_margin="5dp"
-        fab:fab_colorNormal="@android:color/holo_blue_light"
-        fab:fab_colorPressed="@android:color/holo_blue_bright" />
+        android:color="#FFFFFF"
+        android:src="@drawable/ic_add_white_24dp"
+        app:backgroundTint="@android:color/holo_blue_light"
+        app:borderWidth="0dp"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:layout_marginRight="@dimen/fab_margin_right"
+        app:fabSize="normal" />
 
 </RelativeLayout>
