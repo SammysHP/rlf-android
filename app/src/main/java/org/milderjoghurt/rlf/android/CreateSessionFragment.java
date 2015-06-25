@@ -67,7 +67,7 @@ public class CreateSessionFragment extends Fragment {
 
             @Override
             public void onFailure(Throwable e) {
-                Toast.makeText(getActivity(), "Fehler: Sitzung nicht Erstellt", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Sitzung nicht Erstellt, " + e.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
