@@ -14,12 +14,4 @@
         tools:layout="@layout/fragment_student_live_feedback"
         android:layout_weight="0.74" />
 
-<!--    <fragment
-         android:id="@+id/fragment_student_live"
-         android:name="org.milderjoghurt.rlf.android.StudentLiveFragment"
-         android:layout_width="match_parent"
-         android:layout_height="196dp"
-         tools:layout="@layout/fragment_student_live" />-->
-
-
 </LinearLayout>

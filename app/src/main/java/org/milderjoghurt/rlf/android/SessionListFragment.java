@@ -2,7 +2,6 @@ package org.milderjoghurt.rlf.android;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.malinskiy.superrecyclerview.OnMoreListener;
@@ -20,7 +18,7 @@ import com.malinskiy.superrecyclerview.SuperRecyclerView;
 import com.malinskiy.superrecyclerview.swipe.SparseItemRemoveAnimator;
 import com.malinskiy.superrecyclerview.swipe.SwipeItemManagerInterface;
 
-import org.milderjoghurt.rlf.android.dummy.SessionListAdapter;
+import org.milderjoghurt.rlf.android.contentprovider.SessionListAdapter;
 import org.milderjoghurt.rlf.android.models.Session;
 import org.milderjoghurt.rlf.android.net.ApiConnector;
 import org.milderjoghurt.rlf.android.net.ApiResponseHandler;

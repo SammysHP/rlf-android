@@ -1,4 +1,4 @@
-package org.milderjoghurt.rlf.android.dummy;
+package org.milderjoghurt.rlf.android.contentprovider;
 
 import android.content.Intent;
 import android.support.v7.widget.CardView;

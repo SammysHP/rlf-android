@@ -21,7 +21,7 @@ import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 /**
  * Fragment for voting functionality
  */
-public class VoteFragment extends Fragment {
+public class StudentLiveAnswerFragment extends Fragment {
 
     // local res / logging
     private static final String LOG_TAG = "Voting";
@@ -44,7 +44,7 @@ public class VoteFragment extends Fragment {
     private long lastVoteTime = 0; // timestamp --> prevent clientside spamming
     private Session currentSession = null;
 
-    public VoteFragment() {
+    public StudentLiveAnswerFragment() {
 
     }
 
@@ -53,12 +53,12 @@ public class VoteFragment extends Fragment {
         ApiConnector.getSession(pSessionID, new ApiResponseHandler<Session>() {
             @Override
             public void onSuccess(Session session) {
-                VoteFragment.this.currentSession = session;
+                StudentLiveAnswerFragment.this.currentSession = session;
             }
 
             @Override
             public void onFailure(Throwable e) {
-                VoteFragment.this.currentSession = null; // TODO network error ..
+                StudentLiveAnswerFragment.this.currentSession = null; // TODO network error ..
             }
         });
     }
@@ -66,7 +66,7 @@ public class VoteFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_vote, container, false);
+        return inflater.inflate(R.layout.fragment_student_live_answer, container, false);
     }
 
     /**
@@ -244,7 +244,7 @@ public class VoteFragment extends Fragment {
             View.OnClickListener voteClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    VoteFragment.this.onVoteClick(view);
+                    StudentLiveAnswerFragment.this.onVoteClick(view);
                 }
             };
 
@@ -256,7 +256,7 @@ public class VoteFragment extends Fragment {
             sendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    VoteFragment.this.onVoteSend(view);
+                    StudentLiveAnswerFragment.this.onVoteSend(view);
                 }
             });
 

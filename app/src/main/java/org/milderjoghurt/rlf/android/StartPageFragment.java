@@ -11,7 +11,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,7 +20,7 @@ public class StartPageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final View view = inflater.inflate(R.layout.fragment_start_page, container, false);
+        final View view = inflater.inflate(R.layout.fragment_startpage, container, false);
         setHasOptionsMenu(true);
 
         EditText editText = (EditText) view.findViewById(R.id.SessionID);
