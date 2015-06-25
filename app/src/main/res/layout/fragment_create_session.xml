@@ -29,7 +29,7 @@
         android:layout_alignParentRight="true"
         android:adjustViewBounds="true"
         android:color="#FFFFFF"
-        app:backgroundTint="@android:color/holo_blue_light"
+        app:backgroundTint="@color/button_normal"
         android:src="@drawable/ic_add_white_24dp"
         app:borderWidth="0dp"
         android:layout_marginBottom="@dimen/fab_margin_bottom"

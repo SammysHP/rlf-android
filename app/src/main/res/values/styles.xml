@@ -2,14 +2,19 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+        <!-- colorPrimary is used for the default action bar background -->
         <item name="colorPrimary">#2196F3</item>
-        <item name="colorPrimaryDark">#1565C0</item>
-        <item name="colorAccent">#E91E63</item>
+        <!-- colorPrimaryDark is used for the status bar -->
+        <item name="colorPrimaryDark">#1976D2</item>
+        <!-- colorAccent is used as the default value for colorControlActivated
+              which is used to tint widgets -->
+        <item name="colorAccent">#00c853</item>
+        <!-- You can also set colorControlNormal, colorControlActivated
+            colorControlHighlight and colorSwitchThumbNormal. -->
     </style>
 
     <style name="ColoredButton" parent="Widget.AppCompat.Button">
-        <item name="colorButtonNormal">#1E88E5</item>
+        <item name="colorButtonNormal">@color/button_normal</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="elevation">8dp</item>
     </style>

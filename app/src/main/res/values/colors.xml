@@ -8,4 +8,8 @@
     <color name="viewpagerindicator_fg">#ffffff</color>
 
     <color name="vote_button_selected">@android:color/holo_blue_light</color>
+
+
+    <color name="button_normal">#2196f3</color>
+    <color name="button_pressed">#1976D2</color>
 </resources>
