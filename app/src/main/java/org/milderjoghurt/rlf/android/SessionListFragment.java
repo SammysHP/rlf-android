@@ -30,7 +30,7 @@ import java.util.List;
 
 public class SessionListFragment extends Fragment implements OnMoreListener, SwipeRefreshLayout.OnRefreshListener {
 
-    List<Session> sessions;
+    List<Session> sessions = null;
     private SuperRecyclerView mRecyclerView;
     private SessionListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -59,13 +59,15 @@ public class SessionListFragment extends Fragment implements OnMoreListener, Swi
 
     // Provide Dummy content
     private void initializeData() {
-        sessions = new ArrayList<>();
+        if(sessions == null)
+            sessions = new ArrayList<>();
 
         // get all available data from server
         final String ownerID = ApiConnector.getOwnerId(getActivity().getApplicationContext());
         ApiConnector.getSessionsByOwner(ownerID, new ApiResponseHandler<List<Session>>() {
             @Override
             public void onSuccess(List<Session> model) {
+
                 sessions.clear();
                 sessions.addAll(model);
                 Log.d("receive", "received " + sessions.size() + " items");
