@@ -28,9 +28,7 @@ public class Vote {
 	public Vote() {
 	}
 
-	public Vote(Session session, String owner, Type type, Integer value) {
-		this.session = session;
-		this.owner = owner;
+	public Vote(Type type, Integer value) {
 		this.type = type;
 		this.value = value;
 	}
