@@ -224,6 +224,9 @@ public class ApiConnector {
                     if (statusCode == 401) {
                         handler.onFailure(new PermissionDeniedException(responseString));
                         return;
+                    } else if (statusCode == 404) {
+                        handler.onFailure(new NoSuchSessionException(session.id));
+                        return;
                     }
 
                     handler.onFailure(e);
@@ -251,6 +254,9 @@ public class ApiConnector {
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
                 if (statusCode == 401) {
                     handler.onFailure(new PermissionDeniedException(responseString));
+                    return;
+                } else if (statusCode == 404) {
+                    handler.onFailure(new NoSuchSessionException(session.id));
                     return;
                 }
 
