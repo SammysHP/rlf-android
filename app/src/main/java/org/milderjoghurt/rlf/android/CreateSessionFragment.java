@@ -56,6 +56,10 @@ public class CreateSessionFragment extends Fragment {
 
     public void FloatingButtonClick(View v) {
         EditText et = (EditText) getView().findViewById(R.id.etSessionName);
+        if (!(et.getText().toString().length() > 0)) {
+            Toast.makeText(getActivity(), "Bitte einen Sitzungsnamen eingeben", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         Session session = new Session(ApiConnector.getOwnerId(getActivity().getApplicationContext()), et.getText().toString(), false, d);
         ApiConnector.createSession(session, ApiConnector.getOwnerId(getActivity().getApplicationContext()), new ApiResponseHandler<Session>() {
@@ -67,7 +71,7 @@ public class CreateSessionFragment extends Fragment {
 
             @Override
             public void onFailure(Throwable e) {
-                Toast.makeText(getActivity(), "Sitzung nicht Erstellt, " + e.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Fehler beim Erstellen: " + e.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
