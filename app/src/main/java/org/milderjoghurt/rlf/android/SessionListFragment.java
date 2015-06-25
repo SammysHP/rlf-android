@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -51,6 +52,22 @@ public class SessionListFragment extends Fragment implements OnMoreListener, Swi
                 view.getContext().startActivity(intent);
             }
         });
+
+
+        View refresher = view.findViewById(R.id.btnRefreshSessionList);
+        if(refresher != null && refresher instanceof Button) {
+            Button refresherButton = (Button) refresher;
+            refresherButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    SessionListFragment.this.onRefresh();
+                    if(sessions != null && sessions.size() > 0) {
+                        // TODO the fragment has to be changed in order to display list items (if found any) ?!
+                    }
+                }
+            });
+        }
 
         return view;
     }

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.malinskiy.superrecyclerview.swipe.BaseSwipeAdapter;
 
@@ -62,17 +63,20 @@ public class SessionListAdapter extends BaseSwipeAdapter<SessionListAdapter.View
 
                 if (toDeleteSessionObj == null)
                     return; // nothing to do ..
+
+                final View sourceView = v; // necessary to get context within asynch handler
+
                 final String toDeleteSession = toDeleteSessionObj.id;
                 ApiConnector.deleteSession(toDeleteSession, ApiConnector.getOwnerId(v.getContext()), new ApiResponseHandler<Session>() {
                     @Override
                     public void onSuccess(Session model) {
                         remove(holder.getPosition());
-                        //Toast.makeText(v.getContext(), holder.getPosition() + " gelscht", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(sourceView.getContext(), model.name + " entfernt", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onFailure(Throwable e) {
-                        //Toast.makeText(v.getContext(), "Fehler beim Lschen!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(sourceView.getContext(), "Fehler beim Entfernen!", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
