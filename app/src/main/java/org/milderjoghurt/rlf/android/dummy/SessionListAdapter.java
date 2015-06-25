@@ -63,7 +63,7 @@ public class SessionListAdapter extends BaseSwipeAdapter<SessionListAdapter.View
                 if (toDeleteSessionObj == null)
                     return; // nothing to do ..
                 final String toDeleteSession = toDeleteSessionObj.id;
-                ApiConnector.deleteSession(toDeleteSession, toDeleteSessionObj.owner, new ApiResponseHandler<Session>() {
+                ApiConnector.deleteSession(toDeleteSession, ApiConnector.getOwnerId(v.getContext()), new ApiResponseHandler<Session>() {
                     @Override
                     public void onSuccess(Session model) {
                         remove(holder.getPosition());
