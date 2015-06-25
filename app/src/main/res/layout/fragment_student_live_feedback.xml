@@ -1,73 +1,157 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_student_live_feedback"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    tools:context="org.milderjoghurt.rlf.android.StudentLiveFeedbackFragment">
+    android:id="@+id/test1" >
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:id="@+id/test2"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/signal"
+        android:layout_toStartOf="@+id/signal"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp">
+
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_turtle" />
 
-        <SeekBar
-            android:id="@+id/feedback_seekbar_speed"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
+            android:src="@drawable/ic_turtle"
+            android:layout_below="@+id/vSeekBar2"
+            android:layout_alignRight="@+id/vSeekBar2"
+            android:layout_alignEnd="@+id/vSeekBar2" />
+
+
+        <org.milderjoghurt.rlf.android.ui.VerticalSeekBar
+
+            android:id="@+id/vSeekBar1"
+            android:layout_width="25dp"
+
+            android:layout_marginLeft="7dp"
             android:enabled="false"
             android:max="256"
-            android:maxHeight="15dp"
+            android:maxWidth="15dp"
+
+
+            android:layout_height="320dp"
             android:progress="128"
-            android:progressDrawable="@drawable/seekbar_npn"
+            android:progressDrawable="@drawable/seekbar_vertical_npn"
             android:splitTrack="false"
-            android:thumb="@drawable/seekbar_arrows" />
+            android:thumb="@drawable/seekbar_arrows"
+            android:layout_below="@+id/imageView"
+            android:layout_centerHorizontal="true" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_rabbit" />
+
+            android:src="@drawable/ic_rabbit"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/vSeekBar2"
+            android:layout_alignEnd="@+id/vSeekBar2"
+            android:id="@+id/imageView1" />
     </LinearLayout>
+
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:id="@+id/test"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/signal"
+        android:layout_toEndOf="@+id/signal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp">
+
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_understand" />
+            android:src="@drawable/ic_understand"
+            android:layout_below="@+id/vSeekBar2"
+            android:layout_alignRight="@+id/vSeekBar2"
+            android:layout_alignEnd="@+id/vSeekBar2"
+            android:layout_gravity="right" />
 
-        <SeekBar
-            android:id="@+id/feedback_seekbar_understandability"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
+
+        <org.milderjoghurt.rlf.android.ui.VerticalSeekBar
+
+            android:id="@+id/vSeekBar2"
+            android:layout_width="25dp"
+
+            android:layout_marginLeft="7dp"
             android:enabled="false"
             android:max="256"
-            android:maxHeight="15dp"
-            android:progress="0"
-            android:progressDrawable="@drawable/seekbar_pn"
+            android:maxWidth="15dp"
+
+            android:layout_height="320dp"
+            android:progress="128"
+            android:progressDrawable="@drawable/seekbar_vertical_pn"
             android:splitTrack="false"
-            android:thumb="@drawable/seekbar_arrows" />
+            android:thumb="@drawable/seekbar_arrows"
+            android:layout_below="@+id/imageView"
+            android:indeterminate="false" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_confused" />
+            android:src="@drawable/ic_confused"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/vSeekBar2"
+            android:layout_alignEnd="@+id/vSeekBar2"
+            android:id="@+id/imageView2"
+            android:layout_gravity="right" />
     </LinearLayout>
-</LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hand heben"
+        android:textSize="25dp"
+        android:id="@+id/signal"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/roundedbutton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="25dp"
+        android:layout_below="@+id/test" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="41dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Small Text"
+            android:id="@+id/textView2"
+            android:layout_gravity="center_horizontal"
+            android:layout_below="@+id/test"
+            android:layout_alignLeft="@+id/button2"
+            android:layout_alignStart="@+id/button2"
+            android:layout_alignRight="@+id/button2"
+            android:layout_alignEnd="@+id/button2" />
+
+        <Button
+            android:layout_width="81dp"
+            android:layout_height="130dp"
+            android:text="Feedback senden"
+            android:id="@+id/button2"
+            android:textSize="11sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_below="@+id/textView2"
+            android:layout_alignLeft="@+id/test2"
+            android:layout_alignStart="@+id/test2" />
+    </LinearLayout>
+
+</RelativeLayout>

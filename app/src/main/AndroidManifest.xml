@@ -27,7 +27,8 @@
         <activity
             android:name=".StudentLiveActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".StartPageActivity" >
+            android:parentActivityName=".StartPageActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
