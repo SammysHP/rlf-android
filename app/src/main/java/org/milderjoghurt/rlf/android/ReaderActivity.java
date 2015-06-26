@@ -20,7 +20,7 @@ public class ReaderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_reader);
 
         Intent intent = getIntent();
-        setTitle(intent.getStringExtra("Titel") + ": " + intent.getStringExtra("SessionId"));
+        setTitle(intent.getStringExtra("SessionId") + ": " + intent.getStringExtra("Titel"));
 
 
 
