@@ -22,6 +22,7 @@
 
     <color name="vote_button_selected">@color/material_lightblue_500</color>
 
+
     <color name="sessionlist_open">@color/material_lightgreen_500</color>
     <color name="sessionlist_closed">@color/material_red_500</color>
 </resources>

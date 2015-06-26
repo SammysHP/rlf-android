@@ -76,11 +76,11 @@ public class StartPageFragment extends Fragment {
         final EditText editText = (EditText) getView().findViewById(R.id.SessionID);
         if (editText.getText().toString().length() != 6) {
             Toast.makeText(getActivity(), "zu kurze ID", Toast.LENGTH_SHORT).show();
-            editText.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
+            editText.getBackground().setColorFilter(getResources().getColor(R.color.material_red_a400), PorterDuff.Mode.SRC_ATOP);
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    editText.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+                    editText.setBackground(getResources().getDrawable(R.drawable.rounded_edittext_bg));
                 }
             }, 500);
         } else {
