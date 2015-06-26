@@ -15,7 +15,6 @@ import org.milderjoghurt.rlf.android.net.ApiConnector;
 import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 
 import java.util.List;
-import java.util.Random;
 
 public class ReaderLiveFeedbackDetailsFragment extends Fragment {
     /*
@@ -26,16 +25,12 @@ public class ReaderLiveFeedbackDetailsFragment extends Fragment {
     /*
      * TODO: For demonstration
      */
-    double sumspeed = 0;
-    double sumunderstandable = 0;
 
     double avgspeed = 0;
     double avgunderstandable = 0;
-    private boolean isOpen = false;
     private String sessionId;
     private Session activeSession = null;
     private Runnable demonstrationRunnable = new Runnable() {
-        private final Random RANDOM = new Random();
 
         @Override
         public void run() {
@@ -58,12 +53,10 @@ public class ReaderLiveFeedbackDetailsFragment extends Fragment {
                         public void onSuccess(List<VoteStats> model) {
                             for (VoteStats v : model) {
                                 if (v.type == VoteStats.Type.SPEED)
-                                    sumspeed += v.value;
+                                    avgspeed = v.value;
                                 if (v.type == VoteStats.Type.UNDERSTANDABILITY)
-                                    sumunderstandable += v.value;
+                                    avgunderstandable = v.value;
                             }
-                            avgspeed = sumspeed / model.size();
-                            avgunderstandable = sumunderstandable / model.size();
                         }
 
                         @Override
@@ -100,19 +93,6 @@ public class ReaderLiveFeedbackDetailsFragment extends Fragment {
                 return true;
             }
         });
-        sessionId = getActivity().getIntent().getStringExtra("SessionId");
-        ApiConnector.getSession(sessionId, new ApiResponseHandler<Session>() {
-            @Override
-            public void onSuccess(Session model) {
-                activeSession = model;
-            }
-
-            @Override
-            public void onFailure(Throwable e) {
-
-            }
-        });
-
         return view;
     }
 

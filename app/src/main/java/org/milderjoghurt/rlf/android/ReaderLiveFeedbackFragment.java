@@ -18,10 +18,7 @@ import org.milderjoghurt.rlf.android.models.VoteStats;
 import org.milderjoghurt.rlf.android.net.ApiConnector;
 import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Feedback indicator.
@@ -43,15 +40,8 @@ public class ReaderLiveFeedbackFragment extends Fragment {
      * TODO: For demonstration
      */
     private Runnable demonstrationRunnable = new Runnable() {
-        private final List<FeedbackState> VALUES = Collections.unmodifiableList(Arrays.asList(FeedbackState.values()));
-        private final int SIZE = VALUES.size();
-        private final Random RANDOM = new Random();
 
-        double sumspeed = 0;
-        double sumunderstandable = 0;
-
-        double avgspeed = 0;
-        double avgunderstandable = 0;
+        int curStatus = 0;
 
         @Override
         public void run() {
@@ -60,15 +50,11 @@ public class ReaderLiveFeedbackFragment extends Fragment {
                     @Override
                     public void onSuccess(List<VoteStats> model) {
                         for (VoteStats v : model) {
-                            if (v.type == VoteStats.Type.SPEED)
-                                sumspeed += v.value;
-                            if (v.type == VoteStats.Type.UNDERSTANDABILITY)
-                                sumunderstandable += v.value;
+                            if (v.type == VoteStats.Type.ALL)
+                                curStatus = v.value;
+                            if (v.type == VoteStats.Type.CURRENTUSERS)
+                                setUserCount(v.value);
                         }
-                        avgspeed = sumspeed / model.size();
-                        avgunderstandable = sumunderstandable / model.size();
-                        setUserCount(model.size());
-
                     }
 
                     @Override
@@ -76,9 +62,9 @@ public class ReaderLiveFeedbackFragment extends Fragment {
 
                     }
                 });
-                if (avgspeed > 40 && avgspeed < 60)
+                if (curStatus > 66)
                     setFeedbackState(FeedbackState.INACTIVE.POSITIVE);
-                else if (avgspeed > 20 && avgspeed < 80)
+                else if (curStatus > 33)
                     setFeedbackState(FeedbackState.INACTIVE.NEUTRAL);
                 else
                     setFeedbackState(FeedbackState.INACTIVE.NEGATIVE);
@@ -108,11 +94,10 @@ public class ReaderLiveFeedbackFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 isOpen = isChecked;
                 if (isOpen && !activeSession.open) {
-                    activeSession.open = true;
                     ApiConnector.updateSession(activeSession, ApiConnector.getOwnerId(view.getContext()), new ApiResponseHandler<Session>() {
                         @Override
                         public void onSuccess(Session model) {
-
+                            activeSession.open = true;
                         }
 
                         @Override
@@ -124,11 +109,11 @@ public class ReaderLiveFeedbackFragment extends Fragment {
                 if (!isOpen) {
                     setFeedbackState(FeedbackState.INACTIVE);
                     if (activeSession.open) {
-                        activeSession.open = false;
+
                         ApiConnector.updateSession(activeSession, ApiConnector.getOwnerId(view.getContext()), new ApiResponseHandler<Session>() {
                             @Override
                             public void onSuccess(Session model) {
-
+                                activeSession.open = false;
                             }
 
                             @Override
