@@ -22,14 +22,13 @@ public class Session {
     public Session() {
     }
 
-    public Session(String owner, String name) {
-        this.owner = owner;
+    public Session(String name) {
         this.name = name;
         this.open = true;
     }
 
-    public Session(String owner, String name, Boolean open, Date date) {
-        this(owner, name);
+    public Session(String name, Boolean open, Date date) {
+        this(name);
         this.open = open;
         this.date = date;
     }

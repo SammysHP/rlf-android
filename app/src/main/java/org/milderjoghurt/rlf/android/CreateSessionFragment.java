@@ -61,7 +61,7 @@ public class CreateSessionFragment extends Fragment {
             return;
         }
 
-        Session session = new Session(ApiConnector.getOwnerId(getActivity().getApplicationContext()), et.getText().toString(), false, d);
+        Session session = new Session(et.getText().toString(), false, d);
         ApiConnector.createSession(session, ApiConnector.getOwnerId(getActivity().getApplicationContext()), new ApiResponseHandler<Session>() {
             @Override
             public void onSuccess(Session model) {
