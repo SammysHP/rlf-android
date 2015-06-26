@@ -8,8 +8,15 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
+
+import org.milderjoghurt.rlf.android.models.Session;
+import org.milderjoghurt.rlf.android.models.VoteStats;
+import org.milderjoghurt.rlf.android.net.ApiConnector;
+import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,32 +30,15 @@ import java.util.Random;
  */
 public class ReaderLiveFeedbackFragment extends Fragment {
 
-    /**
-     * States for the feedback view.
-     * <p/>
-     * POSITIVE represents an all-good situation (usually green with happy smiley), NEGATIVE a bad situation (red with sad smiley) and NEUTRAL something inbetween.
-     */
-    public enum FeedbackState {
-        POSITIVE(R.color.reader_livefeedback_positive, R.drawable.feedback_smiley_happy),
-        NEUTRAL(R.color.reader_livefeedback_neutral, R.drawable.feedback_smiley_neutral),
-        NEGATIVE(R.color.reader_livefeedback_negative, R.drawable.feedback_smiley_sad);
-
-        public final int color;
-        public final int icon;
-
-        FeedbackState(final int color, final int icon) {
-            this.color = color;
-            this.icon = icon;
-        }
-    }
-
     public static final int FLASH_DURATION = 500; // ms
-
     /*
      * TODO: For demonstration
      */
     Handler demonstrationHandler = new Handler();
-
+    private FeedbackState activeFeedbackState = FeedbackState.INACTIVE;
+    private boolean requestActive = false;
+    private boolean isOpen = false;
+    private String sessionId;
     /*
      * TODO: For demonstration
      */
@@ -57,39 +47,52 @@ public class ReaderLiveFeedbackFragment extends Fragment {
         private final int SIZE = VALUES.size();
         private final Random RANDOM = new Random();
 
+        double sumspeed = 0;
+        double sumunderstandable = 0;
+
+        double avgspeed = 0;
+        double avgunderstandable = 0;
+
         @Override
         public void run() {
-            // Change feedback state with probability of 80%
-            if (RANDOM.nextInt(100) < 80) {
-                setFeedbackState(VALUES.get(RANDOM.nextInt(SIZE)));
-            }
+            if (isOpen) {
+                ApiConnector.getVoteStats(sessionId, new ApiResponseHandler<List<VoteStats>>() {
+                    @Override
+                    public void onSuccess(List<VoteStats> model) {
+                        for (VoteStats v : model) {
+                            if (v.type == VoteStats.Type.SPEED)
+                                sumspeed += v.value;
+                            if (v.type == VoteStats.Type.UNDERSTANDABILITY)
+                                sumunderstandable += v.value;
+                        }
+                        avgspeed = sumspeed / model.size();
+                        avgunderstandable = sumunderstandable / model.size();
+                        setUserCount(model.size());
 
-            // Raise request with probability of 15%
-            if (RANDOM.nextInt(100) < 15) {
-                setRequestState(true);
-            }
+                    }
 
-            // Dismiss request with probability of 50%
-            if (RANDOM.nextInt(100) < 50) {
-                setRequestState(false);
-            }
+                    @Override
+                    public void onFailure(Throwable e) {
 
-            // Update user count with probability of 50%
-            if (RANDOM.nextInt(100) < 50) {
-                setUserCount(RANDOM.nextInt(15+5));
+                    }
+                });
+                if (avgspeed > 40 && avgspeed < 60)
+                    setFeedbackState(FeedbackState.INACTIVE.POSITIVE);
+                else if (avgspeed > 20 && avgspeed < 80)
+                    setFeedbackState(FeedbackState.INACTIVE.NEUTRAL);
+                else
+                    setFeedbackState(FeedbackState.INACTIVE.NEGATIVE);
+                updateView();
+                demonstrationHandler.postDelayed(demonstrationRunnable, 5000); // every 5 seconds
             }
-
-            demonstrationHandler.postDelayed(demonstrationRunnable, 5000); // every 5 seconds
         }
     };
-
-    private FeedbackState activeFeedbackState = FeedbackState.POSITIVE;
-    private boolean requestActive = false;
+    private Session activeSession;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_reader_livefeedback, container, false);
+        final View view = inflater.inflate(R.layout.fragment_reader_livefeedback, container, false);
 
         View dismissButton = view.findViewById(R.id.reader_feedback_dismiss);
         dismissButton.setOnClickListener(new View.OnClickListener() {
@@ -99,7 +102,56 @@ public class ReaderLiveFeedbackFragment extends Fragment {
                 updateView();
             }
         });
+        Switch OpenSwitch = (Switch) view.findViewById(R.id.swtSessionOpen);
+        OpenSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isOpen = isChecked;
+                if (isOpen && !activeSession.open) {
+                    activeSession.open = true;
+                    ApiConnector.updateSession(activeSession, ApiConnector.getOwnerId(view.getContext()), new ApiResponseHandler<Session>() {
+                        @Override
+                        public void onSuccess(Session model) {
 
+                        }
+
+                        @Override
+                        public void onFailure(Throwable e) {
+
+                        }
+                    });
+                }
+                if (!isOpen) {
+                    setFeedbackState(FeedbackState.INACTIVE);
+                    if (activeSession.open) {
+                        activeSession.open = false;
+                        ApiConnector.updateSession(activeSession, ApiConnector.getOwnerId(view.getContext()), new ApiResponseHandler<Session>() {
+                            @Override
+                            public void onSuccess(Session model) {
+
+                            }
+
+                            @Override
+                            public void onFailure(Throwable e) {
+
+                            }
+                        });
+                    }
+                }
+            }
+        });
+        sessionId = getActivity().getIntent().getStringExtra("SessionId");
+        ApiConnector.getSession(sessionId, new ApiResponseHandler<Session>() {
+            @Override
+            public void onSuccess(Session model) {
+                activeSession = model;
+            }
+
+            @Override
+            public void onFailure(Throwable e) {
+
+            }
+        });
         return view;
     }
 
@@ -107,7 +159,7 @@ public class ReaderLiveFeedbackFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateView();
-        demonstrationHandler.post(demonstrationRunnable); // TODO: For demonstration
+        demonstrationHandler.post(demonstrationRunnable);// TODO: For demonstration
     }
 
     @Override
@@ -179,5 +231,25 @@ public class ReaderLiveFeedbackFragment extends Fragment {
 
         TextView v = (TextView) getView().findViewById(R.id.reader_feedback_usercount);
         v.setText(Integer.toString(count));
+    }
+
+    /**
+     * States for the feedback view.
+     * <p/>
+     * POSITIVE represents an all-good situation (usually green with happy smiley), NEGATIVE a bad situation (red with sad smiley) and NEUTRAL something inbetween.
+     */
+    public enum FeedbackState {
+        POSITIVE(R.color.reader_livefeedback_positive, R.drawable.feedback_smiley_happy),
+        NEUTRAL(R.color.reader_livefeedback_neutral, R.drawable.feedback_smiley_neutral),
+        NEGATIVE(R.color.reader_livefeedback_negative, R.drawable.feedback_smiley_sad),
+        INACTIVE(R.color.reader_livefeedback_inactiv, R.drawable.feedback_smiley_neutral);
+
+        public final int color;
+        public final int icon;
+
+        FeedbackState(final int color, final int icon) {
+            this.color = color;
+            this.icon = icon;
+        }
     }
 }

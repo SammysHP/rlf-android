@@ -7,11 +7,13 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
 
-import java.util.Arrays;
-import java.util.Collections;
+import org.milderjoghurt.rlf.android.models.Session;
+import org.milderjoghurt.rlf.android.models.VoteStats;
+import org.milderjoghurt.rlf.android.net.ApiConnector;
+import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
+
 import java.util.List;
 import java.util.Random;
 
@@ -24,28 +26,59 @@ public class ReaderLiveFeedbackDetailsFragment extends Fragment {
     /*
      * TODO: For demonstration
      */
+    double sumspeed = 0;
+    double sumunderstandable = 0;
+
+    double avgspeed = 0;
+    double avgunderstandable = 0;
+    private boolean isOpen = false;
+    private String sessionId;
+    private Session activeSession = null;
     private Runnable demonstrationRunnable = new Runnable() {
         private final Random RANDOM = new Random();
 
         @Override
         public void run() {
-            if (getView() != null) {
-                // Change speed with probability of 70%
-                if (RANDOM.nextInt(100) < 70) {
-                    SeekBar bar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_speed);
-                    final int progress = Math.max(0, Math.min(255, bar.getProgress() + (RANDOM.nextInt(20) - 10)));
-                    bar.setProgress(progress);
+            sessionId = getActivity().getIntent().getStringExtra("SessionId");
+            ApiConnector.getSession(sessionId, new ApiResponseHandler<Session>() {
+                @Override
+                public void onSuccess(Session model) {
+                    activeSession = model;
                 }
 
-                // Change understandability with probability of 70%
-                if (RANDOM.nextInt(100) < 70) {
-                    SeekBar bar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_understandability);
-                    final int progress = Math.max(0, Math.min(255, bar.getProgress() + (RANDOM.nextInt(20) - 10)));
-                    bar.setProgress(progress);
+                @Override
+                public void onFailure(Throwable e) {
+
                 }
+            });
+            if (getView() != null && activeSession != null) {
+                if (activeSession.open) {
+                    ApiConnector.getVoteStats(sessionId, new ApiResponseHandler<List<VoteStats>>() {
+                        @Override
+                        public void onSuccess(List<VoteStats> model) {
+                            for (VoteStats v : model) {
+                                if (v.type == VoteStats.Type.SPEED)
+                                    sumspeed += v.value;
+                                if (v.type == VoteStats.Type.UNDERSTANDABILITY)
+                                    sumunderstandable += v.value;
+                            }
+                            avgspeed = sumspeed / model.size();
+                            avgunderstandable = sumunderstandable / model.size();
+                        }
+
+                        @Override
+                        public void onFailure(Throwable e) {
+
+                        }
+                    });
+                }
+                SeekBar speedbar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_speed);
+                speedbar.setProgress((int) avgspeed);
+                SeekBar understandbar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_understandability);
+                understandbar.setProgress((int) avgunderstandable);
             }
 
-            demonstrationHandler.postDelayed(demonstrationRunnable, 2000); // every 5 seconds
+            demonstrationHandler.postDelayed(demonstrationRunnable, 5000); // every 5 seconds
         }
     };
 
@@ -65,6 +98,18 @@ public class ReaderLiveFeedbackDetailsFragment extends Fragment {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return true;
+            }
+        });
+        sessionId = getActivity().getIntent().getStringExtra("SessionId");
+        ApiConnector.getSession(sessionId, new ApiResponseHandler<Session>() {
+            @Override
+            public void onSuccess(Session model) {
+                activeSession = model;
+            }
+
+            @Override
+            public void onFailure(Throwable e) {
+
             }
         });
 
