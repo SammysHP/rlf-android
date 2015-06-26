@@ -117,12 +117,13 @@ public class ReaderLiveFeedbackFragment extends Fragment {
             @Override
             public void onSuccess(Session model) {
                 activeSession = model;
+                OpenSwitch.setChecked(activeSession.open);
             }
 
             @Override
             public void onFailure(Throwable e) {
                 Toast.makeText(getActivity(), "Fehler: " + e.toString(), Toast.LENGTH_LONG).show();
-                //getActivity().finish();
+                getActivity().finish();
             }
         });
         return view;
