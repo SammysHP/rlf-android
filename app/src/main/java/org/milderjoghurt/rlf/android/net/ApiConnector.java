@@ -346,7 +346,7 @@ public class ApiConnector {
     }
 
     public static void resetAnswers(final String sessionId, final String owner, final ApiResponseHandler<Session> handler) {
-        get(Constants.SESSIONID + sessionId + Constants.RESET_ANSWERS + owner, null, new TextHttpResponseHandler() {
+        post(Constants.SESSIONID + sessionId + Constants.RESET_ANSWERS + owner, "[]", new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable e) {
                 if (statusCode == 404) {
