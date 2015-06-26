@@ -12,6 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.milderjoghurt.rlf.android.models.Session;
 import org.milderjoghurt.rlf.android.models.VoteStats;
@@ -28,24 +29,20 @@ import java.util.List;
 public class ReaderLiveFeedbackFragment extends Fragment {
 
     public static final int FLASH_DURATION = 500; // ms
-    /*
-     * TODO: For demonstration
-     */
+
     Handler demonstrationHandler = new Handler();
     private FeedbackState activeFeedbackState = FeedbackState.INACTIVE;
     private boolean requestActive = false;
-    private boolean isOpen = false;
     private String sessionId;
-    /*
-     * TODO: For demonstration
-     */
+    private Session activeSession;
+
     private Runnable demonstrationRunnable = new Runnable() {
 
         int curStatus = 0;
 
         @Override
         public void run() {
-            if (isOpen) {
+            if (activeSession != null && activeSession.open) {
                 ApiConnector.getVoteStats(sessionId, new ApiResponseHandler<List<VoteStats>>() {
                     @Override
                     public void onSuccess(List<VoteStats> model) {
@@ -54,26 +51,27 @@ public class ReaderLiveFeedbackFragment extends Fragment {
                                 curStatus = v.value;
                             if (v.type == VoteStats.Type.CURRENTUSERS)
                                 setUserCount(v.value);
+                            if (v.type == VoteStats.Type.REQUEST)
+                                setRequestState(v.value > 0); // TODO: handle request count info in value
                         }
                     }
 
                     @Override
                     public void onFailure(Throwable e) {
-
+                        Toast.makeText(getActivity(), "Fehler: " + e.toString(), Toast.LENGTH_LONG).show();
                     }
                 });
                 if (curStatus > 66)
-                    setFeedbackState(FeedbackState.INACTIVE.POSITIVE);
+                    setFeedbackState(FeedbackState.POSITIVE);
                 else if (curStatus > 33)
-                    setFeedbackState(FeedbackState.INACTIVE.NEUTRAL);
+                    setFeedbackState(FeedbackState.NEUTRAL);
                 else
-                    setFeedbackState(FeedbackState.INACTIVE.NEGATIVE);
+                    setFeedbackState(FeedbackState.NEGATIVE);
                 updateView();
                 demonstrationHandler.postDelayed(demonstrationRunnable, 5000); // every 5 seconds
             }
         }
     };
-    private Session activeSession;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,19 +90,17 @@ public class ReaderLiveFeedbackFragment extends Fragment {
         OpenSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
-                isOpen = isChecked;
-                if (isOpen && !activeSession.open) {
-                    activeSession.open = true;
-                }
-                if (!isOpen) {
+                activeSession.open = isChecked;
+                if (!isChecked) {
                     setFeedbackState(FeedbackState.INACTIVE);
-                    if (activeSession.open) {
-                        activeSession.open = false;
-                    }
+                } else {
+                    setFeedbackState(FeedbackState.NEUTRAL);
                 }
+
                 ApiConnector.updateSession(activeSession, ApiConnector.getOwnerId(view.getContext()), new ApiResponseHandler<Session>() {
                     @Override
                     public void onSuccess(Session model) {
+                        activeSession = model;
                     }
 
                     @Override
@@ -123,7 +119,8 @@ public class ReaderLiveFeedbackFragment extends Fragment {
 
             @Override
             public void onFailure(Throwable e) {
-
+                Toast.makeText(getActivity(), "Fehler: " + e.toString(), Toast.LENGTH_LONG).show();
+                //getActivity().finish();
             }
         });
         return view;
@@ -216,7 +213,7 @@ public class ReaderLiveFeedbackFragment extends Fragment {
         POSITIVE(R.color.reader_livefeedback_positive, R.drawable.feedback_smiley_happy),
         NEUTRAL(R.color.reader_livefeedback_neutral, R.drawable.feedback_smiley_neutral),
         NEGATIVE(R.color.reader_livefeedback_negative, R.drawable.feedback_smiley_sad),
-        INACTIVE(R.color.reader_livefeedback_inactiv, R.drawable.feedback_smiley_neutral);
+        INACTIVE(R.color.reader_livefeedback_inactiv, R.drawable.feedback_smiley_happy);
 
         public final int color;
         public final int icon;
