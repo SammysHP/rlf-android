@@ -90,24 +90,26 @@ public class ReaderLiveFeedbackFragment extends Fragment {
         OpenSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
-                activeSession.open = isChecked;
                 if (!isChecked) {
                     setFeedbackState(FeedbackState.INACTIVE);
                 } else {
                     setFeedbackState(FeedbackState.NEUTRAL);
                 }
+                if (activeSession.open != isChecked) {
+                    activeSession.open = isChecked;
+                    ApiConnector.updateSession(activeSession, ApiConnector.getOwnerId(view.getContext()), new ApiResponseHandler<Session>() {
+                        @Override
+                        public void onSuccess(Session model) {
+                            activeSession = model;
+                        }
 
-                ApiConnector.updateSession(activeSession, ApiConnector.getOwnerId(view.getContext()), new ApiResponseHandler<Session>() {
-                    @Override
-                    public void onSuccess(Session model) {
-                        activeSession = model;
-                    }
-
-                    @Override
-                    public void onFailure(Throwable e) {
-                        OpenSwitch.setChecked(!isChecked);
-                    }
-                });
+                        @Override
+                        public void onFailure(Throwable e) {
+                            activeSession.open = !isChecked;
+                            OpenSwitch.setChecked(!isChecked);
+                        }
+                    });
+                }
             }
         });
         sessionId = getActivity().getIntent().getStringExtra("SessionId");
