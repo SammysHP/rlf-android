@@ -88,41 +88,30 @@ public class ReaderLiveFeedbackFragment extends Fragment {
                 updateView();
             }
         });
-        Switch OpenSwitch = (Switch) view.findViewById(R.id.swtSessionOpen);
+        final Switch OpenSwitch = (Switch) view.findViewById(R.id.swtSessionOpen);
         OpenSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
                 isOpen = isChecked;
                 if (isOpen && !activeSession.open) {
-                    ApiConnector.updateSession(activeSession, ApiConnector.getOwnerId(view.getContext()), new ApiResponseHandler<Session>() {
-                        @Override
-                        public void onSuccess(Session model) {
-                            activeSession.open = true;
-                        }
-
-                        @Override
-                        public void onFailure(Throwable e) {
-
-                        }
-                    });
+                    activeSession.open = true;
                 }
                 if (!isOpen) {
                     setFeedbackState(FeedbackState.INACTIVE);
                     if (activeSession.open) {
-
-                        ApiConnector.updateSession(activeSession, ApiConnector.getOwnerId(view.getContext()), new ApiResponseHandler<Session>() {
-                            @Override
-                            public void onSuccess(Session model) {
-                                activeSession.open = false;
-                            }
-
-                            @Override
-                            public void onFailure(Throwable e) {
-
-                            }
-                        });
+                        activeSession.open = false;
                     }
                 }
+                ApiConnector.updateSession(activeSession, ApiConnector.getOwnerId(view.getContext()), new ApiResponseHandler<Session>() {
+                    @Override
+                    public void onSuccess(Session model) {
+                    }
+
+                    @Override
+                    public void onFailure(Throwable e) {
+                        OpenSwitch.setChecked(!isChecked);
+                    }
+                });
             }
         });
         sessionId = getActivity().getIntent().getStringExtra("SessionId");

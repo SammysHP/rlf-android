@@ -49,7 +49,6 @@ public class ReaderPollFragment extends Fragment {
 
         @Override
         public void run() {
-            sessionId = getActivity().getIntent().getStringExtra("SessionId");
             ApiConnector.getSession(sessionId, new ApiResponseHandler<Session>() {
                 @Override
                 public void onSuccess(Session model) {
@@ -109,6 +108,7 @@ public class ReaderPollFragment extends Fragment {
         pollbarC = new Bar((LinearLayout) view.findViewById(R.id.pollbarC), "C");
         pollbarD = new Bar((LinearLayout) view.findViewById(R.id.pollbarD), "D");
 
+        sessionId = getActivity().getIntent().getStringExtra("SessionId");
         View dismissButton = view.findViewById(R.id.poll_reset);
         dismissButton.setOnClickListener(new View.OnClickListener() {
             @Override
