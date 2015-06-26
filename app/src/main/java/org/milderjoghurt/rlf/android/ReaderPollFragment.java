@@ -17,12 +17,9 @@ import org.milderjoghurt.rlf.android.net.ApiConnector;
 import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 
 import java.util.List;
-import java.util.Random;
 
 public class ReaderPollFragment extends Fragment {
-    /*
-     * TODO: For demonstration
-     */
+
     Handler demonstrationHandler = new Handler();
     private Bar pollbarA;
     private Bar pollbarB;
@@ -30,22 +27,8 @@ public class ReaderPollFragment extends Fragment {
     private Bar pollbarD;
     private String sessionId;
     private Session activeSession = null;
-    /*
-     * TODO: For demonstration
-     */
+
     private Runnable demonstrationRunnable = new Runnable() {
-        private final Random RANDOM = new Random();
-
-        public int multiMax(int... n) {
-            int i = 0;
-            int max = n[i];
-
-            while (++i < n.length)
-                if (n[i] > max)
-                    max = n[i];
-
-            return max;
-        }
 
         @Override
         public void run() {
@@ -58,7 +41,7 @@ public class ReaderPollFragment extends Fragment {
 
                 @Override
                 public void onFailure(Throwable e) {
-
+                    Toast.makeText(getActivity(), "Fehler: " + e.toString(), Toast.LENGTH_LONG).show();
                 }
             });
             if (activeSession != null) {
@@ -88,7 +71,6 @@ public class ReaderPollFragment extends Fragment {
 
                         @Override
                         public void onFailure(Throwable e) {
-
                         }
                     });
                 }
@@ -113,10 +95,6 @@ public class ReaderPollFragment extends Fragment {
         dismissButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pollbarA.setCount(0,0);
-                pollbarB.setCount(0,0);
-                pollbarC.setCount(0,0);
-                pollbarD.setCount(0,0);
                 ApiConnector.resetAnswers(sessionId, ApiConnector.getOwnerId(v.getContext()), new ApiResponseHandler<Session>() {
                     @Override
                     public void onSuccess(Session model) {
@@ -125,6 +103,7 @@ public class ReaderPollFragment extends Fragment {
 
                     @Override
                     public void onFailure(Throwable e) {
+                        Toast.makeText(getActivity(), "Fehler: " + e.toString(), Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -133,6 +112,10 @@ public class ReaderPollFragment extends Fragment {
     }
 
     public void resetCallback() {
+        pollbarA.setCount(0, 0);
+        pollbarB.setCount(0, 0);
+        pollbarC.setCount(0, 0);
+        pollbarD.setCount(0, 0);
         Toast.makeText(this.getActivity(), "Neue Fragerunde gestartet", Toast.LENGTH_LONG).show();
     }
 
@@ -164,7 +147,7 @@ public class ReaderPollFragment extends Fragment {
             text.setText(label + " (" + count + ")");
 
             ProgressBar progress = (ProgressBar) bar.findViewById(R.id.progressbar);
-            if (total < 0 || count <= 0) {
+            if (total <= 0 || count <= 0) {
                 progress.setProgress(0);
             } else if (count > total) {
                 progress.setProgress(100);
