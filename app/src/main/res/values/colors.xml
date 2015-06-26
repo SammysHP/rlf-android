@@ -1,18 +1,26 @@
 <resources>
-    <color name="reader_livefeedback_positive">@android:color/holo_green_light</color>
-    <color name="reader_livefeedback_neutral">@android:color/holo_orange_light</color>
-    <color name="reader_livefeedback_negative">@android:color/holo_red_light</color>
-    <color name="reader_livefeedback_request">@android:color/holo_blue_bright</color>
-
-    <color name="viewpagerindicator_bg">#333333</color>
-    <color name="viewpagerindicator_fg">#ffffff</color>
-
-    <color name="vote_button_selected">@android:color/holo_blue_light</color>
-
+    <color name="material_red_500">#f44336</color>
+    <color name="material_red_a400">#ff1744</color>
+    <color name="material_lightgreen_500">#8bc34a</color>
+    <color name="material_green_500">#4caf50</color>
+    <color name="material_lightblue_500">#03a9f4</color>
+    <color name="material_amber_500">#ffc107</color>
 
     <color name="button_normal">#2196f3</color>
     <color name="button_pressed">#1976D2</color>
 
-    <color name="material_red_500">#f44336</color>
-    <color name="material_red_a400">#ff1744</color>
+    <color name="startpage_id_error">@color/material_red_a400</color>
+
+    <color name="reader_livefeedback_positive">@color/material_lightgreen_500</color>
+    <color name="reader_livefeedback_neutral">@color/material_amber_500</color>
+    <color name="reader_livefeedback_negative">@color/material_red_500</color>
+    <color name="reader_livefeedback_request">@color/material_lightblue_500</color>
+
+    <color name="viewpagerindicator_bg">#333333</color>
+    <color name="viewpagerindicator_fg">#ffffff</color>
+
+    <color name="vote_button_selected">@color/material_lightblue_500</color>
+
+    <color name="sessionlist_open">@color/material_lightgreen_500</color>
+    <color name="sessionlist_closed">@color/material_red_500</color>
 </resources>

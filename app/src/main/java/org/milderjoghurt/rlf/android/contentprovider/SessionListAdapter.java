@@ -111,10 +111,10 @@ public class SessionListAdapter extends BaseSwipeAdapter<SessionListAdapter.View
         holder.sessionDate.setText(sdf.format(sessions.get(pos).date));
         if (sessions.get(pos).open) {
             holder.sessionOpen.setImageResource(R.drawable.ic_action_play);
-            holder.sessionOpen.setBackgroundResource(android.R.color.holo_green_light);
+            holder.sessionOpen.setBackgroundResource(R.color.sessionlist_open);
         } else {
             holder.sessionOpen.setImageResource(R.drawable.ic_action_pause);
-            holder.sessionOpen.setBackgroundResource(android.R.color.holo_red_light);
+            holder.sessionOpen.setBackgroundResource(R.color.sessionlist_closed);
         }
     }
 
