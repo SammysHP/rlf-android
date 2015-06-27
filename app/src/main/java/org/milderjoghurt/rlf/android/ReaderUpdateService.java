@@ -21,7 +21,7 @@ public class ReaderUpdateService extends Service {
     private String sessionId = "";
     private Session activeSession = null;
     static Handler ThreadHandler = new Handler();
-    private Runnable Updatethread = new Runnable() {
+    private Runnable updateThread = new Runnable() {
 
         @Override
         public void run() {
@@ -38,9 +38,9 @@ public class ReaderUpdateService extends Service {
                 });
             }
             if(activeSession != null) {
+                final Bundle bundle = new Bundle();
                 if (!activeSession.open) {
-                    final Bundle bundle = new Bundle();
-                    bundle.putInt("Status", 0);
+                    bundle.putInt("Open", 0);
                     for (Handler upd : updHandlers) {
                         Message msg = new Message();
                         msg.setData(bundle);
@@ -48,22 +48,21 @@ public class ReaderUpdateService extends Service {
                     }
                 }
                 if (activeSession.open) {
-                    final Bundle bundle = new Bundle();
                     ApiConnector.getVoteStats(sessionId, new ApiResponseHandler<List<VoteStats>>() {
                         @Override
                         public void onSuccess(List<VoteStats> model) {
-                            bundle.putInt("Status", 1);
+                            bundle.putInt("Open", 1);
                             for (VoteStats v : model) {
                                 if (v.type == VoteStats.Type.ALL)
                                     bundle.putInt("All", v.value);
                                 if (v.type == VoteStats.Type.CURRENTUSERS)
                                     bundle.putInt("Count", v.value);
                                 if (v.type == VoteStats.Type.REQUEST)
-                                    bundle.putInt("Request", v.value); // TODO: handle request count info in value
+                                    bundle.putInt("Request", v.value);
                                 if (v.type == VoteStats.Type.SPEED)
                                     bundle.putInt("Speed", v.value);
                                 if (v.type == VoteStats.Type.UNDERSTANDABILITY)
-                                    bundle.putInt("Understand", v.value);
+                                    bundle.putInt("Understandability", v.value);
                             }
                             for (Handler upd : updHandlers) {
                                 Message msg = new Message();
@@ -79,7 +78,7 @@ public class ReaderUpdateService extends Service {
                     });
                 }
             }
-            ThreadHandler.postDelayed(Updatethread, 5000); // every 5 seconds
+            ThreadHandler.postDelayed(updateThread, 5000); // every 5 seconds
         }
     };
 
@@ -96,8 +95,8 @@ public class ReaderUpdateService extends Service {
 
     @Override
     public void onCreate(){
-        ThreadHandler.removeCallbacks(Updatethread);
-        ThreadHandler.postDelayed(Updatethread, 1000);
+        ThreadHandler.removeCallbacks(updateThread);
+        ThreadHandler.postDelayed(updateThread,1000);
     }
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
@@ -108,7 +107,6 @@ public class ReaderUpdateService extends Service {
             return ReaderUpdateService.this;
         }
         public void setCallback(Handler ReaderUpdateHandler){
-
         }
         public void addCallback(Handler ReaderUpdateHandler){
             updHandlers.add(ReaderUpdateHandler);
