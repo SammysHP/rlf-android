@@ -29,6 +29,7 @@ import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 public class StudentLiveFeedbackFragment extends Fragment {
 
     private Session currentSession = null;
+    private String sessionId;
     private boolean isPressed = false;
     private Button signal_btn;
     private static final int unselectedColor = R.color.button_material_light;
@@ -38,7 +39,7 @@ public class StudentLiveFeedbackFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public void setSessionID(String pSessionID) {
+/*    public void setSessionID(String pSessionID) {
 
         ApiConnector.getSession(pSessionID, new ApiResponseHandler<Session>() {
             @Override
@@ -51,13 +52,32 @@ public class StudentLiveFeedbackFragment extends Fragment {
                 StudentLiveFeedbackFragment.this.currentSession = null; // TODO network error ..
             }
         });
-    }
+    }*/
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        sessionId = getActivity().getIntent().getStringExtra("SessionId");
+        ApiConnector.getSession(sessionId, new ApiResponseHandler<Session>() {
+            @Override
+            public void onFailure(Throwable e) {
+                Log.e("rlf-android", e.toString());
+                // session id invalid or network issue
+                // report error (TODO)
+                // and exit.
+                Toast.makeText(getActivity().getApplicationContext(), "Fehler", Toast.LENGTH_SHORT).show();
+                //finish();
+            }
+
+            @Override
+            public void onSuccess(Session session) {
+                currentSession = session;
+            }
+        });
+
         return inflater.inflate(R.layout.fragment_student_live_feedback, container, false);
     }
 
@@ -65,6 +85,10 @@ public class StudentLiveFeedbackFragment extends Fragment {
 
     public void onActivityCreated(Bundle savedInstance) {
     super.onActivityCreated(savedInstance);
+
+
+
+
 
     //   Button break1_btn = (Button) getView().findViewById(R.id.break1)
     signal_btn = (Button) getView().findViewById(R.id.signal);
@@ -78,7 +102,7 @@ public class StudentLiveFeedbackFragment extends Fragment {
 
             if (isPressed) {
 
-                 vote.value = 1;
+                 vote.value = -1;
 
                         //(getResources().getDrawable(R.drawable.roundedbutton));
                 signal_btn.setBackgroundColor((getResources().getColor(R.color.vote_button_selected)));
