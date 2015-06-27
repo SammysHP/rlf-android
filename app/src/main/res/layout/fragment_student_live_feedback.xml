@@ -33,12 +33,12 @@
 
             android:layout_marginLeft="7dp"
             android:enabled="false"
-            android:max="256"
+            android:max="100"
             android:maxWidth="15dp"
 
 
             android:layout_height="320dp"
-            android:progress="128"
+            android:progress="50"
             android:progressDrawable="@drawable/seekbar_vertical_npn"
             android:splitTrack="false"
             android:thumb="@drawable/seekbar_arrows"
@@ -86,7 +86,7 @@
 
             android:layout_marginLeft="7dp"
             android:enabled="false"
-            android:max="256"
+            android:max="100"
             android:maxWidth="15dp"
 
             android:layout_height="320dp"

@@ -25,12 +25,12 @@ public class StudentLiveActivity extends AppCompatActivity {
     private ViewPagerAdapter viewPagerAdapter;
 
     private String sessionId;
+    boolean screenFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_student_live);
 
         final Intent intent = getIntent();
         final Uri uri = intent.getData();
@@ -52,9 +52,6 @@ public class StudentLiveActivity extends AppCompatActivity {
             finish();
         }
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPagerAdapter = new ViewPagerAdapter();
-        viewPager.setAdapter(viewPagerAdapter);
 
         ApiConnector.getSession(sessionId, new ApiResponseHandler<Session>() {
             @Override
@@ -64,7 +61,9 @@ public class StudentLiveActivity extends AppCompatActivity {
                 // report error (TODO)
                 // and exit.
                 Toast.makeText(StudentLiveActivity.this, "Fehler", Toast.LENGTH_SHORT).show();
+                screenFlag = true;
                 finish();
+                return;
             }
 
             @Override
@@ -72,6 +71,15 @@ public class StudentLiveActivity extends AppCompatActivity {
                 setTitle(session.name);
             }
         });
+/*        if (screenFlag){
+            finish();
+            return;
+        }*/
+        setContentView(R.layout.activity_student_live);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPagerAdapter = new ViewPagerAdapter();
+        viewPager.setAdapter(viewPagerAdapter);
+
     }
 
     private class ViewPagerAdapter extends PagerAdapter {

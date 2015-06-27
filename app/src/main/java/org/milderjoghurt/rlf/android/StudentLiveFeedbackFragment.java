@@ -17,6 +17,7 @@ import org.milderjoghurt.rlf.android.net.ApiConnector;
 import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 import org.milderjoghurt.rlf.android.ui.VerticalSeekBar;
 
+import org.milderjoghurt.rlf.android.net.exceptions.SessionNotOpenException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,7 +62,7 @@ public class StudentLiveFeedbackFragment extends Fragment {
             }
         });
 
-        Toast.makeText(getActivity().getApplicationContext(), sessionId, Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getActivity().getApplicationContext(), sessionId, Toast.LENGTH_SHORT).show();
 
         return inflater.inflate(R.layout.fragment_student_live_feedback, container, false);
     }
@@ -135,13 +136,19 @@ public class StudentLiveFeedbackFragment extends Fragment {
                     @Override
                     public void onFailure(Throwable e) {
                         //Log.e("rlf-android", e.toString());
-                        Toast.makeText(getActivity().getApplicationContext(), "Fehler, Auswahl wurde nicht akzeptiert!", Toast.LENGTH_SHORT).show();
-                        Log.e("rlf-android", e.toString());
+                        if(e instanceof SessionNotOpenException) {
+                            Toast.makeText(getActivity().getApplicationContext(), "Die Sitzung wurde bereits geschlossen!", Toast.LENGTH_LONG).show();
+                            getActivity().finish();
+                        }else{
+
+                            Toast.makeText(getActivity().getApplicationContext(), "Fehler, Auswahl wurde nicht akzeptiert!", Toast.LENGTH_SHORT).show();
+                            Log.e("rlf-android", e.toString());
+                        }
                     }
 
                     @Override
                     public void onSuccess(Vote v) {
-                        Toast.makeText(getActivity().getApplicationContext(), "Feedback gesendet!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity().getApplicationContext(), "Feedback gesendet!", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -159,11 +166,8 @@ public class StudentLiveFeedbackFragment extends Fragment {
                 int speed = speedBar.getProgress();
                 int understandabillity = understandBar.getProgress();
                 Vote voteSpeed = new Vote(Vote.Type.SPEED, speed);
-                Vote voteUnderstandabillity = new Vote(Vote.Type.UNDERSTANDABILITY, understandabillity);
+                Vote voteUnderstandabillity = new Vote(Vote.Type.UNDERSTANDABILITY, (understandabillity));
 
-
-                //(getResources().getDrawable(R.drawable.roundedbutton));
-                signal_btn.setBackgroundColor((getResources().getColor(R.color.vote_button_selected)));
 
                 if(currentSession == null)
                 {
@@ -176,8 +180,15 @@ public class StudentLiveFeedbackFragment extends Fragment {
                     @Override
                     public void onFailure(Throwable e) {
                         //Log.e("rlf-android", e.toString());
-                        Toast.makeText(getActivity().getApplicationContext(), "Fehler, Auswahl wurde nicht akzeptiert!", Toast.LENGTH_SHORT).show();
-                        Log.e("rlf-android", e.toString());
+                        if(e instanceof SessionNotOpenException) {
+                            Toast.makeText(getActivity().getApplicationContext(), "Die Sitzung wurde bereits geschlossen!", Toast.LENGTH_LONG).show();
+                            getActivity().finish();
+                        }else {
+
+                            Toast.makeText(getActivity().getApplicationContext(), "Fehler, Auswahl wurde nicht akzeptiert!", Toast.LENGTH_SHORT).show();
+                            Log.e("rlf-android", e.toString());
+                        }
+
                     }
 
                     @Override
@@ -191,8 +202,14 @@ public class StudentLiveFeedbackFragment extends Fragment {
                     @Override
                     public void onFailure(Throwable e) {
                         //Log.e("rlf-android", e.toString());
-                        Toast.makeText(getActivity().getApplicationContext(), "Fehler, Auswahl wurde nicht akzeptiert!", Toast.LENGTH_SHORT).show();
-                        Log.e("rlf-android", e.toString());
+
+                        if(e instanceof SessionNotOpenException) {
+                            Toast.makeText(getActivity().getApplicationContext(), "Die Sitzung wurde bereits geschlossen!", Toast.LENGTH_LONG).show();
+                            getActivity().finish();
+                        }else {
+                            Toast.makeText(getActivity().getApplicationContext(), "Fehler, Auswahl wurde nicht akzeptiert!", Toast.LENGTH_SHORT).show();
+                            Log.e("rlf-android", e.toString());
+                        }
                     }
 
                     @Override

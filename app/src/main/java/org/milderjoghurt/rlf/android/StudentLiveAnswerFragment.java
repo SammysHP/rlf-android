@@ -44,6 +44,12 @@ public class StudentLiveAnswerFragment extends Fragment {
     private long lastVoteTime = 0; // timestamp --> prevent clientside spamming
     private Session currentSession = null;
 
+    private QuestionAnswer q;
+    private Button btnA;
+    private Button btnB;
+    private Button btnC;
+    private Button btnD;;
+
     public StudentLiveAnswerFragment() {
 
     }
@@ -69,10 +75,25 @@ public class StudentLiveAnswerFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_student_live_answer, container, false);
     }
 
+    public void onVoteClick(View v){
+
+        if (btnA.isActivated()){
+            q.answer = QuestionAnswer.Answer.A;
+        }else if(btnB.isActivated()){
+            q.answer = QuestionAnswer.Answer.B;
+        }else if(btnC.isActivated()){
+            q.answer = QuestionAnswer.Answer.C;
+        }else if(btnD.isActivated()){
+            q.answer = QuestionAnswer.Answer.D;
+        }
+    }
+
+
+
     /**
      * Should be called when user clicks on a vote button
-     */
-    public void onVoteClick(View src) {
+     */  //testweise umschreiben
+    /*public void onVoteClick(View src) {
 
         Button btnSource = (Button) src;
         if(btnSource == null)
@@ -85,10 +106,10 @@ public class StudentLiveAnswerFragment extends Fragment {
                 // set model state
                 selectionStates[i] = !selectionStates[i];
             }
-        }
+        }*/
 
         // ui feedback
-        updateUI();
+       // updateUI();
 
         // TODO:
         // the model state might also be sended here, but this might contradict
@@ -96,7 +117,7 @@ public class StudentLiveAnswerFragment extends Fragment {
 
         // debug
         //Log.d(LOG_TAG, "voted " + getLastVoteSymbolStr());
-    }
+    //}
 
     /**
      * Should be called when vote was chosen by user and is about to be sended to host
@@ -150,7 +171,9 @@ public class StudentLiveAnswerFragment extends Fragment {
         }
 
         //
-        ApiConnector.createAnswer(currentSession, new QuestionAnswer(), ApiConnector.getOwnerId(getActivity().getApplicationContext()), new ApiResponseHandler<QuestionAnswer>() {
+
+        //
+        ApiConnector.createAnswer(currentSession, q, ApiConnector.getOwnerId(getActivity().getApplicationContext()), new ApiResponseHandler<QuestionAnswer>() {
             @Override
             public void onFailure(Throwable e) {
                 // sending answer to server was not successful, give feedback
@@ -169,7 +192,7 @@ public class StudentLiveAnswerFragment extends Fragment {
                 lastVoteTime = curTime;
 
                 // debug
-                Log.d(LOG_TAG, "voted " + getLastVoteSymbolStr());
+              //  Log.d(LOG_TAG, "voted " + getLastVoteSymbolStr());
 
                 // give more ui feedback:
                 Toast.makeText(getActivity().getApplicationContext(), MSG_VOTE_SENDED, Toast.LENGTH_SHORT).show();
@@ -185,9 +208,9 @@ public class StudentLiveAnswerFragment extends Fragment {
 
     }
 
-    private boolean isSelected(int index) {
+   /* private boolean isSelected(int index) {
         return (index >= 0 && index < selectionStates.length) ? selectionStates[index] : false;
-    }
+    }*/
 
     private boolean isAtLeastOneSelected() {
         boolean result = false;
@@ -213,7 +236,7 @@ public class StudentLiveAnswerFragment extends Fragment {
      * Returns the current model state. Can be "VOTE_NONE" if no selection was done
      * @return Selection choices as string or VOTE_NONE
      */
-    public String getLastVoteSymbolStr() {
+/*    public String getLastVoteSymbolStr() {
 
         // TODO: details about how to communicate with server necessary
 
@@ -226,7 +249,7 @@ public class StudentLiveAnswerFragment extends Fragment {
                 result += VOTES_LBL[i];
 
         return result;
-    }
+    }*/
 
     @Override
     public void onActivityCreated(Bundle savedInstance) {
@@ -235,10 +258,10 @@ public class StudentLiveAnswerFragment extends Fragment {
 
         // fill vote map
         try {
-            Button btnA = (Button) getView().findViewById(R.id.btnVoteA);
-            Button btnB = (Button) getView().findViewById(R.id.btnVoteB);
-            Button btnC = (Button) getView().findViewById(R.id.btnVoteC);
-            Button btnD = (Button) getView().findViewById(R.id.btnVoteD);
+             btnA = (Button) getView().findViewById(R.id.btnVoteA);
+             btnB = (Button) getView().findViewById(R.id.btnVoteB);
+             btnC = (Button) getView().findViewById(R.id.btnVoteC);
+             btnD = (Button) getView().findViewById(R.id.btnVoteD);
             sendButton = (Button) getView().findViewById(R.id.btnVoteSend);
 
             View.OnClickListener voteClickListener = new View.OnClickListener() {
@@ -260,10 +283,7 @@ public class StudentLiveAnswerFragment extends Fragment {
                 }
             });
 
-            voteMapping[0] = btnA;
-            voteMapping[1] = btnB;
-            voteMapping[2] = btnC;
-            voteMapping[3] = btnD;
+
 
 
             sendBtnUIFeedback = new AnimationDrawable();
