@@ -43,7 +43,7 @@ public class ReaderLiveFeedbackFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             ReaderLiveFeedbackFragment fragment = mFragment.get();
-            if(fragment.activeSession.open) {
+            if(fragment != null && fragment.activeSession != null && fragment.activeSession.open) {
                 int curStatus = msg.getData().getInt("All");
                 if (curStatus > 66) {
                     fragment.setFeedbackState(FeedbackState.POSITIVE);
@@ -164,8 +164,14 @@ public class ReaderLiveFeedbackFragment extends Fragment {
 
     @Override
     public void onPause() {
-        super.onPause();
+        m_Binder.removeCallbackHandler(CallbackHandler);
         getActivity().unbindService(updConnection);
+        super.onPause();
+
+    }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
     }
 
     /**

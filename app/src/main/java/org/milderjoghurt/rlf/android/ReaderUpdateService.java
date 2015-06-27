@@ -25,6 +25,8 @@ public class ReaderUpdateService extends Service {
 
         @Override
         public void run() {
+            if (updHandlers.size() < 1)
+                stopSelf();
             if(sessionId.length() == 6) {
                 ApiConnector.getSession(sessionId, new ApiResponseHandler<Session>() {
                     @Override
@@ -78,7 +80,8 @@ public class ReaderUpdateService extends Service {
                     });
                 }
             }
-            ThreadHandler.postDelayed(updateThread, 5000); // every 5 seconds
+            if(updHandlers.size() > 0)
+                ThreadHandler.postDelayed(updateThread, 5000); // every 5 seconds
         }
     };
 

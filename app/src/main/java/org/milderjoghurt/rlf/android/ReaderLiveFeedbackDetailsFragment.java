@@ -28,15 +28,18 @@ public class ReaderLiveFeedbackDetailsFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             ReaderLiveFeedbackDetailsFragment fragment = mFragment.get();
-            if(msg.getData().getInt("Status") !=0) {
+            if(fragment!=null && msg.getData().getInt("Open") !=0) {
                 int avgspeed = msg.getData().getInt("Speed");
                 int avgunderstandable = msg.getData().getInt("Understandability");
-                SeekBar speedbar = (SeekBar) fragment.getView().findViewById(R.id.feedback_seekbar_speed);
-                speedbar.setProgress(avgspeed);
-                SeekBar understandbar = (SeekBar) fragment.getView().findViewById(R.id.feedback_seekbar_understandability);
-                understandbar.setProgress(avgunderstandable);
+                fragment.updateView(avgspeed,avgunderstandable);
             }
         }
+    }
+    public void updateView(int speed, int understandability){
+        SeekBar speedbar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_speed);
+        speedbar.setProgress(speed);
+        SeekBar understandbar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_understandability);
+        understandbar.setProgress(understandability);
     }
 
     private final MyHandler CallbackHandler = new MyHandler(this);
@@ -87,7 +90,8 @@ public class ReaderLiveFeedbackDetailsFragment extends Fragment {
 
     @Override
     public void onPause() {
-        super.onPause();
+        m_Binder.removeCallbackHandler(CallbackHandler);
         getActivity().unbindService(updConnection);
+        super.onPause();
     }
 }

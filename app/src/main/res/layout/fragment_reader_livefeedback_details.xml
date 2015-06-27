@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_understand" />
+            android:src="@drawable/ic_confused" />
 
         <SeekBar
             android:id="@+id/feedback_seekbar_understandability"
@@ -68,6 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_confused" />
+            android:src="@drawable/ic_understand" />
+
     </LinearLayout>
 </LinearLayout>
