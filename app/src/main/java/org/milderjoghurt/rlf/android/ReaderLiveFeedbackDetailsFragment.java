@@ -1,51 +1,46 @@
 package org.milderjoghurt.rlf.android;
 
 import android.app.Fragment;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-
 public class ReaderLiveFeedbackDetailsFragment extends Fragment {
-    /*
-     * TODO: For demonstration
-     */
-    Handler demonstrationHandler = new Handler();
 
-    /*
-     * TODO: For demonstration
-     */
-    private Runnable demonstrationRunnable = new Runnable() {
-        private final Random RANDOM = new Random();
+    private Handler CallbackHandler = new Handler(){
+        public void handleMessage(Message msg){
+            super.handleMessage(msg);
+            int avgspeed = msg.getData().getInt("Speed");
+            int avgunderstandable = msg.getData().getInt("Understand");
+            SeekBar speedbar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_speed);
+            speedbar.setProgress(avgspeed);
+            SeekBar understandbar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_understandability);
+            understandbar.setProgress(avgunderstandable);
+        }
+    };
+    private static ReaderUpdateService.ReaderBinder m_Binder;
+    private static ReaderUpdateService m_Service;
+    private ServiceConnection updConnection = new ServiceConnection() {
 
-        @Override
-        public void run() {
-            if (getView() != null) {
-                // Change speed with probability of 70%
-                if (RANDOM.nextInt(100) < 70) {
-                    SeekBar bar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_speed);
-                    final int progress = Math.max(0, Math.min(255, bar.getProgress() + (RANDOM.nextInt(20) - 10)));
-                    bar.setProgress(progress);
-                }
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            m_Binder = (ReaderUpdateService.ReaderBinder) binder;
+            m_Service = m_Binder.getService();
+            m_Binder.addCallback(CallbackHandler);
+        }
 
-                // Change understandability with probability of 70%
-                if (RANDOM.nextInt(100) < 70) {
-                    SeekBar bar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_understandability);
-                    final int progress = Math.max(0, Math.min(255, bar.getProgress() + (RANDOM.nextInt(20) - 10)));
-                    bar.setProgress(progress);
-                }
-            }
-
-            demonstrationHandler.postDelayed(demonstrationRunnable, 2000); // every 5 seconds
+        public void onServiceDisconnected(ComponentName name) {
+            m_Service = null;
+            m_Binder = null;
         }
     };
 
@@ -67,20 +62,20 @@ public class ReaderLiveFeedbackDetailsFragment extends Fragment {
                 return true;
             }
         });
-
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        demonstrationHandler.post(demonstrationRunnable); // TODO: For demonstration
+        Intent serviceIntent = new Intent(getActivity(),ReaderUpdateService.class);
+        serviceIntent.putExtra("sessionId",getActivity().getIntent().getStringExtra("sessionId"));
+        getActivity().bindService(serviceIntent, updConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        demonstrationHandler.removeCallbacks(demonstrationRunnable); // TODO: For demonstration
+        getActivity().unbindService(updConnection);
     }
-
 }

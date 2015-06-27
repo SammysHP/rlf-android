@@ -1,20 +1,29 @@
 package org.milderjoghurt.rlf.android;
 
 import android.app.Fragment;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import org.milderjoghurt.rlf.android.models.Session;
+import org.milderjoghurt.rlf.android.models.Vote;
+import org.milderjoghurt.rlf.android.net.ApiConnector;
+import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 
 /**
  * Feedback indicator.
@@ -23,83 +32,109 @@ import java.util.Random;
  */
 public class ReaderLiveFeedbackFragment extends Fragment {
 
-    /**
-     * States for the feedback view.
-     * <p/>
-     * POSITIVE represents an all-good situation (usually green with happy smiley), NEGATIVE a bad situation (red with sad smiley) and NEUTRAL something inbetween.
-     */
-    public enum FeedbackState {
-        POSITIVE(R.color.reader_livefeedback_positive, R.drawable.feedback_smiley_happy),
-        NEUTRAL(R.color.reader_livefeedback_neutral, R.drawable.feedback_smiley_neutral),
-        NEGATIVE(R.color.reader_livefeedback_negative, R.drawable.feedback_smiley_sad);
-
-        public final int color;
-        public final int icon;
-
-        FeedbackState(final int color, final int icon) {
-            this.color = color;
-            this.icon = icon;
-        }
-    }
-
-    public static final int FLASH_DURATION = 500; // ms
-
-    /*
-     * TODO: For demonstration
-     */
-    Handler demonstrationHandler = new Handler();
-
-    /*
-     * TODO: For demonstration
-     */
-    private Runnable demonstrationRunnable = new Runnable() {
-        private final List<FeedbackState> VALUES = Collections.unmodifiableList(Arrays.asList(FeedbackState.values()));
-        private final int SIZE = VALUES.size();
-        private final Random RANDOM = new Random();
-
-        @Override
-        public void run() {
-            // Change feedback state with probability of 80%
-            if (RANDOM.nextInt(100) < 80) {
-                setFeedbackState(VALUES.get(RANDOM.nextInt(SIZE)));
-            }
-
-            // Raise request with probability of 15%
-            if (RANDOM.nextInt(100) < 15) {
+    private Handler CallbackHandler = new Handler(){
+        public void handleMessage(Message msg){
+            super.handleMessage(msg);
+            int curStatus = msg.getData().getInt("All");
+            if (curStatus > 66)
+                setFeedbackState(FeedbackState.POSITIVE);
+            else if (curStatus > 33)
+                setFeedbackState(FeedbackState.NEUTRAL);
+            else
+                setFeedbackState(FeedbackState.NEGATIVE);
+            if(msg.getData().getInt("Request") >0)
                 setRequestState(true);
-            }
+            setUserCount(msg.getData().getInt("Count"));
+            updateView();
+        }
+    };
+    private static ReaderUpdateService.ReaderBinder m_Binder;
+    private static ReaderUpdateService m_Service;
+    private ServiceConnection updConnection = new ServiceConnection() {
 
-            // Dismiss request with probability of 50%
-            if (RANDOM.nextInt(100) < 50) {
-                setRequestState(false);
-            }
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            m_Binder = (ReaderUpdateService.ReaderBinder) binder;
+            m_Service = m_Binder.getService();
+            m_Binder.addCallback(CallbackHandler);
+        }
 
-            // Update user count with probability of 50%
-            if (RANDOM.nextInt(100) < 50) {
-                setUserCount(RANDOM.nextInt(15+5));
-            }
-
-            demonstrationHandler.postDelayed(demonstrationRunnable, 5000); // every 5 seconds
+        public void onServiceDisconnected(ComponentName name) {
+            m_Service = null;
+            m_Binder = null;
         }
     };
 
-    private FeedbackState activeFeedbackState = FeedbackState.POSITIVE;
+    public static final int FLASH_DURATION = 500; // ms
+
+    private FeedbackState activeFeedbackState = FeedbackState.INACTIVE;
     private boolean requestActive = false;
+    private String sessionId;
+    private Session activeSession;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_reader_livefeedback, container, false);
+        final View view = inflater.inflate(R.layout.fragment_reader_livefeedback, container, false);
 
         View dismissButton = view.findViewById(R.id.reader_feedback_dismiss);
         dismissButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestActive = false;
+                Vote vote = new Vote(Vote.Type.REQUEST, -1);
+                ApiConnector.createVote(activeSession, vote, ApiConnector.getOwnerId(view.getContext()), new ApiResponseHandler<Vote>() {
+                    @Override
+                    public void onSuccess(Vote model) {
+                        requestActive = false;
+                    }
+
+                    @Override
+                    public void onFailure(Throwable e) {
+                        Toast.makeText(getActivity(), "Fehler: " + e.toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
                 updateView();
             }
         });
+        final Switch OpenSwitch = (Switch) view.findViewById(R.id.swtSessionOpen);
+        OpenSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+                if (!isChecked) {
+                    setFeedbackState(FeedbackState.INACTIVE);
+                } else {
+                    setFeedbackState(FeedbackState.NEUTRAL);
+                }
+                if (activeSession.open != isChecked) {
+                    activeSession.open = isChecked;
+                    ApiConnector.updateSession(activeSession, ApiConnector.getOwnerId(view.getContext()), new ApiResponseHandler<Session>() {
+                        @Override
+                        public void onSuccess(Session model) {
+                            activeSession = model;
+                        }
 
+                        @Override
+                        public void onFailure(Throwable e) {
+                            activeSession.open = !isChecked;
+                            OpenSwitch.setChecked(!isChecked);
+                        }
+                    });
+                }
+            }
+        });
+        sessionId = getActivity().getIntent().getStringExtra("SessionId");
+        ApiConnector.getSession(sessionId, new ApiResponseHandler<Session>() {
+            @Override
+            public void onSuccess(Session model) {
+                activeSession = model;
+                OpenSwitch.setChecked(activeSession.open);
+            }
+
+            @Override
+            public void onFailure(Throwable e) {
+                Toast.makeText(getActivity(), "Fehler: " + e.toString(), Toast.LENGTH_LONG).show();
+                getActivity().finish();
+            }
+        });
         return view;
     }
 
@@ -107,13 +142,16 @@ public class ReaderLiveFeedbackFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateView();
-        demonstrationHandler.post(demonstrationRunnable); // TODO: For demonstration
+        Intent serviceIntent = new Intent(getActivity(),ReaderUpdateService.class);
+        serviceIntent.putExtra("sessionId",sessionId);
+        getActivity().bindService(serviceIntent, updConnection, Context.BIND_AUTO_CREATE);
     }
+
 
     @Override
     public void onPause() {
         super.onPause();
-        demonstrationHandler.removeCallbacks(demonstrationRunnable); // TODO: For demonstration
+        getActivity().unbindService(updConnection);
     }
 
     /**
@@ -179,5 +217,25 @@ public class ReaderLiveFeedbackFragment extends Fragment {
 
         TextView v = (TextView) getView().findViewById(R.id.reader_feedback_usercount);
         v.setText(Integer.toString(count));
+    }
+
+    /**
+     * States for the feedback view.
+     * <p/>
+     * POSITIVE represents an all-good situation (usually green with happy smiley), NEGATIVE a bad situation (red with sad smiley) and NEUTRAL something inbetween.
+     */
+    public enum FeedbackState {
+        POSITIVE(R.color.reader_livefeedback_positive, R.drawable.feedback_smiley_happy),
+        NEUTRAL(R.color.reader_livefeedback_neutral, R.drawable.feedback_smiley_neutral),
+        NEGATIVE(R.color.reader_livefeedback_negative, R.drawable.feedback_smiley_sad),
+        INACTIVE(R.color.reader_livefeedback_inactiv, R.drawable.feedback_smiley_happy);
+
+        public final int color;
+        public final int icon;
+
+        FeedbackState(final int color, final int icon) {
+            this.color = color;
+            this.icon = icon;
+        }
     }
 }

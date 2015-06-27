@@ -45,7 +45,8 @@ public class SessionListAdapter extends BaseSwipeAdapter<SessionListAdapter.View
             public boolean onTouch(View v, MotionEvent e) {
                 if (e.getAction() == MotionEvent.ACTION_UP) {
                     Intent intent = new Intent(v.getContext(), ReaderActivity.class);
-                    intent.putExtra("Titel", sessions.get(holder.getPosition()).toString());
+                    intent.putExtra("Titel", sessions.get(holder.getPosition()).name.toString());
+                    intent.putExtra("SessionId", sessions.get(holder.getPosition()).id);
                     v.getContext().startActivity(intent);
                 }
                 return true;
@@ -111,10 +112,10 @@ public class SessionListAdapter extends BaseSwipeAdapter<SessionListAdapter.View
         holder.sessionDate.setText(sdf.format(sessions.get(pos).date));
         if (sessions.get(pos).open) {
             holder.sessionOpen.setImageResource(R.drawable.ic_action_play);
-            holder.sessionOpen.setBackgroundResource(android.R.color.holo_green_light);
+            holder.sessionOpen.setBackgroundResource(R.color.sessionlist_open);
         } else {
             holder.sessionOpen.setImageResource(R.drawable.ic_action_pause);
-            holder.sessionOpen.setBackgroundResource(android.R.color.holo_red_light);
+            holder.sessionOpen.setBackgroundResource(R.color.sessionlist_closed);
         }
     }
 

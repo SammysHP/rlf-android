@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/reader_feedback_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -33,8 +34,10 @@
 
     <Button
         android:id="@+id/poll_reset"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:theme="@style/ColoredButton"
+        android:backgroundTint="@color/material_red_500"
         android:text="Zurücksetzen" />
 </LinearLayout>
