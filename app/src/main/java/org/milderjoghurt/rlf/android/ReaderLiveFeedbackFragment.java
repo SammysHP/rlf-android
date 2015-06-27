@@ -22,11 +22,8 @@ import android.widget.Toast;
 
 import org.milderjoghurt.rlf.android.models.Session;
 import org.milderjoghurt.rlf.android.models.Vote;
-import org.milderjoghurt.rlf.android.models.VoteStats;
 import org.milderjoghurt.rlf.android.net.ApiConnector;
 import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
-
-import java.util.List;
 
 /**
  * Feedback indicator.
@@ -69,48 +66,10 @@ public class ReaderLiveFeedbackFragment extends Fragment {
 
     public static final int FLASH_DURATION = 500; // ms
 
-    Handler demonstrationHandler = new Handler();
     private FeedbackState activeFeedbackState = FeedbackState.INACTIVE;
     private boolean requestActive = false;
     private String sessionId;
     private Session activeSession;
-
-    private Runnable demonstrationRunnable = new Runnable() {
-
-        int curStatus = 0;
-
-        @Override
-        public void run() {
-            if (activeSession != null && activeSession.open) {
-                ApiConnector.getVoteStats(sessionId, new ApiResponseHandler<List<VoteStats>>() {
-                    @Override
-                    public void onSuccess(List<VoteStats> model) {
-                        for (VoteStats v : model) {
-                            if (v.type == VoteStats.Type.ALL)
-                                curStatus = v.value;
-                            if (v.type == VoteStats.Type.CURRENTUSERS)
-                                setUserCount(v.value);
-                            if (v.type == VoteStats.Type.REQUEST)
-                                setRequestState(v.value > 0); // TODO: handle request count info in value
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Throwable e) {
-                        Toast.makeText(getActivity(), "Fehler: " + e.toString(), Toast.LENGTH_LONG).show();
-                    }
-                });
-                if (curStatus > 66)
-                    setFeedbackState(FeedbackState.POSITIVE);
-                else if (curStatus > 33)
-                    setFeedbackState(FeedbackState.NEUTRAL);
-                else
-                    setFeedbackState(FeedbackState.NEGATIVE);
-                updateView();
-                demonstrationHandler.postDelayed(demonstrationRunnable, 5000); // every 5 seconds
-            }
-        }
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -183,7 +142,6 @@ public class ReaderLiveFeedbackFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateView();
-        //demonstrationHandler.post(demonstrationRunnable);// TODO: For demonstration
         Intent serviceIntent = new Intent(getActivity(),ReaderUpdateService.class);
         serviceIntent.putExtra("sessionId",sessionId);
         getActivity().bindService(serviceIntent, updConnection, Context.BIND_AUTO_CREATE);
@@ -194,7 +152,6 @@ public class ReaderLiveFeedbackFragment extends Fragment {
     public void onPause() {
         super.onPause();
         getActivity().unbindService(updConnection);
-        //demonstrationHandler.removeCallbacks(demonstrationRunnable); // TODO: For demonstration
     }
 
     /**
