@@ -20,7 +20,7 @@ import java.util.List;
 public class ReaderUpdateService extends Service {
     private String sessionId = "";
     private Session activeSession = null;
-    Handler ThreadHandler = new Handler();
+    static Handler ThreadHandler = new Handler();
     private Runnable updateThread = new Runnable() {
 
         @Override
@@ -95,7 +95,8 @@ public class ReaderUpdateService extends Service {
 
     @Override
     public void onCreate(){
-        ThreadHandler.post(updateThread);
+        ThreadHandler.removeCallbacks(updateThread);
+        ThreadHandler.postDelayed(updateThread,1000);
     }
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
