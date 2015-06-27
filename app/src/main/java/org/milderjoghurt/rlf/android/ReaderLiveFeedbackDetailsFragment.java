@@ -15,21 +15,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 
+import java.lang.ref.WeakReference;
+
 public class ReaderLiveFeedbackDetailsFragment extends Fragment {
 
-    private Handler CallbackHandler = new Handler(){
-        public void handleMessage(Message msg){
-            super.handleMessage(msg);
+    private static class MyHandler extends Handler {
+        private final WeakReference<ReaderLiveFeedbackDetailsFragment> mFragment;
+
+        public MyHandler(ReaderLiveFeedbackDetailsFragment fragment) {
+            mFragment = new WeakReference<>(fragment);
+        }
+        @Override
+        public void handleMessage(Message msg) {
+            ReaderLiveFeedbackDetailsFragment fragment = mFragment.get();
             if(msg.getData().getInt("Status") !=0) {
                 int avgspeed = msg.getData().getInt("Speed");
                 int avgunderstandable = msg.getData().getInt("Understand");
-                SeekBar speedbar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_speed);
+                SeekBar speedbar = (SeekBar) fragment.getView().findViewById(R.id.feedback_seekbar_speed);
                 speedbar.setProgress(avgspeed);
-                SeekBar understandbar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_understandability);
+                SeekBar understandbar = (SeekBar) fragment.getView().findViewById(R.id.feedback_seekbar_understandability);
                 understandbar.setProgress(avgunderstandable);
             }
         }
-    };
+    }
+
+    private final MyHandler CallbackHandler = new MyHandler(this);
     private static ReaderUpdateService.ReaderBinder m_Binder;
     private static ReaderUpdateService m_Service;
     private ServiceConnection updConnection = new ServiceConnection() {

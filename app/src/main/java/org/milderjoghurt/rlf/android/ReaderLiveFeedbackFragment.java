@@ -25,6 +25,8 @@ import org.milderjoghurt.rlf.android.models.Vote;
 import org.milderjoghurt.rlf.android.net.ApiConnector;
 import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Feedback indicator.
  * <p/>
@@ -32,27 +34,34 @@ import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
  */
 public class ReaderLiveFeedbackFragment extends Fragment {
 
-    private Handler CallbackHandler = new Handler(){
-        public void handleMessage(Message msg){
-            super.handleMessage(msg);
-            if(activeSession.open) {
+    private static class MyHandler extends Handler {
+        private final WeakReference<ReaderLiveFeedbackFragment> mFragment;
+
+        public MyHandler(ReaderLiveFeedbackFragment fragment) {
+            mFragment = new WeakReference<>(fragment);
+        }
+        @Override
+        public void handleMessage(Message msg) {
+            ReaderLiveFeedbackFragment fragment = mFragment.get();
+            if(fragment.activeSession.open) {
                 int curStatus = msg.getData().getInt("All");
                 if (curStatus > 66)
-                    setFeedbackState(FeedbackState.POSITIVE);
+                    fragment.setFeedbackState(FeedbackState.POSITIVE);
                 else if (curStatus > 33)
-                    setFeedbackState(FeedbackState.NEUTRAL);
+                    fragment.setFeedbackState(FeedbackState.NEUTRAL);
                 else
-                    setFeedbackState(FeedbackState.NEGATIVE);
+                    fragment.setFeedbackState(FeedbackState.NEGATIVE);
                 if (msg.getData().getInt("Request") > 0)
-                    setRequestState(true);
-                setUserCount(msg.getData().getInt("Count"));
+                    fragment.setRequestState(true);
+                fragment.setUserCount(msg.getData().getInt("Count"));
             }else{
-                setFeedbackState(FeedbackState.INACTIVE);
+                fragment.setFeedbackState(FeedbackState.INACTIVE);
             }
-
-            updateView();
+            fragment.updateView();
         }
-    };
+    }
+
+    private final MyHandler CallbackHandler = new MyHandler(this);
     private static ReaderUpdateService.ReaderBinder m_Binder;
     private static ReaderUpdateService m_Service;
     private ServiceConnection updConnection = new ServiceConnection() {
