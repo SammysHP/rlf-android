@@ -1,23 +1,21 @@
 package org.milderjoghurt.rlf.android;
 
 
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.graphics.Color;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.widget.Toast;
 
-import org.milderjoghurt.rlf.android.R;
 import org.milderjoghurt.rlf.android.models.Session;
 import org.milderjoghurt.rlf.android.models.Vote;
 import org.milderjoghurt.rlf.android.net.ApiConnector;
 import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
+import org.milderjoghurt.rlf.android.ui.VerticalSeekBar;
 
 
 /**
@@ -32,6 +30,8 @@ public class StudentLiveFeedbackFragment extends Fragment {
     private boolean isPressed = false;
     private Button signal_btn;
     private Button feedback_btn;
+    private VerticalSeekBar speedBar;
+    private VerticalSeekBar understandBar;
     private static final int unselectedColor = R.color.button_material_light;
 
 
@@ -71,12 +71,38 @@ public class StudentLiveFeedbackFragment extends Fragment {
         super.onActivityCreated(savedInstance);
 
 
-        signal_btn = (Button) getView().findViewById(R.id.signal);
+        //Sliders
 
+        speedBar =(VerticalSeekBar) getView().findViewById(R.id.speedBar);
+        understandBar = (VerticalSeekBar) getView().findViewById(R.id.understandBar);
+
+
+
+
+        //Buttons
+
+        signal_btn = (Button) getView().findViewById(R.id.signal);
         signal_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 isPressed = !isPressed;
+
+
+               // Runnable mRunnable;
+               // Handler mHandler=new Handler();
+
+         /*       mRunnable=new Runnable() {
+
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        // yourLayoutObject.setVisibility(View.INVISIBLE); //If you want just hide the View. But it will retain space occupied by the View.
+                        // yourLayoutObject.setVisibility(View.GONE); //This will remove the View. and free s the space occupied by the View
+                    }
+                };*/
+
+
+
 
                 Vote vote = new Vote(Vote.Type.REQUEST, 0);
 
@@ -130,9 +156,10 @@ public class StudentLiveFeedbackFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-
-                Vote voteSpeed = new Vote(Vote.Type.SPEED, 7);
-                Vote voteUnderstandabillity = new Vote(Vote.Type.UNDERSTANDABILITY, 7);
+                int speed = speedBar.getProgress();
+                int understandabillity = understandBar.getProgress();
+                Vote voteSpeed = new Vote(Vote.Type.SPEED, speed);
+                Vote voteUnderstandabillity = new Vote(Vote.Type.UNDERSTANDABILITY, understandabillity);
 
 
                 //(getResources().getDrawable(R.drawable.roundedbutton));
