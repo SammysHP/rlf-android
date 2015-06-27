@@ -1,10 +1,16 @@
 package org.milderjoghurt.rlf.android;
 
 import android.app.Fragment;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.milderjoghurt.rlf.android.models.Session;
+import org.milderjoghurt.rlf.android.models.Vote;
 import org.milderjoghurt.rlf.android.models.VoteStats;
 import org.milderjoghurt.rlf.android.net.ApiConnector;
 import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
@@ -27,6 +34,38 @@ import java.util.List;
  * This will show a square area which indicates the current feedback and request state. Feedback will be displayed in different colors as smileys, request state by flashing colors.
  */
 public class ReaderLiveFeedbackFragment extends Fragment {
+
+    private Handler CallbackHandler = new Handler(){
+        public void handleMessage(Message msg){
+            super.handleMessage(msg);
+            int curStatus = msg.getData().getInt("All");
+            if (curStatus > 66)
+                setFeedbackState(FeedbackState.POSITIVE);
+            else if (curStatus > 33)
+                setFeedbackState(FeedbackState.NEUTRAL);
+            else
+                setFeedbackState(FeedbackState.NEGATIVE);
+            if(msg.getData().getInt("Request") >0)
+                setRequestState(true);
+            setUserCount(msg.getData().getInt("Count"));
+            updateView();
+        }
+    };
+    private static ReaderUpdateService.ReaderBinder m_Binder;
+    private static ReaderUpdateService m_Service;
+    private ServiceConnection updConnection = new ServiceConnection() {
+
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            m_Binder = (ReaderUpdateService.ReaderBinder) binder;
+            m_Service = m_Binder.getService();
+            m_Binder.addCallback(CallbackHandler);
+        }
+
+        public void onServiceDisconnected(ComponentName name) {
+            m_Service = null;
+            m_Binder = null;
+        }
+    };
 
     public static final int FLASH_DURATION = 500; // ms
 
@@ -82,7 +121,18 @@ public class ReaderLiveFeedbackFragment extends Fragment {
         dismissButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestActive = false;
+                Vote vote = new Vote(Vote.Type.REQUEST, -1);
+                ApiConnector.createVote(activeSession, vote, ApiConnector.getOwnerId(view.getContext()), new ApiResponseHandler<Vote>() {
+                    @Override
+                    public void onSuccess(Vote model) {
+                        requestActive = false;
+                    }
+
+                    @Override
+                    public void onFailure(Throwable e) {
+                        Toast.makeText(getActivity(), "Fehler: " + e.toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
                 updateView();
             }
         });
@@ -133,13 +183,18 @@ public class ReaderLiveFeedbackFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateView();
-        demonstrationHandler.post(demonstrationRunnable);// TODO: For demonstration
+        //demonstrationHandler.post(demonstrationRunnable);// TODO: For demonstration
+        Intent serviceIntent = new Intent(getActivity(),ReaderUpdateService.class);
+        serviceIntent.putExtra("sessionId",sessionId);
+        getActivity().bindService(serviceIntent, updConnection, Context.BIND_AUTO_CREATE);
     }
+
 
     @Override
     public void onPause() {
         super.onPause();
-        demonstrationHandler.removeCallbacks(demonstrationRunnable); // TODO: For demonstration
+        getActivity().unbindService(updConnection);
+        //demonstrationHandler.removeCallbacks(demonstrationRunnable); // TODO: For demonstration
     }
 
     /**

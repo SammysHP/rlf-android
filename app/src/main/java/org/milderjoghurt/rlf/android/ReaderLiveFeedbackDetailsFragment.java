@@ -1,8 +1,14 @@
 package org.milderjoghurt.rlf.android;
 
 import android.app.Fragment;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +23,36 @@ import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 import java.util.List;
 
 public class ReaderLiveFeedbackDetailsFragment extends Fragment {
+
+    int avgspeed = 0;
+    int avgunderstandable = 0;
+    private Handler CallbackHandler = new Handler(){
+        public void handleMessage(Message msg){
+            super.handleMessage(msg);
+            int avgspeed = msg.getData().getInt("Speed");
+            int avgunderstandable = msg.getData().getInt("Understand");
+            SeekBar speedbar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_speed);
+            speedbar.setProgress(avgspeed);
+            SeekBar understandbar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_understandability);
+            understandbar.setProgress(avgunderstandable);
+        }
+    };
+    private static ReaderUpdateService.ReaderBinder m_Binder;
+    private static ReaderUpdateService m_Service;
+    private ServiceConnection updConnection = new ServiceConnection() {
+
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            m_Binder = (ReaderUpdateService.ReaderBinder) binder;
+            m_Service = m_Binder.getService();
+            m_Binder.addCallback(CallbackHandler);
+        }
+
+        public void onServiceDisconnected(ComponentName name) {
+            m_Service = null;
+            m_Binder = null;
+        }
+    };
+
     /*
      * TODO: For demonstration
      */
@@ -26,8 +62,7 @@ public class ReaderLiveFeedbackDetailsFragment extends Fragment {
      * TODO: For demonstration
      */
 
-    double avgspeed = 0;
-    double avgunderstandable = 0;
+
     private String sessionId;
     private Session activeSession = null;
     private Runnable demonstrationRunnable = new Runnable() {
@@ -99,13 +134,17 @@ public class ReaderLiveFeedbackDetailsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        demonstrationHandler.post(demonstrationRunnable); // TODO: For demonstration
+        Intent serviceIntent = new Intent(getActivity(),ReaderUpdateService.class);
+        serviceIntent.putExtra("sessionId",sessionId);
+        getActivity().bindService(serviceIntent, updConnection, Context.BIND_AUTO_CREATE);
+        //demonstrationHandler.post(demonstrationRunnable); // TODO: For demonstration
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        demonstrationHandler.removeCallbacks(demonstrationRunnable); // TODO: For demonstration
+        getActivity().unbindService(updConnection);
+        //demonstrationHandler.removeCallbacks(demonstrationRunnable); // TODO: For demonstration
     }
 
 }
