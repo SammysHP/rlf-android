@@ -37,19 +37,16 @@ public class ReaderLiveFeedbackFragment extends Fragment {
             super.handleMessage(msg);
             if(activeSession.open) {
                 int curStatus = msg.getData().getInt("All");
-                if (curStatus > 66)
+                if (curStatus > 66) {
                     setFeedbackState(FeedbackState.POSITIVE);
-                else if (curStatus > 33)
+                } else if (curStatus > 33) {
                     setFeedbackState(FeedbackState.NEUTRAL);
-                else
+                } else {
                     setFeedbackState(FeedbackState.NEGATIVE);
-                if (msg.getData().getInt("Request") > 0)
-                    setRequestState(true);
+                }
+                setRequestState(msg.getData().getInt("Request") > 0);
                 setUserCount(msg.getData().getInt("Count"));
-            }else{
-                setFeedbackState(FeedbackState.INACTIVE);
             }
-
             updateView();
         }
     };

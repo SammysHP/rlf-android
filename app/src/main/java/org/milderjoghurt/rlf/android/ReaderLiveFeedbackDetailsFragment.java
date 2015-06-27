@@ -20,9 +20,9 @@ public class ReaderLiveFeedbackDetailsFragment extends Fragment {
     private Handler CallbackHandler = new Handler(){
         public void handleMessage(Message msg){
             super.handleMessage(msg);
-            if(msg.getData().getInt("Status") !=0) {
+            if(msg.getData().getInt("Open") !=0) {
                 int avgspeed = msg.getData().getInt("Speed");
-                int avgunderstandable = msg.getData().getInt("Understand");
+                int avgunderstandable = msg.getData().getInt("Understandability");
                 SeekBar speedbar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_speed);
                 speedbar.setProgress(avgspeed);
                 SeekBar understandbar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_understandability);
