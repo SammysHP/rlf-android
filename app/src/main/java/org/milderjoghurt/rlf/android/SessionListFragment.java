@@ -23,6 +23,7 @@ import org.milderjoghurt.rlf.android.models.Session;
 import org.milderjoghurt.rlf.android.net.ApiConnector;
 import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,15 +66,23 @@ public class SessionListFragment extends Fragment implements OnMoreListener, Swi
         ApiConnector.getSessionsByOwner(ownerID, new ApiResponseHandler<List<Session>>() {
             @Override
             public void onSuccess(List<Session> model) {
-
+                // refresh data
                 sessions.clear();
                 sessions.addAll(model);
-                Log.d("receive", "received " + sessions.size() + " items");
                 mAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onFailure(Throwable e) {
+
+                if(e instanceof IOException) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Fehler bei der Netzwerkkommunikation!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "Fehler: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+                // this is just a convention for handling errors. we only want to show
+                // data when query was successfull
                 sessions.clear();
                 mAdapter.notifyDataSetChanged();
             }
