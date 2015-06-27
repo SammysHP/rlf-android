@@ -25,44 +25,59 @@ public class ReaderUpdateService extends Service {
 
         @Override
         public void run() {
-            if(sessionId.length() == 6 && activeSession == null)
-            ApiConnector.getSession(sessionId, new ApiResponseHandler<Session>() {
-                @Override
-                public void onSuccess(Session model) {
-                    activeSession = model;
-                }
-                @Override
-                public void onFailure(Throwable e) {
-                }
-            });
-            if (activeSession != null && activeSession.open) {
-                final Bundle bundle = new Bundle();
-                ApiConnector.getVoteStats(sessionId, new ApiResponseHandler<List<VoteStats>>() {
+            if(sessionId.length() == 6) {
+                ApiConnector.getSession(sessionId, new ApiResponseHandler<Session>() {
                     @Override
-                    public void onSuccess(List<VoteStats> model) {
-                        for (VoteStats v : model) {
-                            if (v.type == VoteStats.Type.ALL)
-                                bundle.putInt("All",v.value);
-                            if (v.type == VoteStats.Type.CURRENTUSERS)
-                                bundle.putInt("Count", v.value);
-                            if (v.type == VoteStats.Type.REQUEST)
-                                bundle.putInt("Request", v.value); // TODO: handle request count info in value
-                            if(v.type == VoteStats.Type.SPEED)
-                                bundle.putInt("Speed",v.value);
-                            if(v.type == VoteStats.Type.UNDERSTANDABILITY)
-                                bundle.putInt("Understand",v.value);
-                        }
-                        for(Handler upd : updHandlers){
-                            Message msg = new Message();
-                            msg.setData(bundle);
-                            upd.sendMessage(msg);
-                        }
+                    public void onSuccess(Session model) {
+                        activeSession = model;
                     }
+
                     @Override
                     public void onFailure(Throwable e) {
-                        Toast.makeText(getApplicationContext(), "Fehler: " + e.toString(), Toast.LENGTH_LONG).show();
                     }
                 });
+            }
+            if(activeSession != null) {
+                if (!activeSession.open) {
+                    final Bundle bundle = new Bundle();
+                    bundle.putInt("Status", 0);
+                    for (Handler upd : updHandlers) {
+                        Message msg = new Message();
+                        msg.setData(bundle);
+                        upd.sendMessage(msg);
+                    }
+                }
+                if (activeSession.open) {
+                    final Bundle bundle = new Bundle();
+                    ApiConnector.getVoteStats(sessionId, new ApiResponseHandler<List<VoteStats>>() {
+                        @Override
+                        public void onSuccess(List<VoteStats> model) {
+                            bundle.putInt("Status", 1);
+                            for (VoteStats v : model) {
+                                if (v.type == VoteStats.Type.ALL)
+                                    bundle.putInt("All", v.value);
+                                if (v.type == VoteStats.Type.CURRENTUSERS)
+                                    bundle.putInt("Count", v.value);
+                                if (v.type == VoteStats.Type.REQUEST)
+                                    bundle.putInt("Request", v.value); // TODO: handle request count info in value
+                                if (v.type == VoteStats.Type.SPEED)
+                                    bundle.putInt("Speed", v.value);
+                                if (v.type == VoteStats.Type.UNDERSTANDABILITY)
+                                    bundle.putInt("Understand", v.value);
+                            }
+                            for (Handler upd : updHandlers) {
+                                Message msg = new Message();
+                                msg.setData(bundle);
+                                upd.sendMessage(msg);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Throwable e) {
+                            Toast.makeText(getApplicationContext(), "Fehler: " + e.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
             }
             ThreadHandler.postDelayed(Updatethread, 5000); // every 5 seconds
         }

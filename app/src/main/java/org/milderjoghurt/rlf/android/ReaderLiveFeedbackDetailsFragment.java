@@ -20,12 +20,14 @@ public class ReaderLiveFeedbackDetailsFragment extends Fragment {
     private Handler CallbackHandler = new Handler(){
         public void handleMessage(Message msg){
             super.handleMessage(msg);
-            int avgspeed = msg.getData().getInt("Speed");
-            int avgunderstandable = msg.getData().getInt("Understand");
-            SeekBar speedbar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_speed);
-            speedbar.setProgress(avgspeed);
-            SeekBar understandbar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_understandability);
-            understandbar.setProgress(avgunderstandable);
+            if(msg.getData().getInt("Status") !=0) {
+                int avgspeed = msg.getData().getInt("Speed");
+                int avgunderstandable = msg.getData().getInt("Understand");
+                SeekBar speedbar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_speed);
+                speedbar.setProgress(avgspeed);
+                SeekBar understandbar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_understandability);
+                understandbar.setProgress(avgunderstandable);
+            }
         }
     };
     private static ReaderUpdateService.ReaderBinder m_Binder;

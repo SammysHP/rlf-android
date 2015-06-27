@@ -35,16 +35,21 @@ public class ReaderLiveFeedbackFragment extends Fragment {
     private Handler CallbackHandler = new Handler(){
         public void handleMessage(Message msg){
             super.handleMessage(msg);
-            int curStatus = msg.getData().getInt("All");
-            if (curStatus > 66)
-                setFeedbackState(FeedbackState.POSITIVE);
-            else if (curStatus > 33)
-                setFeedbackState(FeedbackState.NEUTRAL);
-            else
-                setFeedbackState(FeedbackState.NEGATIVE);
-            if(msg.getData().getInt("Request") >0)
-                setRequestState(true);
-            setUserCount(msg.getData().getInt("Count"));
+            if(activeSession.open) {
+                int curStatus = msg.getData().getInt("All");
+                if (curStatus > 66)
+                    setFeedbackState(FeedbackState.POSITIVE);
+                else if (curStatus > 33)
+                    setFeedbackState(FeedbackState.NEUTRAL);
+                else
+                    setFeedbackState(FeedbackState.NEGATIVE);
+                if (msg.getData().getInt("Request") > 0)
+                    setRequestState(true);
+                setUserCount(msg.getData().getInt("Count"));
+            }else{
+                setFeedbackState(FeedbackState.INACTIVE);
+            }
+
             updateView();
         }
     };
