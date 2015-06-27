@@ -19,19 +19,19 @@ import org.milderjoghurt.rlf.android.models.Vote;
 import org.milderjoghurt.rlf.android.net.ApiConnector;
 import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 
+
 /**
  * A simple {@link Fragment} subclass.
  */
 
 
-
-
 public class StudentLiveFeedbackFragment extends Fragment {
 
-    private Session currentSession = null;
-    private String sessionId;
+    private Session currentSession;
+    public String sessionId;
     private boolean isPressed = false;
     private Button signal_btn;
+    private Button feedback_btn;
     private static final int unselectedColor = R.color.button_material_light;
 
 
@@ -39,20 +39,6 @@ public class StudentLiveFeedbackFragment extends Fragment {
         // Required empty public constructor
     }
 
-/*    public void setSessionID(String pSessionID) {
-
-        ApiConnector.getSession(pSessionID, new ApiResponseHandler<Session>() {
-            @Override
-            public void onSuccess(Session session) {
-                StudentLiveFeedbackFragment.this.currentSession = session;
-            }
-
-            @Override
-            public void onFailure(Throwable e) {
-                StudentLiveFeedbackFragment.this.currentSession = null; // TODO network error ..
-            }
-        });
-    }*/
 
 
     @Override
@@ -60,81 +46,138 @@ public class StudentLiveFeedbackFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        sessionId = getActivity().getIntent().getStringExtra("SessionId");
+        sessionId = getActivity().getIntent().getStringExtra(StudentLiveActivity.EXTRA_ID);
         ApiConnector.getSession(sessionId, new ApiResponseHandler<Session>() {
             @Override
-            public void onFailure(Throwable e) {
-                Log.e("rlf-android", e.toString());
-                // session id invalid or network issue
-                // report error (TODO)
-                // and exit.
-                Toast.makeText(getActivity().getApplicationContext(), "Fehler", Toast.LENGTH_SHORT).show();
-                //finish();
+            public void onSuccess(Session model) {
+                currentSession = model;
+
             }
 
             @Override
-            public void onSuccess(Session session) {
-                currentSession = session;
+            public void onFailure(Throwable e) {
+                Toast.makeText(getActivity(), "Fehler: " + e.toString(), Toast.LENGTH_LONG).show();
+                getActivity().finish();
             }
         });
+
+        Toast.makeText(getActivity().getApplicationContext(), sessionId, Toast.LENGTH_SHORT).show();
 
         return inflater.inflate(R.layout.fragment_student_live_feedback, container, false);
     }
 
 
-
     public void onActivityCreated(Bundle savedInstance) {
-    super.onActivityCreated(savedInstance);
+        super.onActivityCreated(savedInstance);
 
 
-
-
-
-    //   Button break1_btn = (Button) getView().findViewById(R.id.break1)
-    signal_btn = (Button) getView().findViewById(R.id.signal);
+        signal_btn = (Button) getView().findViewById(R.id.signal);
 
         signal_btn.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            isPressed = !isPressed;
+            @Override
+            public void onClick(View v) {
+                isPressed = !isPressed;
 
-            Vote vote = new Vote(Vote.Type.REQUEST, 0);
+                Vote vote = new Vote(Vote.Type.REQUEST, 0);
 
-            if (isPressed) {
+                if (isPressed) {
 
-                 vote.value = -1;
+                    vote.value = 1;
 
-                        //(getResources().getDrawable(R.drawable.roundedbutton));
-                signal_btn.setBackgroundColor((getResources().getColor(R.color.vote_button_selected)));
-                signal_btn.setText("Hand senken");
-            } else {
+                    //(getResources().getDrawable(R.drawable.roundedbutton));
+                    signal_btn.setBackgroundColor((getResources().getColor(R.color.vote_button_selected)));
+                    signal_btn.setText("Hand senken");
+                } else {
 
-                vote.value = 0;
-               // signal_btn.setBackground(getResources().getDrawable(R.drawable.roundedbutton));
-                signal_btn.setBackgroundDrawable(getResources().getDrawable(
-                        R.drawable.roundedbutton));
-                signal_btn.setBackgroundColor(Color.LTGRAY);
-                signal_btn.setText("Hand heben");
-                //signal_btn.setBackgroundResource(android.R.drawable.btn_default);
+                    vote.value = -1;
+                    // signal_btn.setBackground(getResources().getDrawable(R.drawable.roundedbutton));
+                    signal_btn.setBackgroundDrawable(getResources().getDrawable(
+                            R.drawable.roundedbutton));
+                    signal_btn.setBackgroundColor(Color.LTGRAY);
+                    signal_btn.setText("Hand heben");
+                    //signal_btn.setBackgroundResource(android.R.drawable.btn_default);
+                }
+
+                if(currentSession == null)
+                {
+                    Log.e("rlf-android", "session for anwering invalid");
+                    return;
+                }
+
+                ApiConnector.createVote(currentSession, vote, ApiConnector.getOwnerId(getActivity().getApplicationContext()), new ApiResponseHandler<Vote>() {
+
+                    @Override
+                    public void onFailure(Throwable e) {
+                        //Log.e("rlf-android", e.toString());
+                        Toast.makeText(getActivity().getApplicationContext(), "Fehler, Auswahl wurde nicht akzeptiert!", Toast.LENGTH_SHORT).show();
+                        Log.e("rlf-android", e.toString());
+                    }
+
+                    @Override
+                    public void onSuccess(Vote v) {
+                        Toast.makeText(getActivity().getApplicationContext(), "Feedback gesendet!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
+        });
+        //return view;
 
-            ApiConnector.createVote(currentSession, vote, ApiConnector.getOwnerId(getActivity().getApplicationContext()), new ApiResponseHandler<Vote>(){
 
-                @Override
-                public void onFailure(Throwable e){
-                    //Log.e("rlf-android", e.toString());
-                    Toast.makeText(getActivity().getApplicationContext(), "Fehler, Auswahl wurde nicht akzeptiert!", Toast.LENGTH_SHORT).show();
-                    Log.e("rlf-android", e.toString());
+        feedback_btn = (Button) getView().findViewById(R.id.sendFeedback);
+
+        feedback_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                Vote voteSpeed = new Vote(Vote.Type.SPEED, 7);
+                Vote voteUnderstandabillity = new Vote(Vote.Type.UNDERSTANDABILITY, 7);
+
+
+                //(getResources().getDrawable(R.drawable.roundedbutton));
+                signal_btn.setBackgroundColor((getResources().getColor(R.color.vote_button_selected)));
+
+                if(currentSession == null)
+                {
+                    Log.e("rlf-android", "session for anwering invalid");
+                    return;
                 }
-                @Override
-                public void onSuccess(Vote v){
-                    Toast.makeText(getActivity().getApplicationContext(), "Feedback gesendet!", Toast.LENGTH_SHORT).show();
-                }
-            });
 
-        }
-    });
-    //return view;
-}
+                ApiConnector.createVote(currentSession, voteSpeed, ApiConnector.getOwnerId(getActivity().getApplicationContext()), new ApiResponseHandler<Vote>() {
+
+                    @Override
+                    public void onFailure(Throwable e) {
+                        //Log.e("rlf-android", e.toString());
+                        Toast.makeText(getActivity().getApplicationContext(), "Fehler, Auswahl wurde nicht akzeptiert!", Toast.LENGTH_SHORT).show();
+                        Log.e("rlf-android", e.toString());
+                    }
+
+                    @Override
+                    public void onSuccess(Vote v) {
+                        Toast.makeText(getActivity().getApplicationContext(), "Feedback gesendet!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                ApiConnector.createVote(currentSession, voteUnderstandabillity, ApiConnector.getOwnerId(getActivity().getApplicationContext()), new ApiResponseHandler<Vote>() {
+
+                    @Override
+                    public void onFailure(Throwable e) {
+                        //Log.e("rlf-android", e.toString());
+                        Toast.makeText(getActivity().getApplicationContext(), "Fehler, Auswahl wurde nicht akzeptiert!", Toast.LENGTH_SHORT).show();
+                        Log.e("rlf-android", e.toString());
+                    }
+
+                    @Override
+                    public void onSuccess(Vote v) {
+                        Toast.makeText(getActivity().getApplicationContext(), "Feedback gesendet!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        });
+
+
+    }
 
 }
