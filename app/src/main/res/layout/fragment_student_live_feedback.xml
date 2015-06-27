@@ -28,7 +28,7 @@
 
         <org.milderjoghurt.rlf.android.ui.VerticalSeekBar
 
-            android:id="@+id/vSeekBar1"
+            android:id="@+id/speedBar"
             android:layout_width="25dp"
 
             android:layout_marginLeft="7dp"
@@ -81,7 +81,7 @@
 
         <org.milderjoghurt.rlf.android.ui.VerticalSeekBar
 
-            android:id="@+id/vSeekBar2"
+            android:id="@+id/understandBar"
             android:layout_width="25dp"
 
             android:layout_marginLeft="7dp"
@@ -146,7 +146,7 @@
             android:layout_width="110dp"
             android:layout_height="168dp"
             android:text="Feedback senden"
-            android:id="@+id/button2"
+            android:id="@+id/sendFeedback"
             android:textSize="17sp"
             android:layout_gravity="center_horizontal"
             android:layout_below="@+id/textView2"
