@@ -1,6 +1,5 @@
 package org.milderjoghurt.rlf.android;
 
-//import android.content.Intent;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,12 +24,10 @@ public class StudentLiveActivity extends AppCompatActivity {
     private ViewPagerAdapter viewPagerAdapter;
 
     private String sessionId;
-    boolean screenFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         final Intent intent = getIntent();
         final Uri uri = intent.getData();
@@ -48,7 +45,7 @@ public class StudentLiveActivity extends AppCompatActivity {
             // no session id found
             // report error (TODO)
             // and exit.
-            Toast.makeText(StudentLiveActivity.this, "Fehler", Toast.LENGTH_SHORT).show();
+            Toast.makeText(StudentLiveActivity.this, "Fehler: Keine SessionID übergeben", Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -60,26 +57,25 @@ public class StudentLiveActivity extends AppCompatActivity {
                 // session id invalid or network issue
                 // report error (TODO)
                 // and exit.
-                Toast.makeText(StudentLiveActivity.this, "Fehler", Toast.LENGTH_SHORT).show();
-                screenFlag = true;
+                Toast.makeText(StudentLiveActivity.this, "Fehler: " + e.toString(), Toast.LENGTH_SHORT).show();
                 finish();
-                return;
             }
 
             @Override
             public void onSuccess(Session session) {
-                setTitle(session.name);
+                if (session.open) {
+                    setTitle(session.name);
+                } else {
+                    finish();
+                    Toast.makeText(StudentLiveActivity.this, "Sitzung nicht offen", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-/*        if (screenFlag){
-            finish();
-            return;
-        }*/
+
         setContentView(R.layout.activity_student_live);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPagerAdapter = new ViewPagerAdapter();
         viewPager.setAdapter(viewPagerAdapter);
-
     }
 
     private class ViewPagerAdapter extends PagerAdapter {
