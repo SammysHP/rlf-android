@@ -33,7 +33,6 @@ import java.util.TimeZone;
 public class StudentLiveFeedbackFragment extends Fragment {
 
     private Session currentSession;
-    private String sessionId;
     private boolean isPressed = false;
     private Button signal_btn;
     private Button feedback_btn;
@@ -47,30 +46,23 @@ public class StudentLiveFeedbackFragment extends Fragment {
         // Required empty public constructor
     }
 
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
-        sessionId = getActivity().getIntent().getStringExtra(StudentLiveActivity.EXTRA_ID);
-        ApiConnector.getSession(sessionId, new ApiResponseHandler<Session>() {
+    public void setSession(String sessionID) {
+        ApiConnector.getSession(sessionID, new ApiResponseHandler<Session>() {
             @Override
-            public void onSuccess(Session model) {
-                currentSession = model;
-
+            public void onSuccess(Session session) {
+                StudentLiveFeedbackFragment.this.currentSession = session;
             }
 
             @Override
             public void onFailure(Throwable e) {
-                Toast.makeText(getActivity(), "Fehler: " + e.toString(), Toast.LENGTH_LONG).show();
-                getActivity().finish();
+                StudentLiveFeedbackFragment.this.currentSession = null; // TODO network error ..
             }
         });
+    }
 
-       // Toast.makeText(getActivity().getApplicationContext(), sessionId, Toast.LENGTH_SHORT).show();
-
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_student_live_feedback, container, false);
     }
 

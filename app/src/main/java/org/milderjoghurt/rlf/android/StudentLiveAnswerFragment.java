@@ -54,9 +54,8 @@ public class StudentLiveAnswerFragment extends Fragment {
 
     }
 
-    public void setSessionID(String pSessionID) {
-
-        ApiConnector.getSession(pSessionID, new ApiResponseHandler<Session>() {
+    public void setSession(String sessionID) {
+        ApiConnector.getSession(sessionID, new ApiResponseHandler<Session>() {
             @Override
             public void onSuccess(Session session) {
                 StudentLiveAnswerFragment.this.currentSession = session;

@@ -96,14 +96,16 @@ public class StudentLiveActivity extends AppCompatActivity {
             switch (position) {
                 case 0:
                     view = getLayoutInflater().inflate(R.layout.layout_student_live, null);
+                    StudentLiveFeedbackFragment feedbackFrag = (StudentLiveFeedbackFragment) getFragmentManager().findFragmentById(R.id.fragment_student_live_feedback);
+                    feedbackFrag.setSession(sessionId);
                     break;
                 case 1:
                     view = new FrameLayout(container.getContext());
                     //noinspection ResourceType
                     view.setId(12345);
-                    StudentLiveAnswerFragment voteFrag = new StudentLiveAnswerFragment();
-                    voteFrag.setSessionID(sessionId); // session has to be set in any way
-                    getFragmentManager().beginTransaction().add(view.getId(), voteFrag, null).commit();
+                    StudentLiveAnswerFragment answerFrag = new StudentLiveAnswerFragment();
+                    answerFrag.setSession(sessionId); // session has to be set in any way
+                    getFragmentManager().beginTransaction().add(view.getId(), answerFrag, null).commit();
             }
 
             container.addView(view);
