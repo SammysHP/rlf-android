@@ -59,7 +59,7 @@
             android:enabled="false"
             android:max="100"
             android:maxHeight="20dp"
-            android:progress="1"
+            android:progress="100"
             android:progressDrawable="@drawable/seekbar_pn"
             android:splitTrack="false"
             android:thumb="@drawable/seekbar_arrows" />

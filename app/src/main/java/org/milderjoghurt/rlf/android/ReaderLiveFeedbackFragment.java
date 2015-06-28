@@ -115,9 +115,8 @@ public class ReaderLiveFeedbackFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
                 if (!isChecked) {
                     setFeedbackState(FeedbackState.INACTIVE);
-                } else {
-                    setFeedbackState(FeedbackState.NEUTRAL);
                 }
+
                 if (activeSession.open != isChecked) {
                     activeSession.open = isChecked;
                     ApiConnector.updateSession(activeSession, ApiConnector.getOwnerId(view.getContext()), new ApiResponseHandler<Session>() {
