@@ -1,8 +1,5 @@
 package org.milderjoghurt.rlf.android;
 
-import android.graphics.Color;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log; // for demonstration/testing
@@ -33,6 +30,7 @@ public class StudentLiveAnswerFragment extends Fragment {
     // UI
     private Button sendButton = null;
     private static final int unselectedColor = R.color.button_material_light;
+    private static final int selectedColor = R.color.vote_button_selected;
 
     // model
     private boolean[] selectionStates = {false, false, false, false };
@@ -87,21 +85,9 @@ public class StudentLiveAnswerFragment extends Fragment {
       btnD.setBackgroundColor(unselectedColor);
 
       v.setPressed(true);
-      v.setBackgroundColor((getResources().getColor(R.color.vote_button_selected)));
+      v.setBackgroundColor(selectedColor);
       sendButton.setEnabled(true);
 
-/*        if (btnA.isPressed()){
-            q.answer = QuestionAnswer.Answer.A;
-        }else if(btnB.isPressed()){
-            q.answer = QuestionAnswer.Answer.B;
-        }else if(btnC.isPressed()){
-            q.answer = QuestionAnswer.Answer.C;
-        }else if(btnD.isPressed()){
-            q.answer = QuestionAnswer.Answer.D;
-        }else {*/
-
- //       }
-    //  Toast.makeText(getActivity().getApplicationContext(), "pressed"+ q.answer, Toast.LENGTH_SHORT).show();
 
     }
 
@@ -138,7 +124,7 @@ public class StudentLiveAnswerFragment extends Fragment {
             q.answer= QuestionAnswer.Answer.D;
         }
 
-        //QuestionAnswer q = new QuestionAnswer(QuestionAnswer.Answer.D);
+        
         //Toast.makeText(getActivity().getApplicationContext(), "Answer" + q.answer, Toast.LENGTH_SHORT).show();
         //
         ApiConnector.createAnswer(currentSession, q, ApiConnector.getOwnerId(getActivity().getApplicationContext()), new ApiResponseHandler<QuestionAnswer>() {

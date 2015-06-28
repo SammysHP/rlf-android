@@ -20,10 +20,10 @@ import org.milderjoghurt.rlf.android.ui.VerticalSeekBar;
 
 import org.milderjoghurt.rlf.android.net.exceptions.SessionNotOpenException;
 
-import java.text.DateFormat;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -153,7 +153,7 @@ public class StudentLiveFeedbackFragment extends Fragment {
 
             }
         });
-        //return view;
+
 
 
         feedback_btn = (Button) getView().findViewById(R.id.sendFeedback);
