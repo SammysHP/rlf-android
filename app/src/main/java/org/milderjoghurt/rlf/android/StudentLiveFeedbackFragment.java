@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.milderjoghurt.rlf.android.models.Session;
@@ -19,6 +20,11 @@ import org.milderjoghurt.rlf.android.ui.VerticalSeekBar;
 
 import org.milderjoghurt.rlf.android.net.exceptions.SessionNotOpenException;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -27,12 +33,13 @@ import org.milderjoghurt.rlf.android.net.exceptions.SessionNotOpenException;
 public class StudentLiveFeedbackFragment extends Fragment {
 
     private Session currentSession;
-    public String sessionId;
+    private String sessionId;
     private boolean isPressed = false;
     private Button signal_btn;
     private Button feedback_btn;
     private VerticalSeekBar speedBar;
     private VerticalSeekBar understandBar;
+    private TextView lastFeedbackView;
     private static final int unselectedColor = R.color.button_material_light;
 
 
@@ -72,11 +79,11 @@ public class StudentLiveFeedbackFragment extends Fragment {
         super.onActivityCreated(savedInstance);
 
 
-        //Sliders
+        //Sliders und textView
 
         speedBar =(VerticalSeekBar) getView().findViewById(R.id.speedBar);
         understandBar = (VerticalSeekBar) getView().findViewById(R.id.understandBar);
-
+        lastFeedbackView = (TextView) getView().findViewById(R.id.textView2);
 
 
 
@@ -163,6 +170,10 @@ public class StudentLiveFeedbackFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+
+                String currentTimeString = new SimpleDateFormat("HH:mm:ss").format(new Date());
+                lastFeedbackView.setText("Letztes Feedback:" + System.getProperty("line.separator") + currentTimeString);
+
                 int speed = speedBar.getProgress();
                 int understandabillity = understandBar.getProgress();
                 Vote voteSpeed = new Vote(Vote.Type.SPEED, speed);
@@ -193,7 +204,7 @@ public class StudentLiveFeedbackFragment extends Fragment {
 
                     @Override
                     public void onSuccess(Vote v) {
-                        Toast.makeText(getActivity().getApplicationContext(), "Feedback gesendet!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity().getApplicationContext(), "Feedback gesendet!", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -214,7 +225,7 @@ public class StudentLiveFeedbackFragment extends Fragment {
 
                     @Override
                     public void onSuccess(Vote v) {
-                        Toast.makeText(getActivity().getApplicationContext(), "Feedback gesendet!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity().getApplicationContext(), "Feedback gesendet!", Toast.LENGTH_SHORT).show();
                     }
                 });
 
