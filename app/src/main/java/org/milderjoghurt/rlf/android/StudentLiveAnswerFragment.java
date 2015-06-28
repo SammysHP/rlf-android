@@ -1,5 +1,7 @@
 package org.milderjoghurt.rlf.android;
 
+import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log; // for demonstration/testing
@@ -26,23 +28,17 @@ public class StudentLiveAnswerFragment extends Fragment {
     private static final String MSG_VOTE_SENDED = "Auswahl gesendet";
     private static final String MSG_VOTE_BLOCKED = "Du hast eben erst abgestimmt!";
 
-
     // UI
-    private Button sendButton = null;
+    private AnimationDrawable sendBtnUIFeedback = null;
     private static final int unselectedColor = R.color.button_material_light;
-    private static final int selectedColor = R.color.vote_button_selected;
 
-    // model
-    private boolean[] selectionStates = {false, false, false, false };
-    private static final long LEAST_WAIT_TIME = 300; // ms
-    private long lastVoteTime = 0; // timestamp --> prevent clientside spamming
     private Session currentSession = null;
 
-    //private QuestionAnswer q;
+    private Button sendButton = null;
     private Button btnA;
     private Button btnB;
     private Button btnC;
-    private Button btnD;;
+    private Button btnD;
 
     public StudentLiveAnswerFragment() {
 
@@ -68,65 +64,47 @@ public class StudentLiveAnswerFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_student_live_answer, container, false);
     }
 
-    public void onVoteClick(View v){
-
-
-      btnA.setBackgroundColor(unselectedColor);
-      btnA.setPressed(false);
-
-
-      btnB.setPressed(false);
-      btnB.setBackgroundColor(unselectedColor);
-
-      btnC.setPressed(false);
-      btnC.setBackgroundColor(unselectedColor);
-
-      btnD.setPressed(false);
-      btnD.setBackgroundColor(unselectedColor);
-
-      v.setPressed(true);
-      v.setBackgroundColor(selectedColor);
-      sendButton.setEnabled(true);
-
-
+    public void onVoteClick(View v) {
+        btnA.setSelected(false);
+        btnA.setBackgroundColor(getResources().getColor(unselectedColor));
+        btnB.setSelected(false);
+        btnB.setBackgroundColor(getResources().getColor(unselectedColor));
+        btnC.setSelected(false);
+        btnC.setBackgroundColor(getResources().getColor(unselectedColor));
+        btnD.setSelected(false);
+        btnD.setBackgroundColor(getResources().getColor(unselectedColor));
+        v.setSelected(true);
+        v.setBackgroundColor(getResources().getColor(R.color.button_pressed));
+        sendButton.setEnabled(true);
     }
 
+
+    /**
+     * Should be called when vote was chosen by user and is about to be sended to host
+     */
     public void onVoteSend(View src) {
-
         // ui feedback
-        sendButton.setBackgroundColor(unselectedColor);
-        //sendBtnUIFeedback.start(); // FIXME: sometimes it seems not to run ..
+        sendButton.setBackground(sendBtnUIFeedback);
 
-        // prevent spamming
-        final long curTime = System.currentTimeMillis();
-        if(curTime - lastVoteTime < LEAST_WAIT_TIME) {
+        sendButton.setEnabled(false); // disable as long as server is working on answer
 
-            // abort because min. idle time is not passed
-            Toast.makeText(getActivity().getApplicationContext(), MSG_VOTE_BLOCKED, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if(currentSession == null)
-        {
+        if (currentSession == null) {
             Log.e("rlf-android", "session for anwering invalid");
             return;
         }
 
-        QuestionAnswer q = new QuestionAnswer(QuestionAnswer.Answer.A);
+        QuestionAnswer q;
 
-        if (btnA.isPressed()){
-            q.answer= QuestionAnswer.Answer.A;
-        }else if(btnB.isPressed()){
-            q.answer= QuestionAnswer.Answer.B;
-        }else if(btnC.isPressed()){
-            q.answer= QuestionAnswer.Answer.C;
-        }else {
-            q.answer= QuestionAnswer.Answer.D;
+        if (btnA.isSelected()) {
+            q = new QuestionAnswer(QuestionAnswer.Answer.A);
+        } else if (btnB.isSelected()) {
+            q = new QuestionAnswer(QuestionAnswer.Answer.B);
+        } else if (btnC.isSelected()) {
+            q = new QuestionAnswer(QuestionAnswer.Answer.C);
+        } else {
+            q = new QuestionAnswer(QuestionAnswer.Answer.D);
         }
 
-        
-        //Toast.makeText(getActivity().getApplicationContext(), "Answer" + q.answer, Toast.LENGTH_SHORT).show();
-        //
         ApiConnector.createAnswer(currentSession, q, ApiConnector.getOwnerId(getActivity().getApplicationContext()), new ApiResponseHandler<QuestionAnswer>() {
             @Override
             public void onFailure(Throwable e) {
@@ -137,12 +115,9 @@ public class StudentLiveAnswerFragment extends Fragment {
 
             @Override
             public void onSuccess(QuestionAnswer answer) {
-                // debug
-                Log.d("rlf-android", "auswahl " + answer.toString() + " gesendet");
-
-                lastVoteTime = curTime;
-                Toast.makeText(getActivity().getApplicationContext(), "Abgestimmt", Toast.LENGTH_SHORT).show();
-                }
+                // give more ui feedback:
+                Toast.makeText(getActivity().getApplicationContext(), MSG_VOTE_SENDED, Toast.LENGTH_SHORT).show();
+            }
         });
 
     }
@@ -154,10 +129,10 @@ public class StudentLiveAnswerFragment extends Fragment {
 
         // fill vote map
         try {
-             btnA = (Button) getView().findViewById(R.id.btnVoteA);
-             btnB = (Button) getView().findViewById(R.id.btnVoteB);
-             btnC = (Button) getView().findViewById(R.id.btnVoteC);
-             btnD = (Button) getView().findViewById(R.id.btnVoteD);
+            btnA = (Button) getView().findViewById(R.id.btnVoteA);
+            btnB = (Button) getView().findViewById(R.id.btnVoteB);
+            btnC = (Button) getView().findViewById(R.id.btnVoteC);
+            btnD = (Button) getView().findViewById(R.id.btnVoteD);
             sendButton = (Button) getView().findViewById(R.id.btnVoteSend);
 
             View.OnClickListener voteClickListener = new View.OnClickListener() {
