@@ -82,11 +82,11 @@ public class StudentLiveAnswerFragment extends Fragment {
 
         QuestionAnswer q;
 
-        if (btnA.isSelected()) {
+        if (btnA.isActivated()) {
             q = new QuestionAnswer(QuestionAnswer.Answer.A);
-        } else if (btnB.isSelected()) {
+        } else if (btnB.isActivated()) {
             q = new QuestionAnswer(QuestionAnswer.Answer.B);
-        } else if (btnC.isSelected()) {
+        } else if (btnC.isActivated()) {
             q = new QuestionAnswer(QuestionAnswer.Answer.C);
         } else {
             q = new QuestionAnswer(QuestionAnswer.Answer.D);
