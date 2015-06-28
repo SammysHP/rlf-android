@@ -30,7 +30,8 @@
             android:layout_weight="1"
             android:singleLine="false"
             android:text="@string/VoteFragButtonA"
-            android:textSize="40sp" />
+            android:textSize="40sp"
+            android:background="@drawable/answer_button_bg" />
 
         <Button
             android:id="@+id/btnVoteB"
@@ -41,7 +42,8 @@
             android:layout_weight="1"
             android:singleLine="false"
             android:text="@string/VoteFragButtonB"
-            android:textSize="40sp" />
+            android:textSize="40sp"
+            android:background="@drawable/answer_button_bg" />
 
         <Space
             android:layout_width="0dp"
@@ -69,7 +71,8 @@
             android:layout_weight="1"
             android:singleLine="false"
             android:text="@string/VoteFragButtonC"
-            android:textSize="40sp" />
+            android:textSize="40sp"
+            android:background="@drawable/answer_button_bg" />
 
         <Button
             android:id="@+id/btnVoteD"
@@ -80,7 +83,8 @@
             android:layout_weight="1"
             android:singleLine="false"
             android:text="@string/VoteFragButtonD"
-            android:textSize="40sp" />
+            android:textSize="40sp"
+            android:background="@drawable/answer_button_bg" />
 
         <Space
             android:layout_width="0dp"

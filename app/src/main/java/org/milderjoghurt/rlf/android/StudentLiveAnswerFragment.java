@@ -26,11 +26,6 @@ public class StudentLiveAnswerFragment extends Fragment {
     // local res / logging
     private static final String LOG_TAG = "Voting";
     private static final String MSG_VOTE_SENDED = "Auswahl gesendet";
-    private static final String MSG_VOTE_BLOCKED = "Du hast eben erst abgestimmt!";
-
-    // UI
-    private AnimationDrawable sendBtnUIFeedback = null;
-    private static final int unselectedColor = R.color.button_material_light;
 
     private Session currentSession = null;
 
@@ -65,16 +60,11 @@ public class StudentLiveAnswerFragment extends Fragment {
     }
 
     public void onVoteClick(View v) {
-        btnA.setSelected(false);
-        btnA.setBackgroundColor(getResources().getColor(unselectedColor));
-        btnB.setSelected(false);
-        btnB.setBackgroundColor(getResources().getColor(unselectedColor));
-        btnC.setSelected(false);
-        btnC.setBackgroundColor(getResources().getColor(unselectedColor));
-        btnD.setSelected(false);
-        btnD.setBackgroundColor(getResources().getColor(unselectedColor));
-        v.setSelected(true);
-        v.setBackgroundColor(getResources().getColor(R.color.button_pressed));
+        btnA.setActivated(false);
+        btnB.setActivated(false);
+        btnC.setActivated(false);
+        btnD.setActivated(false);
+        v.setActivated(true);
         sendButton.setEnabled(true);
     }
 
@@ -83,9 +73,6 @@ public class StudentLiveAnswerFragment extends Fragment {
      * Should be called when vote was chosen by user and is about to be sended to host
      */
     public void onVoteSend(View src) {
-        // ui feedback
-        sendButton.setBackground(sendBtnUIFeedback);
-
         sendButton.setEnabled(false); // disable as long as server is working on answer
 
         if (currentSession == null) {
@@ -117,6 +104,11 @@ public class StudentLiveAnswerFragment extends Fragment {
             public void onSuccess(QuestionAnswer answer) {
                 // give more ui feedback:
                 Toast.makeText(getActivity().getApplicationContext(), MSG_VOTE_SENDED, Toast.LENGTH_SHORT).show();
+                sendButton.setEnabled(true);
+                btnA.setActivated(false);
+                btnB.setActivated(false);
+                btnC.setActivated(false);
+                btnD.setActivated(false);
             }
         });
 
