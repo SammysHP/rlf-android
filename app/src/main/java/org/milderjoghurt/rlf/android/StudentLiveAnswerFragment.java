@@ -1,5 +1,6 @@
 package org.milderjoghurt.rlf.android;
 
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -76,15 +77,27 @@ public class StudentLiveAnswerFragment extends Fragment {
 
     public void onVoteClick(View v){
 
-        if (btnA.isActivated()){
-            q.answer = QuestionAnswer.Answer.A;
-        }else if(btnB.isActivated()){
-            q.answer = QuestionAnswer.Answer.B;
-        }else if(btnC.isActivated()){
-            q.answer = QuestionAnswer.Answer.C;
-        }else if(btnD.isActivated()){
-            q.answer = QuestionAnswer.Answer.D;
+         if (btnA.isSelected()){
+            btnA.setActivated(false);
+            btnA.setSelected(false);
+            btnA.setBackgroundColor(unselectedColor);
+        }if (btnB.isSelected()){
+            btnA.setActivated(false);
+            btnB.setSelected(false);
+            btnA.setBackgroundColor(unselectedColor);
+        }if (btnC.isSelected()){
+            btnC.setActivated(false);
+            btnC.setSelected(false);
+            btnA.setBackgroundColor(unselectedColor);
+        }if (btnD.isSelected()){
+            btnD.setActivated(false);
+            btnD.setSelected(false);
+            btnA.setBackgroundColor(unselectedColor);
         }
+        v.setSelected(true);
+        v.setActivated(true);
+        v.setBackgroundColor(Color.LTGRAY);
+        sendButton.setEnabled(true);
     }
 
 
@@ -170,7 +183,15 @@ public class StudentLiveAnswerFragment extends Fragment {
         }
 
         //
-
+        if (btnA.isActivated()){
+            q.answer = QuestionAnswer.Answer.A;
+        }else if(btnB.isActivated()){
+            q.answer = QuestionAnswer.Answer.B;
+        }else if(btnC.isActivated()){
+            q.answer = QuestionAnswer.Answer.C;
+        }else if(btnD.isActivated()){
+            q.answer = QuestionAnswer.Answer.D;
+        }
         //
         ApiConnector.createAnswer(currentSession, q, ApiConnector.getOwnerId(getActivity().getApplicationContext()), new ApiResponseHandler<QuestionAnswer>() {
             @Override
@@ -191,18 +212,18 @@ public class StudentLiveAnswerFragment extends Fragment {
                 lastVoteTime = curTime;
 
                 // debug
-              //  Log.d(LOG_TAG, "voted " + getLastVoteSymbolStr());
+                //  Log.d(LOG_TAG, "voted " + getLastVoteSymbolStr());
 
                 // give more ui feedback:
                 Toast.makeText(getActivity().getApplicationContext(), MSG_VOTE_SENDED, Toast.LENGTH_SHORT).show();
 
                 // reset model
-                for(int i=0;i<selectionStates.length;++i) {
-                    selectionStates[i] = false;
+//                for(int i=0;i<selectionStates.length;++i) {
+//                    selectionStates[i] = false;
                 }
 
-                updateUI();
-            }
+               // updateUI();
+
         });
 
     }
@@ -211,17 +232,17 @@ public class StudentLiveAnswerFragment extends Fragment {
         return (index >= 0 && index < selectionStates.length) ? selectionStates[index] : false;
     }*/
 
-    private boolean isAtLeastOneSelected() {
+/*    private boolean isAtLeastOneSelected() {
         boolean result = false;
         for(boolean b : selectionStates)
             result |= b;
         return result;
-    }
+    }*/
 
     /**
      * Updates UI state, especially element colors
      */
-    private void updateUI() {
+/*    private void updateUI() {
         for(int i = 0; i < voteMapping.length; ++i) {
             final int btnColor = selectionStates[i] ? getResources().getColor(R.color.vote_button_selected) : getResources().getColor(unselectedColor);
             voteMapping[i].setBackgroundColor(btnColor);
@@ -229,7 +250,7 @@ public class StudentLiveAnswerFragment extends Fragment {
 
         // there was (at least) one selection, so "sending" is enabled
         sendButton.setEnabled(isAtLeastOneSelected());
-    }
+    }*/
 
     /**
      * Returns the current model state. Can be "VOTE_NONE" if no selection was done
@@ -285,12 +306,12 @@ public class StudentLiveAnswerFragment extends Fragment {
 
 
 
-            sendBtnUIFeedback = new AnimationDrawable();
+         /*   sendBtnUIFeedback = new AnimationDrawable();
             sendBtnUIFeedback.addFrame(new ColorDrawable(getResources().getColor(R.color.vote_button_selected)), 110);
             sendBtnUIFeedback.addFrame(new ColorDrawable(getResources().getColor(unselectedColor)), 10); // back to unselected
-            sendBtnUIFeedback.setOneShot(true);
+            sendBtnUIFeedback.setOneShot(true);*/
 
-            updateUI();
+            //updateUI();
 
         } catch (Exception e) {
             Log.d(LOG_TAG, "gui setup failed in vote fragment");
