@@ -120,4 +120,13 @@ public class SessionListFragment extends Fragment implements OnMoreListener, Swi
     public void onRefresh() {
         initializeData();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // always present current data
+        Log.d(getClass().getSimpleName(), "refreshed data on resume");
+        onRefresh();
+    }
 }
