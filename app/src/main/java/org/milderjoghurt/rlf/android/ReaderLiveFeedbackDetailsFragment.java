@@ -36,6 +36,9 @@ public class ReaderLiveFeedbackDetailsFragment extends Fragment {
         }
     }
     public void updateView(int speed, int understandability){
+        if (getView() == null) {
+            return;
+        }
         SeekBar speedbar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_speed);
         speedbar.setProgress(speed);
         SeekBar understandbar = (SeekBar) getView().findViewById(R.id.feedback_seekbar_understandability);
