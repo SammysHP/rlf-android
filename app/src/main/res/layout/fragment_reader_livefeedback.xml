@@ -57,4 +57,15 @@
         android:clickable="true"
         android:src="@drawable/ic_dismiss_raised_hand"
         android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/reader_feedback_dismiss_break"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:clickable="true"
+        android:visibility="gone"
+        android:text="Pause!"
+        android:textSize="32dp" />
 </org.milderjoghurt.rlf.android.ui.SquareRelativeLayout>

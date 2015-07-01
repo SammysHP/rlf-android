@@ -47,6 +47,7 @@ public class ApiConnector {
 
     // ueber diese zeit lang ist eine "meldung" (hand heben im feedback) auf dem server gueltig
     public static final int VALID_DURATION_OF_SIGNALLING_MILLIS = 30 * 1000;
+    public static final int VALID_DURATION_OF_BREAK_SIGNALLING_MILLIS = 30 * 1000;
 
     private ApiConnector() {
         // Do not instantiate
