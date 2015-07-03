@@ -41,8 +41,9 @@ public class StudentLiveFeedbackFragment extends Fragment {
     private Button signal_btn;
     private Button break_btn;
     private boolean breakIsPressed = false;
-    private Timer break_timer = new Timer();
     private Timer signal_timer = new Timer();
+    private Timer break_timer = new Timer();
+    private long lastBreakRequest = 0;
     private Button feedback_btn;
     private VerticalSeekBar speedBar;
     private VerticalSeekBar understandBar;
@@ -88,7 +89,6 @@ public class StudentLiveFeedbackFragment extends Fragment {
         if (isBtnPressed) {
             breakBtn.setBackgroundColor((getResources().getColor(R.color.vote_button_selected)));
         } else {
-            breakBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundedbutton));
             breakBtn.setBackgroundColor(Color.LTGRAY);
         }
     }
@@ -103,25 +103,30 @@ public class StudentLiveFeedbackFragment extends Fragment {
         understandBar = (VerticalSeekBar) getView().findViewById(R.id.understandBar);
         lastFeedbackView = (TextView) getView().findViewById(R.id.textView2);
 
-
-        View vv = getView().findViewById(R.id.btnBreak);
-
-        if(vv == null)
-            Log.e("affaf", "break is null");
-
         break_btn = (Button) getView().findViewById(R.id.btnBreak);
         break_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                breakIsPressed = !breakIsPressed;
 
-                if(currentSession == null)
-                {
+                if (currentSession == null) {
                     Log.e("rlf-android", "session for anwering invalid");
                     return;
                 }
 
-                if(breakIsPressed) {
+                // a request for a break cannot be done once and once again (--> cooldown!)
+                final long currentBreakRequestTime = System.currentTimeMillis();
+                if (currentBreakRequestTime - lastBreakRequest < ApiConnector.VALID_DURATION_OF_BREAK_SIGNALLING_MILLIS) {
+                    return;
+                }
+
+                breakIsPressed = !breakIsPressed;
+
+                // when switching to pressed state ...
+                if (breakIsPressed) {
+
+                    // update state
+                    lastBreakRequest = currentBreakRequestTime;
+
                     break_timer.cancel(); // abort previous tasks (if any)
                     break_timer.purge();
                     break_timer = new Timer();
@@ -140,6 +145,7 @@ public class StudentLiveFeedbackFragment extends Fragment {
 
                         }
                     }, ApiConnector.VALID_DURATION_OF_BREAK_SIGNALLING_MILLIS);
+
 
                     // assumption: the signalling of a break will be invalid on the server after some time
                     // so only the requests have to be transmitted
@@ -163,20 +169,12 @@ public class StudentLiveFeedbackFragment extends Fragment {
                             //Toast.makeText(getActivity().getApplicationContext(), "Feedback gesendet!", Toast.LENGTH_SHORT).show();
                         }
                     });
-                } else {
-                    // btn was manually deactivated
-                    break_timer.cancel();
-                    break_timer.purge();
                 }
 
 
                 executeBreakSignallingButtonUILogic(breakIsPressed, break_btn);
-
-
-
-
-                }
-            });
+            }
+        });
 
         //Buttons
         signal_btn = (Button) getView().findViewById(R.id.signal);

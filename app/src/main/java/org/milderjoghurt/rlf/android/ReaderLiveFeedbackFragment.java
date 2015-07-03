@@ -26,6 +26,7 @@ import org.milderjoghurt.rlf.android.models.Vote;
 import org.milderjoghurt.rlf.android.net.ApiConnector;
 import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 
+
 import java.lang.ref.WeakReference;
 
 /**
@@ -54,7 +55,7 @@ public class ReaderLiveFeedbackFragment extends Fragment {
                     fragment.setFeedbackState(FeedbackState.NEGATIVE);
                 }
                 fragment.setRequestState(msg.getData().getInt("Request") > 0);
-                fragment.setRequestBreakState(msg.getData().getInt("Break") > 0);
+                fragment.setRequestBreakState(msg.getData().getInt("Break"));
                 fragment.setUserCount(msg.getData().getInt("Count"));
             }else{
                 fragment.setFeedbackState(FeedbackState.INACTIVE);
@@ -84,7 +85,7 @@ public class ReaderLiveFeedbackFragment extends Fragment {
 
     private FeedbackState activeFeedbackState = FeedbackState.INACTIVE;
     private boolean requestActive = false;
-    private boolean requestBreakActive = true;
+    private int breakRequests = 0;
     private String sessionId;
     private Session activeSession;
 
@@ -122,7 +123,7 @@ public class ReaderLiveFeedbackFragment extends Fragment {
                 ApiConnector.createVote(activeSession, vote, ApiConnector.getOwnerId(view.getContext()), new ApiResponseHandler<Vote>() {
                     @Override
                     public void onSuccess(Vote model) {
-                        requestBreakActive = false;
+                        breakRequests = 0;
                     }
 
                     @Override
@@ -228,10 +229,10 @@ public class ReaderLiveFeedbackFragment extends Fragment {
      * <p/>
      * Setting this to true will show a message that someone requests a break.
      *
-     * @param enabled Whether someone requests a break
+     * @param count Amount of requests for a break
      */
-    private void setRequestBreakState(final boolean enabled) {
-        requestBreakActive = enabled;
+    private void setRequestBreakState(final int count) {
+        breakRequests = count;
         updateView();
     }
 
@@ -261,14 +262,22 @@ public class ReaderLiveFeedbackFragment extends Fragment {
 //            background.setBackgroundResource(activeFeedbackState.color);
         }
 
+        // if the amount of requests for a break is greater than a threshold
+        // then raise some GUI feedback (amount might also be displayed)
         View dismissBreak = getView().findViewById(R.id.reader_feedback_dismiss_break);
-        if(requestBreakActive) {
+        Log.d(getClass().getSimpleName(), "break count: " + breakRequests);
+        if(breakRequests > 4) {
             dismissBreak.setVisibility(View.VISIBLE);
+
+            if(dismissBreak instanceof TextView) {
+                TextView breakText = (TextView) dismissBreak;
+                breakText.setText("Pause gewuenscht:" + breakRequests);
+            }
         } else {
             dismissBreak.setVisibility(View.GONE);
         }
 
-        if(requestActive || requestBreakActive) {
+        if(requestActive) {
             AnimationDrawable animator = new AnimationDrawable();
             animator.addFrame(new ColorDrawable(getResources().getColor(R.color.reader_livefeedback_request)), FLASH_DURATION);
             animator.addFrame(new ColorDrawable(getResources().getColor(activeFeedbackState.color)), FLASH_DURATION);

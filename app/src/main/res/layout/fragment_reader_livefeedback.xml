@@ -66,6 +66,6 @@
         android:layout_alignParentTop="true"
         android:clickable="true"
         android:visibility="gone"
-        android:text="Pause!"
+        android:text="Pause gewünscht"
         android:textSize="32dp" />
 </org.milderjoghurt.rlf.android.ui.SquareRelativeLayout>
