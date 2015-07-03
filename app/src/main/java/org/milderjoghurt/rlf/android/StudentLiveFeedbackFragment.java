@@ -39,6 +39,9 @@ public class StudentLiveFeedbackFragment extends Fragment {
     private Session currentSession;
     private boolean isPressed = false;
     private Button signal_btn;
+    private Button break_btn;
+    private boolean breakIsPressed = false;
+    private Timer break_timer = new Timer();
     private Timer signal_timer = new Timer();
     private Button feedback_btn;
     private VerticalSeekBar speedBar;
@@ -81,6 +84,15 @@ public class StudentLiveFeedbackFragment extends Fragment {
         }
     }
 
+    private void executeBreakSignallingButtonUILogic(boolean isBtnPressed, Button breakBtn) {
+        if (isBtnPressed) {
+            breakBtn.setBackgroundColor((getResources().getColor(R.color.vote_button_selected)));
+        } else {
+            breakBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundedbutton));
+            breakBtn.setBackgroundColor(Color.LTGRAY);
+        }
+    }
+
     public void onActivityCreated(Bundle savedInstance) {
         super.onActivityCreated(savedInstance);
 
@@ -92,9 +104,81 @@ public class StudentLiveFeedbackFragment extends Fragment {
         lastFeedbackView = (TextView) getView().findViewById(R.id.textView2);
 
 
+        View vv = getView().findViewById(R.id.btnBreak);
+
+        if(vv == null)
+            Log.e("affaf", "break is null");
+
+        break_btn = (Button) getView().findViewById(R.id.btnBreak);
+        break_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                breakIsPressed = !breakIsPressed;
+
+                if(currentSession == null)
+                {
+                    Log.e("rlf-android", "session for anwering invalid");
+                    return;
+                }
+
+                if(breakIsPressed) {
+                    break_timer.cancel(); // abort previous tasks (if any)
+                    break_timer.purge();
+                    break_timer = new Timer();
+                    final Button currentBtnTarget = break_btn;
+                    final Handler hl = new Handler();
+                    break_timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            // thread-safety for gui elements ...
+                            hl.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    currentBtnTarget.callOnClick(); // execute complete logic for model consistency
+                                }
+                            });
+
+                        }
+                    }, ApiConnector.VALID_DURATION_OF_BREAK_SIGNALLING_MILLIS);
+
+                    // assumption: the signalling of a break will be invalid on the server after some time
+                    // so only the requests have to be transmitted
+                    Vote vote = new Vote(Vote.Type.BREAK, 1);
+                    ApiConnector.createVote(currentSession, vote, ApiConnector.getOwnerId(getActivity().getApplicationContext()), new ApiResponseHandler<Vote>() {
+
+                        @Override
+                        public void onFailure(Throwable e) {
+                            //Log.e("rlf-android", e.toString());
+                            if (e instanceof SessionNotOpenException) {
+                                Toast.makeText(getActivity().getApplicationContext(), "Die Sitzung wurde bereits geschlossen!", Toast.LENGTH_LONG).show();
+                                getActivity().finish();
+                            } else {
+                                Toast.makeText(getActivity().getApplicationContext(), "Fehler, Auswahl wurde nicht akzeptiert!", Toast.LENGTH_SHORT).show();
+                                Log.e("rlf-android", "########### " + e.toString());
+                            }
+                        }
+
+                        @Override
+                        public void onSuccess(Vote v) {
+                            //Toast.makeText(getActivity().getApplicationContext(), "Feedback gesendet!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    // btn was manually deactivated
+                    break_timer.cancel();
+                    break_timer.purge();
+                }
+
+
+                executeBreakSignallingButtonUILogic(breakIsPressed, break_btn);
+
+
+
+
+                }
+            });
 
         //Buttons
-
         signal_btn = (Button) getView().findViewById(R.id.signal);
 
         signal_btn.setOnClickListener(new View.OnClickListener() {
@@ -130,24 +214,6 @@ public class StudentLiveFeedbackFragment extends Fragment {
                     signal_timer.cancel();
                     signal_timer.purge();
                 }
-
-
-
-               // Runnable mRunnable;
-               // Handler mHandler=new Handler();
-
-         /*       mRunnable=new Runnable() {
-
-                    @Override
-                    public void run() {
-                        // TODO Auto-generated method stub
-                        // yourLayoutObject.setVisibility(View.INVISIBLE); //If you want just hide the View. But it will retain space occupied by the View.
-                        // yourLayoutObject.setVisibility(View.GONE); //This will remove the View. and free s the space occupied by the View
-                    }
-                };*/
-
-
-
 
                 Vote vote = new Vote(Vote.Type.REQUEST, 0);
 
@@ -204,8 +270,7 @@ public class StudentLiveFeedbackFragment extends Fragment {
                 Vote voteUnderstandabillity = new Vote(Vote.Type.UNDERSTANDABILITY, (understandabillity));
 
 
-                if(currentSession == null)
-                {
+                if (currentSession == null) {
                     Log.e("rlf-android", "session for anwering invalid");
                     return;
                 }
@@ -215,10 +280,10 @@ public class StudentLiveFeedbackFragment extends Fragment {
                     @Override
                     public void onFailure(Throwable e) {
                         //Log.e("rlf-android", e.toString());
-                        if(e instanceof SessionNotOpenException) {
+                        if (e instanceof SessionNotOpenException) {
                             Toast.makeText(getActivity().getApplicationContext(), "Die Sitzung wurde bereits geschlossen!", Toast.LENGTH_LONG).show();
                             getActivity().finish();
-                        }else {
+                        } else {
 
                             Toast.makeText(getActivity().getApplicationContext(), "Fehler, Auswahl wurde nicht akzeptiert!", Toast.LENGTH_SHORT).show();
                             Log.e("rlf-android", e.toString());
@@ -238,10 +303,10 @@ public class StudentLiveFeedbackFragment extends Fragment {
                     public void onFailure(Throwable e) {
                         //Log.e("rlf-android", e.toString());
 
-                        if(e instanceof SessionNotOpenException) {
+                        if (e instanceof SessionNotOpenException) {
                             Toast.makeText(getActivity().getApplicationContext(), "Die Sitzung wurde bereits geschlossen!", Toast.LENGTH_LONG).show();
                             getActivity().finish();
-                        }else {
+                        } else {
                             Toast.makeText(getActivity().getApplicationContext(), "Fehler, Auswahl wurde nicht akzeptiert!", Toast.LENGTH_SHORT).show();
                             Log.e("rlf-android", e.toString());
                         }

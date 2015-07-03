@@ -18,6 +18,7 @@ public class VoteStats {
         UNDERSTANDABILITY,
         REQUEST,
         CURRENTUSERS,
+        BREAK,
     }
 
     public VoteStats() {

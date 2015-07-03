@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,7 @@ public class ReaderLiveFeedbackFragment extends Fragment {
                     fragment.setFeedbackState(FeedbackState.NEGATIVE);
                 }
                 fragment.setRequestState(msg.getData().getInt("Request") > 0);
+                fragment.setRequestBreakState(msg.getData().getInt("Break") > 0);
                 fragment.setUserCount(msg.getData().getInt("Count"));
             }else{
                 fragment.setFeedbackState(FeedbackState.INACTIVE);
@@ -82,6 +84,7 @@ public class ReaderLiveFeedbackFragment extends Fragment {
 
     private FeedbackState activeFeedbackState = FeedbackState.INACTIVE;
     private boolean requestActive = false;
+    private boolean requestBreakActive = true;
     private String sessionId;
     private Session activeSession;
 
@@ -109,6 +112,29 @@ public class ReaderLiveFeedbackFragment extends Fragment {
                 updateView();
             }
         });
+
+        // deactivation of request for a break (quite equal to behavior of "request")
+        View dismissBreakButton = view.findViewById(R.id.reader_feedback_dismiss_break);
+        dismissBreakButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Vote vote = new Vote(Vote.Type.BREAK, -1);
+                ApiConnector.createVote(activeSession, vote, ApiConnector.getOwnerId(view.getContext()), new ApiResponseHandler<Vote>() {
+                    @Override
+                    public void onSuccess(Vote model) {
+                        requestBreakActive = false;
+                    }
+
+                    @Override
+                    public void onFailure(Throwable e) {
+                        Toast.makeText(getActivity(), "Fehler: " + e.toString(), Toast.LENGTH_LONG).show();
+                        Log.e("dismissbreak", "TESTDISMISSBREAK: " + e.toString());
+                    }
+                });
+                updateView();
+            }
+        });
+
         final Switch OpenSwitch = (Switch) view.findViewById(R.id.swtSessionOpen);
         OpenSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -158,7 +184,7 @@ public class ReaderLiveFeedbackFragment extends Fragment {
         super.onResume();
         updateView();
         Intent serviceIntent = new Intent(getActivity(),ReaderUpdateService.class);
-        serviceIntent.putExtra("sessionId",sessionId);
+        serviceIntent.putExtra("sessionId", sessionId);
         getActivity().bindService(serviceIntent, updConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -198,6 +224,18 @@ public class ReaderLiveFeedbackFragment extends Fragment {
     }
 
     /**
+     * Set request state.
+     * <p/>
+     * Setting this to true will show a message that someone requests a break.
+     *
+     * @param enabled Whether someone requests a break
+     */
+    private void setRequestBreakState(final boolean enabled) {
+        requestBreakActive = enabled;
+        updateView();
+    }
+
+    /**
      * Update the view with current feedback and request states.
      */
     private void updateView() {
@@ -210,15 +248,34 @@ public class ReaderLiveFeedbackFragment extends Fragment {
         View dismissButton = getView().findViewById(R.id.reader_feedback_dismiss);
 
         if (requestActive) {
+//            AnimationDrawable animator = new AnimationDrawable();
+//            animator.addFrame(new ColorDrawable(getResources().getColor(R.color.reader_livefeedback_request)), FLASH_DURATION);
+//            animator.addFrame(new ColorDrawable(getResources().getColor(activeFeedbackState.color)), FLASH_DURATION);
+//            animator.setOneShot(false);
+//            background.setBackground(animator);
+//            animator.start();
+            dismissButton.setVisibility(View.VISIBLE);
+        } else {
+            dismissButton.setVisibility(View.GONE);
+//            background.setBackground(null);
+//            background.setBackgroundResource(activeFeedbackState.color);
+        }
+
+        View dismissBreak = getView().findViewById(R.id.reader_feedback_dismiss_break);
+        if(requestBreakActive) {
+            dismissBreak.setVisibility(View.VISIBLE);
+        } else {
+            dismissBreak.setVisibility(View.GONE);
+        }
+
+        if(requestActive || requestBreakActive) {
             AnimationDrawable animator = new AnimationDrawable();
             animator.addFrame(new ColorDrawable(getResources().getColor(R.color.reader_livefeedback_request)), FLASH_DURATION);
             animator.addFrame(new ColorDrawable(getResources().getColor(activeFeedbackState.color)), FLASH_DURATION);
             animator.setOneShot(false);
             background.setBackground(animator);
             animator.start();
-            dismissButton.setVisibility(View.VISIBLE);
         } else {
-            dismissButton.setVisibility(View.GONE);
             background.setBackground(null);
             background.setBackgroundResource(activeFeedbackState.color);
         }

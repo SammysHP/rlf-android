@@ -23,6 +23,7 @@ public class Vote {
 		SPEED,
 		UNDERSTANDABILITY,
 		REQUEST,
+		BREAK,
 	}
 
 	public Vote() {

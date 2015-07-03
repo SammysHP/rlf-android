@@ -61,6 +61,8 @@ public class ReaderUpdateService extends Service {
                                     bundle.putInt("Count", v.value);
                                 if (v.type == VoteStats.Type.REQUEST)
                                     bundle.putInt("Request", v.value);
+                                if (v.type == VoteStats.Type.BREAK)
+                                    bundle.putInt("Break", v.value);
                                 if (v.type == VoteStats.Type.SPEED)
                                     bundle.putInt("Speed", v.value);
                                 if (v.type == VoteStats.Type.UNDERSTANDABILITY)
