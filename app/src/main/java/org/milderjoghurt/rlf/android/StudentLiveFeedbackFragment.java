@@ -27,6 +27,8 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static org.milderjoghurt.rlf.android.R.drawable.roundedbutton;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -76,7 +78,7 @@ public class StudentLiveFeedbackFragment extends Fragment {
             signalBtn.setText("Hand senken");
         } else {
             // signal_btn.setBackground(getResources().getDrawable(R.drawable.roundedbutton));
-            signalBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundedbutton));
+            signalBtn.setBackgroundDrawable(getResources().getDrawable(roundedbutton));
             signalBtn.setBackgroundColor(Color.LTGRAY);
             signalBtn.setText("Hand heben");
             //signal_btn.setBackgroundResource(android.R.drawable.btn_default);
@@ -98,6 +100,11 @@ public class StudentLiveFeedbackFragment extends Fragment {
         //Buttons
 
         signal_btn = (Button) getView().findViewById(R.id.signal);
+
+        //TODO
+        //Setting the Button Background for eyecandy
+        //signal_btn.setBackgroundResource(R.drawable.roundedbutton);
+
         signal_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,6 +196,7 @@ public class StudentLiveFeedbackFragment extends Fragment {
 
 
         feedback_btn = (Button) getView().findViewById(R.id.sendFeedback);
+        feedback_btn.setText("Feedback" + System.getProperty("line.separator") + "senden");
 
         feedback_btn.setOnClickListener(new View.OnClickListener() {
             @Override

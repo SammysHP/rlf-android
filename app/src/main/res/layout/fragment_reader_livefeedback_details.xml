@@ -30,7 +30,8 @@
             android:progress="50"
             android:progressDrawable="@drawable/seekbar_npn"
             android:splitTrack="false"
-            android:thumb="@drawable/seekbar_arrows" />
+            android:thumb="@drawable/seekbar_arrows"
+            android:thumbOffset="1dp" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -62,7 +63,8 @@
             android:progress="100"
             android:progressDrawable="@drawable/seekbar_pn"
             android:splitTrack="false"
-            android:thumb="@drawable/seekbar_arrows" />
+            android:thumb="@drawable/seekbar_arrows"
+            android:thumbOffset="1dp" />
 
         <ImageView
             android:layout_width="wrap_content"
