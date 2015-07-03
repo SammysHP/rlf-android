@@ -73,15 +73,11 @@ public class StudentLiveFeedbackFragment extends Fragment {
 
     private void executeSignallingButtonUILogic(boolean isBtnPressed, Button signalBtn) {
         if (isBtnPressed) {
-            //(getResources().getDrawable(R.drawable.roundedbutton));
             signalBtn.setBackgroundColor((getResources().getColor(R.color.vote_button_selected)));
             signalBtn.setText("Hand senken");
         } else {
-            // signal_btn.setBackground(getResources().getDrawable(R.drawable.roundedbutton));
-            signalBtn.setBackgroundDrawable(getResources().getDrawable(roundedbutton));
             signalBtn.setBackgroundColor(Color.LTGRAY);
             signalBtn.setText("Hand heben");
-            //signal_btn.setBackgroundResource(android.R.drawable.btn_default);
         }
     }
 
@@ -100,10 +96,6 @@ public class StudentLiveFeedbackFragment extends Fragment {
         //Buttons
 
         signal_btn = (Button) getView().findViewById(R.id.signal);
-
-        //TODO
-        //Setting the Button Background for eyecandy
-        //signal_btn.setBackgroundResource(R.drawable.roundedbutton);
 
         signal_btn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -6,11 +6,10 @@
         android:color="#ff000000" />
 
 
-    <solid android:color="@color/highlighted_text_material_light" />
     <corners android:bottomRightRadius="45dip"
         android:bottomLeftRadius="45dip"
         android:topRightRadius="45dip"
         android:topLeftRadius="45dip"
         android:radius="45dip"/>
-    
+
 </shape>

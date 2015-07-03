@@ -111,19 +111,17 @@
     </LinearLayout>
 
     <Button
-        style="@style/RoundButton"
         android:layout_width="120dp"
         android:layout_height="90dp"
         android:text="Hand heben"
         android:textSize="25dp"
         android:id="@+id/signal"
         android:layout_gravity="center_horizontal"
-        android:background="@drawable/roundedbutton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp" />
-    <!--android:background="@drawable/roundedbutton"-->
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
