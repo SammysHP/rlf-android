@@ -40,7 +40,6 @@ public class StudentLiveFeedbackFragment extends Fragment {
     private boolean breakIsPressed = false;
     private Timer signal_timer = new Timer();
     private Timer break_timer = new Timer();
-    private long lastBreakRequest = 0;
     private Button feedback_btn;
     private VerticalSeekBar speedBar;
     private VerticalSeekBar understandBar;
@@ -109,25 +108,20 @@ public class StudentLiveFeedbackFragment extends Fragment {
                     return;
                 }
 
-                // a request for a break cannot be done once and once again (--> cooldown!)
-                final long currentBreakRequestTime = System.currentTimeMillis();
-                if (currentBreakRequestTime - lastBreakRequest < ApiConnector.VALID_DURATION_OF_BREAK_SIGNALLING_MILLIS) {
-                    return;
-                }
-
                 breakIsPressed = !breakIsPressed;
+
+                break_timer.cancel(); // abort previous tasks (if any)
+                break_timer.purge();
 
                 // when switching to pressed state ...
                 if (breakIsPressed) {
 
-                    // update state
-                    lastBreakRequest = currentBreakRequestTime;
-
-                    break_timer.cancel(); // abort previous tasks (if any)
-                    break_timer.purge();
-                    break_timer = new Timer();
                     final Button currentBtnTarget = break_btn;
                     final Handler hl = new Handler();
+
+                    break_timer = new Timer();
+                    // do automatically deactivate this request to prevent raising numbers of
+                    // break requests due to inactive students
                     break_timer.schedule(new TimerTask() {
                         @Override
                         public void run() {
@@ -138,34 +132,33 @@ public class StudentLiveFeedbackFragment extends Fragment {
                                     currentBtnTarget.callOnClick(); // execute complete logic for model consistency
                                 }
                             });
-
                         }
                     }, ApiConnector.VALID_DURATION_OF_BREAK_SIGNALLING_MILLIS);
-
-
-                    // assumption: the signalling of a break will be invalid on the server after some time
-                    // so only the requests have to be transmitted
-                    Vote vote = new Vote(Vote.Type.BREAK, 1);
-                    ApiConnector.createVote(currentSession, vote, ApiConnector.getOwnerId(getActivity().getApplicationContext()), new ApiResponseHandler<Vote>() {
-
-                        @Override
-                        public void onFailure(Throwable e) {
-                            //Log.e("rlf-android", e.toString());
-                            if (e instanceof SessionNotOpenException) {
-                                Toast.makeText(getActivity().getApplicationContext(), "Die Sitzung wurde bereits geschlossen!", Toast.LENGTH_LONG).show();
-                                getActivity().finish();
-                            } else {
-                                Toast.makeText(getActivity().getApplicationContext(), "Fehler, Auswahl wurde nicht akzeptiert!", Toast.LENGTH_SHORT).show();
-                                Log.e("rlf-android", "########### " + e.toString());
-                            }
-                        }
-
-                        @Override
-                        public void onSuccess(Vote v) {
-                            //Toast.makeText(getActivity().getApplicationContext(), "Feedback gesendet!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
                 }
+
+                // send positive/negative numbers as state information to the server
+                // first press will always send a positive number, so sending a number on every call should be valid
+                // and result in a "0" when deactivating the request button
+                Vote vote = new Vote(Vote.Type.BREAK, breakIsPressed ? 1 : -1);
+                ApiConnector.createVote(currentSession, vote, ApiConnector.getOwnerId(getActivity().getApplicationContext()), new ApiResponseHandler<Vote>() {
+
+                    @Override
+                    public void onFailure(Throwable e) {
+                        //Log.e("rlf-android", e.toString());
+                        if (e instanceof SessionNotOpenException) {
+                            Toast.makeText(getActivity().getApplicationContext(), "Die Sitzung wurde bereits geschlossen!", Toast.LENGTH_LONG).show();
+                            getActivity().finish();
+                        } else {
+                            Toast.makeText(getActivity().getApplicationContext(), "Fehler, Auswahl wurde nicht akzeptiert!", Toast.LENGTH_SHORT).show();
+                            Log.e("rlf-android", "########### " + e.toString());
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(Vote v) {
+                        //Toast.makeText(getActivity().getApplicationContext(), "Feedback gesendet!", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
 
                 executeBreakSignallingButtonUILogic(breakIsPressed, break_btn);
