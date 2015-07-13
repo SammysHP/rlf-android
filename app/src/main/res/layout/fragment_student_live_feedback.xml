@@ -125,8 +125,9 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="1"
+            android:background="@drawable/answer_button_bg"
             android:text="PAUSE"
-            android:textSize="25dp" />
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/signal"
@@ -134,8 +135,9 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="1"
+            android:background="@drawable/answer_button_bg"
             android:text="Hand heben"
-            android:textSize="25dp" />
+            android:textSize="20sp" />
     </LinearLayout>
 
 </LinearLayout>

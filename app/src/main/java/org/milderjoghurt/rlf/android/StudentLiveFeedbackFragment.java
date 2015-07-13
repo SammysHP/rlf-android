@@ -2,7 +2,6 @@ package org.milderjoghurt.rlf.android;
 
 
 import android.app.Fragment;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -27,8 +26,6 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static org.milderjoghurt.rlf.android.R.drawable.roundedbutton;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -48,7 +45,6 @@ public class StudentLiveFeedbackFragment extends Fragment {
     private VerticalSeekBar speedBar;
     private VerticalSeekBar understandBar;
     private TextView lastFeedbackView;
-    private static final int unselectedColor = R.color.button_material_light;
 
 
     public StudentLiveFeedbackFragment() {
@@ -77,19 +73,19 @@ public class StudentLiveFeedbackFragment extends Fragment {
 
     private void executeSignallingButtonUILogic(boolean isBtnPressed, Button signalBtn) {
         if (isBtnPressed) {
-            signalBtn.setBackgroundColor((getResources().getColor(R.color.vote_button_selected)));
+            signalBtn.setActivated(true);
             signalBtn.setText("Hand senken");
         } else {
-            signalBtn.setBackgroundColor(Color.LTGRAY);
+            signalBtn.setActivated(false);
             signalBtn.setText("Hand heben");
         }
     }
 
     private void executeBreakSignallingButtonUILogic(boolean isBtnPressed, Button breakBtn) {
         if (isBtnPressed) {
-            breakBtn.setBackgroundColor((getResources().getColor(R.color.vote_button_selected)));
+            breakBtn.setActivated(true);
         } else {
-            breakBtn.setBackgroundColor(Color.LTGRAY);
+            breakBtn.setActivated(false);
         }
     }
 
