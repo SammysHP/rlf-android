@@ -2,16 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="1">
-
+    android:orientation="vertical">
 
     <fragment
         android:id="@+id/fragment_student_live_feedback"
         android:name="org.milderjoghurt.rlf.android.StudentLiveFeedbackFragment"
         android:layout_width="match_parent"
-        android:layout_height="281dp"
-        tools:layout="@layout/fragment_student_live_feedback"
-        android:layout_weight="0.74" />
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_student_live_feedback" />
 
 </LinearLayout>
