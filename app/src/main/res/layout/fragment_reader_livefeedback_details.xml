@@ -26,11 +26,11 @@
             android:layout_weight="1"
             android:enabled="false"
             android:max="100"
-            android:maxHeight="20dp"
+            android:maxHeight="26dp"
             android:progress="50"
             android:progressDrawable="@drawable/seekbar_npn"
             android:splitTrack="false"
-            android:thumb="@drawable/seekbar_arrows"
+            android:thumb="@drawable/seekbar_marker"
             android:thumbOffset="1dp" />
 
         <ImageView
@@ -59,11 +59,11 @@
             android:layout_weight="1"
             android:enabled="false"
             android:max="100"
-            android:maxHeight="20dp"
+            android:maxHeight="26dp"
             android:progress="100"
             android:progressDrawable="@drawable/seekbar_pn"
             android:splitTrack="false"
-            android:thumb="@drawable/seekbar_arrows"
+            android:thumb="@drawable/seekbar_marker"
             android:thumbOffset="1dp" />
 
         <ImageView
