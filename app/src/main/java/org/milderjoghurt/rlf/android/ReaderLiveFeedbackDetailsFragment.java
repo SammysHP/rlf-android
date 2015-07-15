@@ -25,17 +25,19 @@ public class ReaderLiveFeedbackDetailsFragment extends Fragment {
         public MyHandler(ReaderLiveFeedbackDetailsFragment fragment) {
             mFragment = new WeakReference<>(fragment);
         }
+
         @Override
         public void handleMessage(Message msg) {
             ReaderLiveFeedbackDetailsFragment fragment = mFragment.get();
-            if(fragment!=null && msg.getData().getInt("Open") !=0) {
+            if (fragment != null && msg.getData().getInt("Open") != 0) {
                 int avgspeed = msg.getData().getInt("Speed");
                 int avgunderstandable = msg.getData().getInt("Understandability");
-                fragment.updateView(avgspeed,avgunderstandable);
+                fragment.updateView(avgspeed, avgunderstandable);
             }
         }
     }
-    public void updateView(int speed, int understandability){
+
+    public void updateView(int speed, int understandability) {
         if (getView() == null) {
             return;
         }
@@ -86,8 +88,8 @@ public class ReaderLiveFeedbackDetailsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Intent serviceIntent = new Intent(getActivity(),ReaderUpdateService.class);
-        serviceIntent.putExtra("sessionId",getActivity().getIntent().getStringExtra("sessionId"));
+        Intent serviceIntent = new Intent(getActivity(), ReaderUpdateService.class);
+        serviceIntent.putExtra("sessionId", getActivity().getIntent().getStringExtra("sessionId"));
         getActivity().bindService(serviceIntent, updConnection, Context.BIND_AUTO_CREATE);
     }
 

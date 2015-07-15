@@ -26,12 +26,11 @@ import org.milderjoghurt.rlf.android.models.Vote;
 import org.milderjoghurt.rlf.android.net.ApiConnector;
 import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
 
-
 import java.lang.ref.WeakReference;
 
 /**
  * Feedback indicator.
- * <p/>
+ * <p>
  * This will show a square area which indicates the current feedback and request state. Feedback will be displayed in different colors as smileys, request state by flashing colors.
  */
 public class ReaderLiveFeedbackFragment extends Fragment {
@@ -42,10 +41,11 @@ public class ReaderLiveFeedbackFragment extends Fragment {
         public MyHandler(ReaderLiveFeedbackFragment fragment) {
             mFragment = new WeakReference<>(fragment);
         }
+
         @Override
         public void handleMessage(Message msg) {
             ReaderLiveFeedbackFragment fragment = mFragment.get();
-            if(fragment != null && fragment.activeSession != null && fragment.activeSession.open) {
+            if (fragment != null && fragment.activeSession != null && fragment.activeSession.open) {
                 int curStatus = msg.getData().getInt("All");
                 if (curStatus > 66) {
                     fragment.setFeedbackState(FeedbackState.POSITIVE);
@@ -57,7 +57,7 @@ public class ReaderLiveFeedbackFragment extends Fragment {
                 fragment.setRequestState(msg.getData().getInt("Request") > 0);
                 fragment.setRequestBreakState(msg.getData().getInt("Break"));
                 fragment.setUserCount(msg.getData().getInt("Count"));
-            }else{
+            } else {
                 fragment.setFeedbackState(FeedbackState.INACTIVE);
             }
             fragment.updateView();
@@ -142,7 +142,7 @@ public class ReaderLiveFeedbackFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
                 if (!isChecked) {
                     setFeedbackState(FeedbackState.INACTIVE);
-                }else{
+                } else {
                     setFeedbackState(FeedbackState.NEUTRAL);
                 }
 
@@ -184,7 +184,7 @@ public class ReaderLiveFeedbackFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateView();
-        Intent serviceIntent = new Intent(getActivity(),ReaderUpdateService.class);
+        Intent serviceIntent = new Intent(getActivity(), ReaderUpdateService.class);
         serviceIntent.putExtra("sessionId", sessionId);
         getActivity().bindService(serviceIntent, updConnection, Context.BIND_AUTO_CREATE);
     }
@@ -197,8 +197,9 @@ public class ReaderLiveFeedbackFragment extends Fragment {
         super.onPause();
 
     }
+
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
     }
 
@@ -214,7 +215,7 @@ public class ReaderLiveFeedbackFragment extends Fragment {
 
     /**
      * Set request state.
-     * <p/>
+     * <p>
      * Setting this to true will show a message that someone requests to say something.
      *
      * @param enabled Whether someone requests to say something
@@ -226,7 +227,7 @@ public class ReaderLiveFeedbackFragment extends Fragment {
 
     /**
      * Set request state.
-     * <p/>
+     * <p>
      * Setting this to true will show a message that someone requests a break.
      *
      * @param count Amount of requests for a break
@@ -266,10 +267,10 @@ public class ReaderLiveFeedbackFragment extends Fragment {
         // then raise some GUI feedback (amount might also be displayed)
         View dismissBreak = getView().findViewById(R.id.reader_feedback_dismiss_break);
         Log.d(getClass().getSimpleName(), "break count: " + breakRequests);
-        if(breakRequests > 4) {
+        if (breakRequests > 4) {
             dismissBreak.setVisibility(View.VISIBLE);
 
-            if(dismissBreak instanceof TextView) {
+            if (dismissBreak instanceof TextView) {
                 TextView breakText = (TextView) dismissBreak;
                 breakText.setText("Pause gewuenscht:" + breakRequests);
             }
@@ -277,7 +278,7 @@ public class ReaderLiveFeedbackFragment extends Fragment {
             dismissBreak.setVisibility(View.GONE);
         }
 
-        if(requestActive) {
+        if (requestActive) {
             AnimationDrawable animator = new AnimationDrawable();
             animator.addFrame(new ColorDrawable(getResources().getColor(R.color.reader_livefeedback_request)), FLASH_DURATION);
             animator.addFrame(new ColorDrawable(getResources().getColor(activeFeedbackState.color)), FLASH_DURATION);
@@ -308,7 +309,7 @@ public class ReaderLiveFeedbackFragment extends Fragment {
 
     /**
      * States for the feedback view.
-     * <p/>
+     * <p>
      * POSITIVE represents an all-good situation (usually green with happy smiley), NEGATIVE a bad situation (red with sad smiley) and NEUTRAL something inbetween.
      */
     public enum FeedbackState {

@@ -16,13 +16,11 @@ import org.milderjoghurt.rlf.android.models.Session;
 import org.milderjoghurt.rlf.android.models.Vote;
 import org.milderjoghurt.rlf.android.net.ApiConnector;
 import org.milderjoghurt.rlf.android.net.ApiResponseHandler;
-import org.milderjoghurt.rlf.android.ui.VerticalSeekBar;
-
 import org.milderjoghurt.rlf.android.net.exceptions.SessionNotOpenException;
+import org.milderjoghurt.rlf.android.ui.VerticalSeekBar;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -94,7 +92,7 @@ public class StudentLiveFeedbackFragment extends Fragment {
 
         //Sliders und textView
 
-        speedBar =(VerticalSeekBar) getView().findViewById(R.id.speedBar);
+        speedBar = (VerticalSeekBar) getView().findViewById(R.id.speedBar);
         understandBar = (VerticalSeekBar) getView().findViewById(R.id.understandBar);
         lastFeedbackView = (TextView) getView().findViewById(R.id.textView2);
 
@@ -174,7 +172,7 @@ public class StudentLiveFeedbackFragment extends Fragment {
                 isPressed = !isPressed;
 
                 // configure a timer which automatically deactives the "melden" feature after a given interval
-                if(isPressed) {
+                if (isPressed) {
                     signal_timer.cancel(); // abort previous tasks (if any)
                     signal_timer.purge();
                     signal_timer = new Timer();
@@ -208,8 +206,7 @@ public class StudentLiveFeedbackFragment extends Fragment {
                 vote.value = isPressed ? 1 : -1;
 
 
-                if(currentSession == null)
-                {
+                if (currentSession == null) {
                     Log.e("rlf-android", "session for anwering invalid");
                     return;
                 }
@@ -219,10 +216,10 @@ public class StudentLiveFeedbackFragment extends Fragment {
                     @Override
                     public void onFailure(Throwable e) {
                         //Log.e("rlf-android", e.toString());
-                        if(e instanceof SessionNotOpenException) {
+                        if (e instanceof SessionNotOpenException) {
                             Toast.makeText(getActivity().getApplicationContext(), "Die Sitzung wurde bereits geschlossen!", Toast.LENGTH_LONG).show();
                             getActivity().finish();
-                        }else{
+                        } else {
 
                             Toast.makeText(getActivity().getApplicationContext(), "Fehler, Auswahl wurde nicht akzeptiert!", Toast.LENGTH_SHORT).show();
                             Log.e("rlf-android", e.toString());
@@ -237,7 +234,6 @@ public class StudentLiveFeedbackFragment extends Fragment {
 
             }
         });
-
 
 
         feedback_btn = (Button) getView().findViewById(R.id.sendFeedback);

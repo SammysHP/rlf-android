@@ -1,16 +1,13 @@
 package org.milderjoghurt.rlf.android;
 
-import android.graphics.Color;
-import android.graphics.drawable.AnimationDrawable;
-import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log; // for demonstration/testing
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-
 
 import org.milderjoghurt.rlf.android.models.QuestionAnswer;
 import org.milderjoghurt.rlf.android.models.Session;

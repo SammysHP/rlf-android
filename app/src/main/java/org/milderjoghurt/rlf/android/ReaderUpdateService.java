@@ -27,7 +27,7 @@ public class ReaderUpdateService extends Service {
         public void run() {
             if (updHandlers.size() < 1)
                 stopSelf();
-            if(sessionId.length() == 6) {
+            if (sessionId.length() == 6) {
                 ApiConnector.getSession(sessionId, new ApiResponseHandler<Session>() {
                     @Override
                     public void onSuccess(Session model) {
@@ -39,7 +39,7 @@ public class ReaderUpdateService extends Service {
                     }
                 });
             }
-            if(activeSession != null) {
+            if (activeSession != null) {
                 final Bundle bundle = new Bundle();
                 if (!activeSession.open) {
                     bundle.putInt("Open", 0);
@@ -82,13 +82,14 @@ public class ReaderUpdateService extends Service {
                     });
                 }
             }
-            if(updHandlers.size() > 0)
+            if (updHandlers.size() > 0)
                 ThreadHandler.postDelayed(updateThread, 5000); // every 5 seconds
         }
     };
 
     private final IBinder updBinder = new ReaderBinder();
     private static ArrayList<Handler> updHandlers = new ArrayList<Handler>();
+
     public ReaderUpdateService() {
     }
 
@@ -99,24 +100,29 @@ public class ReaderUpdateService extends Service {
     }
 
     @Override
-    public void onCreate(){
+    public void onCreate() {
         ThreadHandler.removeCallbacks(updateThread);
-        ThreadHandler.postDelayed(updateThread,1000);
+        ThreadHandler.postDelayed(updateThread, 1000);
     }
+
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
         return START_STICKY;
     }
-    public class ReaderBinder extends Binder{
-        public ReaderUpdateService getService(){
+
+    public class ReaderBinder extends Binder {
+        public ReaderUpdateService getService() {
             return ReaderUpdateService.this;
         }
-        public void setCallback(Handler ReaderUpdateHandler){
+
+        public void setCallback(Handler ReaderUpdateHandler) {
         }
-        public void addCallback(Handler ReaderUpdateHandler){
+
+        public void addCallback(Handler ReaderUpdateHandler) {
             updHandlers.add(ReaderUpdateHandler);
         }
-        public void removeCallbackHandler(Handler ReaderUpdateHandler){
+
+        public void removeCallbackHandler(Handler ReaderUpdateHandler) {
             updHandlers.remove(ReaderUpdateHandler);
         }
     }

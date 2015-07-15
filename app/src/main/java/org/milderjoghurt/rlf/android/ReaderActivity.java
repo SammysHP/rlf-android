@@ -23,7 +23,6 @@ public class ReaderActivity extends AppCompatActivity {
         setTitle(intent.getStringExtra("SessionId") + ": " + intent.getStringExtra("Titel"));
 
 
-
         // Enable "keep screen on" programmatically (independently of portrait/landscape layout)
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 

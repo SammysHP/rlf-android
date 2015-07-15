@@ -58,7 +58,7 @@ public class SessionListFragment extends Fragment implements OnMoreListener, Swi
 
     // Provide Dummy content
     private void initializeData() {
-        if(sessions == null)
+        if (sessions == null)
             sessions = new ArrayList<>();
 
         // get all available data from server
@@ -75,7 +75,7 @@ public class SessionListFragment extends Fragment implements OnMoreListener, Swi
             @Override
             public void onFailure(Throwable e) {
 
-                if(e instanceof IOException) {
+                if (e instanceof IOException) {
                     Toast.makeText(getActivity().getApplicationContext(), "Fehler bei der Netzwerkkommunikation!", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), "Fehler: " + e.getMessage(), Toast.LENGTH_LONG).show();

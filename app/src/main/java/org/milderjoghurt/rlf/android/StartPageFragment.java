@@ -1,7 +1,7 @@
 package org.milderjoghurt.rlf.android;
+
 import android.app.Fragment;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 public class StartPageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,6 +30,7 @@ public class StartPageFragment extends Fragment {
 
             public void afterTextChanged(Editable s) {
             }
+
             public void beforeTextChanged(CharSequence s, int start,
                                           int count, int after) {
             }
@@ -36,9 +38,9 @@ public class StartPageFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
                 if (((EditText) getView().findViewById(R.id.SessionID)).
-                        getText().toString().length() == 6){
+                        getText().toString().length() == 6) {
                     ((Button) view.findViewById(R.id.btnEnterSession)).setEnabled(true);
-                }else{
+                } else {
                     ((Button) view.findViewById(R.id.btnEnterSession)).setEnabled(false);
                 }
             }
@@ -67,10 +69,12 @@ public class StartPageFragment extends Fragment {
         });
         return view;
     }
+
     @Override
     public void onResume() {
         super.onResume();
     }
+
     private void enterSession() {
         Intent intent = new Intent(getView().getContext(), StudentLiveActivity.class);
         final EditText editText = (EditText) getView().findViewById(R.id.SessionID);
@@ -88,6 +92,7 @@ public class StartPageFragment extends Fragment {
             startActivity(intent);
         }
     }
+
     private void listSessions() {
         Intent intent = new Intent(getView().getContext(), SessionListActivity.class);
         getView().getContext().startActivity(intent);

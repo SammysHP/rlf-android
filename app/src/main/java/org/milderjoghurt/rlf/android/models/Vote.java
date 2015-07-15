@@ -7,31 +7,31 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Vote {
 
-	public Long id;
+    public Long id;
 
-	public Session session;
+    public Session session;
 
-	public String owner;
+    public String owner;
 
-	public Date date = new Date();
+    public Date date = new Date();
 
-	public Integer value;
+    public Integer value;
 
-	public Type type;
+    public Type type;
 
-	public enum Type {
-		SPEED,
-		UNDERSTANDABILITY,
-		REQUEST,
-		BREAK,
-	}
+    public enum Type {
+        SPEED,
+        UNDERSTANDABILITY,
+        REQUEST,
+        BREAK,
+    }
 
-	public Vote() {
-	}
+    public Vote() {
+    }
 
-	public Vote(Type type, Integer value) {
-		this.type = type;
-		this.value = value;
-	}
+    public Vote(Type type, Integer value) {
+        this.type = type;
+        this.value = value;
+    }
 
 }
