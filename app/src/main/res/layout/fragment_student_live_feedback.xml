@@ -119,8 +119,8 @@
                 android:max="100"
                 android:maxWidth="60dp"
                 android:minWidth="60dp"
-                android:progress="50"
-                android:progressDrawable="@drawable/seekbar_vertical_npn"
+                android:progress="100"
+                android:progressDrawable="@drawable/seekbar_vertical_pn"
                 android:splitTrack="false"
                 android:thumb="@drawable/seekbar_vertical_marker"
                 android:thumbOffset="1dp" />
